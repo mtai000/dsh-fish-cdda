@@ -1,0 +1,55 @@
+# ── 运行时数据（插件默认家在 ~/.dsh/cdda-duty，这里防手滑）───────────────
+cdda.log
+mcp.log
+*.ffmpeg.log
+recordings/
+runs/
+screens/
+status.json
+activity.jsonl
+runtime.json
+round.json
+round-lock.json
+play-session.json
+recording.json
+recordings.json
+rounds.json
+decisions.jsonl
+headless-overlay.yml
+/config.json
+/duty.md
+/goal.json
+/knowledge/
+
+# ── 录制产物 ─────────────────────────────────────────────────────────────
+*.mp4
+*.mkv
+*.webm
+*.srt
+*.ass
+
+# ── Node / 包管理 ────────────────────────────────────────────────────────
+node_modules/
+coverage/
+*.tgz
+*.tar.gz
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# ── 本地测试 / 临时 ──────────────────────────────────────────────────────
+.test/
+.test-*/
+.test-dsh/
+tmp/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# ── 环境 / 密钥 ──────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example

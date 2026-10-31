@@ -1,0 +1,244 @@
+{
+  "topic": "early_foods",
+  "tags": [
+    "items",
+    "food",
+    "survival"
+  ],
+  "summary": "Portable, high-impact foods useful in the first week.",
+  "details": {
+    "generated_on": "2025-10-12",
+    "items": [
+      {
+        "item_id": "meat_cooked",
+        "display_name": "cooked meat",
+        "description": "A chunk of cooked meat.  It's filling and nutritious, but unseasoned and a bit bland.",
+        "weight_g": 296.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "flesh"
+        ],
+        "uses": [
+          "Calories 402"
+        ],
+        "durability": "Consumable (charges: 1)",
+        "shelf_life": "1 day"
+      },
+      {
+        "item_id": "meat_smoked",
+        "display_name": "smoked meat",
+        "description": "Tasty meat that has been heavily smoked for preservation.  It could be further smoked to dehydrate it completely.",
+        "weight_g": 296.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "flesh"
+        ],
+        "uses": [
+          "Quench -1",
+          "Calories 402",
+          "Morale +5",
+          "Smoked preservation extends shelf life to 24 days; great for base camps."
+        ],
+        "durability": "Consumable (charges: 1)",
+        "shelf_life": "24 days"
+      },
+      {
+        "item_id": "meat_canned",
+        "display_name": "canned meat",
+        "description": "Low-sodium boiled and canned meat.  Contains most of the nutrition, but little of the savor of cooked meat.",
+        "weight_g": 296.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "flesh"
+        ],
+        "uses": [
+          "Calories 402",
+          "Morale +2",
+          "High protein ration that never spoils; heavy but shelf-stable."
+        ],
+        "durability": "Consumable (charges: 1)",
+        "shelf_life": "1 day 16 hours"
+      },
+      {
+        "item_id": "can_beans",
+        "display_name": "canned beans",
+        "description": "Canned beans.  A staple among canned goods, these are reputedly good for one's coronary health.",
+        "weight_g": 256.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "bean"
+        ],
+        "uses": [
+          "Quench -1",
+          "Calories 203",
+          "Crack open with can opener or knife; pairs with toast for morale."
+        ],
+        "durability": "Consumable (charges: 1)",
+        "shelf_life": "2 days"
+      },
+      {
+        "item_id": "jerky",
+        "display_name": "meat jerky",
+        "description": "Salty dried meat that lasts for a long time, but will make you thirsty.",
+        "weight_g": 85.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "cured_meat",
+          "flesh"
+        ],
+        "uses": [
+          "Quench -5",
+          "Calories 348",
+          "Morale +4",
+          "Excellent travel snack: light weight, decent calories, long shelf life."
+        ],
+        "durability": "Consumable (charges: 1)",
+        "shelf_life": "24 days"
+      },
+      {
+        "item_id": "pemmican",
+        "display_name": "pemmican",
+        "description": "A concentrated mixture of fat and protein, first said to have been used as a nutritious high-energy food by the Querecho and Teya people of what is Texas today.  Composed of meat, tallow, and edible berries, it provides excellent nutrition in an easy to carry form.",
+        "weight_g": 106.0,
+        "volume_ml": 120.0,
+        "materials": [
+          "flesh",
+          "fruit"
+        ],
+        "uses": [
+          "Quench -2",
+          "Calories 440",
+          "Morale +3",
+          "Stacks calories + fat for winter travel; tiny weight footprint."
+        ],
+        "durability": "Consumable (charges: 1)",
+        "shelf_life": "360 days"
+      },
+      {
+        "item_id": "fruit_leather",
+        "display_name": "fruit leather",
+        "description": "Dried strips of sugary fruit paste.",
+        "weight_g": 34.0,
+        "volume_ml": 50.0,
+        "materials": [
+          "dried_vegetable",
+          "fruit"
+        ],
+        "uses": [
+          "Calories 122",
+          "Morale +3",
+          "Sugar rush for quick morale; watch for thirst penalty."
+        ],
+        "durability": "Consumable (charges: 1)",
+        "shelf_life": "360 days"
+      },
+      {
+        "item_id": "apple",
+        "display_name": "apple",
+        "description": "An iconic and delicious fruit grown and enjoyed across the world, used for generations in folk medicine as doctor repellant.",
+        "weight_g": 182.0,
+        "volume_ml": 232.0,
+        "materials": [
+          "fruit"
+        ],
+        "uses": [
+          "Quench +3",
+          "Calories 94",
+          "Morale +3"
+        ],
+        "durability": "Consumable (charges: 1)",
+        "shelf_life": "6 days 16 hours"
+      },
+      {
+        "item_id": "bread",
+        "display_name": "bread",
+        "description": "A humble piece of bread, one of the single most important staple foods of human civilization since the dawn of agriculture.",
+        "weight_g": 58.0,
+        "volume_ml": 200.0,
+        "materials": [
+          "wheat"
+        ],
+        "uses": [
+          "Calories 77",
+          "Morale +1",
+          "Combine with peanut butter for morale-positive sandwiches."
+        ],
+        "durability": "Consumable (charges: 1)",
+        "shelf_life": "10 days"
+      },
+      {
+        "item_id": "crackers",
+        "display_name": "cracker",
+        "description": "Dry and salty, these crackers will leave you quite thirsty.",
+        "weight_g": 56.0,
+        "volume_ml": 125.0,
+        "materials": [
+          "wheat"
+        ],
+        "uses": [
+          "Quench -4",
+          "Calories 280",
+          "Morale +2"
+        ],
+        "durability": "Consumable (charges: 1)",
+        "shelf_life": "90 days"
+      },
+      {
+        "item_id": "oatmeal",
+        "display_name": "oatmeal",
+        "description": "Dry flakes of flattened grain.  Tasty and nutritious when cooked, it also doubles as food for horses while dry.",
+        "weight_g": 35.0,
+        "volume_ml": 125.0,
+        "materials": [
+          "wheat"
+        ],
+        "uses": [
+          "Quench -15",
+          "Calories 131",
+          "Morale -8",
+          "Cook with clean water to unlock morale bonus and warmth."
+        ],
+        "durability": "Consumable (charges: 1)",
+        "shelf_life": "360 days"
+      },
+      {
+        "item_id": "oatmeal_cooked",
+        "display_name": "cooked oatmeal",
+        "description": "A filling and nutritious New England classic that has sustained pioneers and captains of industry alike.",
+        "weight_g": 256.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "wheat"
+        ],
+        "uses": [
+          "Quench +45",
+          "Calories 151",
+          "Morale +2",
+          "Warm breakfast: morale +5, good before long raids."
+        ],
+        "durability": "Consumable (charges: 1)",
+        "shelf_life": "10 days"
+      },
+      {
+        "item_id": "peanutbutter",
+        "display_name": "peanut butter",
+        "description": "A brown goo that tastes very little like its namesake.  It's not bad, but it'll stick to the roof of your mouth.",
+        "weight_g": 50.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "junk",
+          "nut"
+        ],
+        "uses": [
+          "Quench -2",
+          "Calories 190",
+          "Morale +2",
+          "8 servings per container",
+          "High calorie spread; combine with crackers or bread for portable meals."
+        ],
+        "durability": "Consumable (charges: 8)",
+        "shelf_life": "180 days"
+      }
+    ]
+  }
+}

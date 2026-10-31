@@ -1,0 +1,506 @@
+{
+  "topic": "basic_materials",
+  "tags": [
+    "items",
+    "materials",
+    "crafting"
+  ],
+  "summary": "Core scavenged materials and fasteners required for primitive crafting.",
+  "details": {
+    "generated_on": "2025-10-12",
+    "items": [
+      {
+        "item_id": "stick",
+        "display_name": "stick",
+        "description": "A respectable length of wood, just big enough to wrap your hand around.  Makes a decent melee weapon.",
+        "weight_g": 1500.0,
+        "volume_ml": 2500.0,
+        "materials": [
+          "wood"
+        ],
+        "category": "spare_parts",
+        "flags": [
+          "TRADER_AVOID",
+          "FIREWOOD"
+        ],
+        "uses": [
+          "Source: smash bushes or furniture; base handle for primitive tools."
+        ]
+      },
+      {
+        "item_id": "stick_long",
+        "display_name": "long stick",
+        "description": "A straight section of wood, about eight feet long and a couple of inches in diameter.  Makes a decent melee weapon, and can be broken into shorter pieces for crafting.",
+        "weight_g": 3000.0,
+        "volume_ml": 5000.0,
+        "materials": [
+          "wood"
+        ],
+        "category": "spare_parts",
+        "flags": [
+          "TRADER_AVOID",
+          "FIREWOOD",
+          "REACH_ATTACK"
+        ],
+        "uses": [
+          "Harvest from small trees; carve into spears or tool hafts."
+        ]
+      },
+      {
+        "item_id": "pointy_stick_long",
+        "display_name": "long pointy stick",
+        "description": "A stout pole with one end sharpened to a point.",
+        "weight_g": 1551.0,
+        "volume_ml": 2500.0,
+        "materials": [
+          "wood"
+        ],
+        "category": null,
+        "flags": [
+          "SPEAR",
+          "REACH_ATTACK",
+          "NPC_THROWN",
+          "SHEATH_SPEAR"
+        ],
+        "uses": [
+          "Fire-harden to upgrade into wooden spears quickly."
+        ]
+      },
+      {
+        "item_id": "2x4",
+        "display_name": "plank",
+        "description": "A flat, thick plank of wood, like a 2 by 4 or similar piece of dimensional lumber.  Makes a decent melee weapon if you're desperate, and can be used for all kinds of construction projects.",
+        "weight_g": 2440.0,
+        "volume_ml": 4130.0,
+        "materials": [
+          "wood"
+        ],
+        "category": "spare_parts",
+        "flags": [
+          "FRAGILE_MELEE",
+          "FIREWOOD"
+        ],
+        "uses": [
+          "Salvage from furniture; essential for construction and tool handles."
+        ]
+      },
+      {
+        "item_id": "rock",
+        "display_name": "rock",
+        "description": "A rock the size of a baseball.  Makes a decent melee weapon, and is also good for throwing at enemies.",
+        "weight_g": 657.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "stone"
+        ],
+        "category": "spare_parts",
+        "flags": [
+          "TRADER_AVOID",
+          "NPC_THROWN"
+        ],
+        "uses": [
+          "Gather from ground; combine with sticks for basic stone tools."
+        ]
+      },
+      {
+        "item_id": "sharp_rock",
+        "display_name": "sharp rock",
+        "description": "A baseball-sized rock with a somewhat sharp edge that also chips in a semi-predictable way if struck.  With the right skills, you could give it a better edge.",
+        "weight_g": 500.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "stone"
+        ],
+        "category": null,
+        "flags": [
+          "ALLOWS_BODY_BLOCK"
+        ],
+        "uses": [
+          "Knapped from rocks; substitute for simple cutting edges."
+        ]
+      },
+      {
+        "item_id": "rock_flaking",
+        "display_name": "flaking rock",
+        "description": "A rock the size of a baseball which chips in a semi-predictable way if struck, leaving a sharp edge.  Makes a decent melee weapon, and is also good for throwing at enemies.",
+        "weight_g": 657.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "stone"
+        ],
+        "category": "spare_parts",
+        "flags": [
+          "TRADER_AVOID",
+          "NPC_THROWN"
+        ],
+        "uses": [
+          "Abstract requirement satisfied by flint/sharp rocks for knapping."
+        ]
+      },
+      {
+        "item_id": "flint",
+        "display_name": "flint",
+        "description": "A chunk of flint, the kind of rock that can make sparks if stuck against high-carbon steel.  It also chips in a semi-predictable way if struck, leaving a sharp edge.",
+        "weight_g": 657.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "stone"
+        ],
+        "category": "spare_parts",
+        "flags": [
+          "TRADER_AVOID",
+          "NPC_THROWN"
+        ],
+        "uses": [
+          "Superior knapping stone; boosts success crafting stone blades."
+        ]
+      },
+      {
+        "item_id": "splinter",
+        "display_name": "splintered wood",
+        "description": "A splintered piece of wood, could be used as a skewer or for kindling.",
+        "weight_g": 150.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "wood"
+        ],
+        "category": "other",
+        "flags": [
+          "NO_SALVAGE",
+          "TRADER_AVOID",
+          "FIREWOOD"
+        ],
+        "uses": [
+          "Byproduct of smashing furniture; used in fire drill crafting."
+        ]
+      },
+      {
+        "item_id": "pipe",
+        "display_name": "pipe",
+        "description": "A steel pipe; makes a good melee weapon.  Useful in a bunch of crafting recipes.",
+        "weight_g": 600.0,
+        "volume_ml": 370.0,
+        "materials": [
+          "steel"
+        ],
+        "category": "spare_parts",
+        "flags": [],
+        "uses": [
+          "Smash lockers or disassemble furniture to harvest metal piping."
+        ]
+      },
+      {
+        "item_id": "nail",
+        "display_name": "nail",
+        "description": "A pin-shaped piece of iron.  It can be used to construct various things with a hammer.",
+        "weight_g": 4.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "steel"
+        ],
+        "category": "spare_parts",
+        "flags": [],
+        "uses": [
+          "Recovered from smashed furniture; fasteners for primitive shovel."
+        ]
+      },
+      {
+        "item_id": "pool_cue",
+        "display_name": "pool cue",
+        "description": "A hardwood stick designed for hitting colorful balls around a felt table.  Truly, the coolest of sports.",
+        "weight_g": 510.0,
+        "volume_ml": 1042.0,
+        "materials": [
+          "wood"
+        ],
+        "category": null,
+        "flags": [
+          "FRAGILE_MELEE"
+        ],
+        "uses": [
+          "Loot from bars; substitute shaft for cudgel crafting."
+        ]
+      },
+      {
+        "item_id": "duct_tape",
+        "display_name": "duct tape",
+        "description": "A roll of incredibly strong tape.  Its uses are innumerable.",
+        "weight_g": 3.5,
+        "volume_ml": 930.0,
+        "materials": [
+          "plastic"
+        ],
+        "category": "spare_parts",
+        "flags": [
+          "UNRECOVERABLE"
+        ],
+        "uses": [
+          "Multi-purpose adhesive; holds primitive shovel blade securely."
+        ]
+      },
+      {
+        "item_id": "plant_fibre",
+        "display_name": "plant fiber",
+        "description": "Tough, thin fiber taken from a plant.  Can be used as thread.",
+        "weight_g": 1.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "veggy"
+        ],
+        "category": "spare_parts",
+        "flags": [],
+        "uses": [
+          "Collect by butchering vegetation; twist into cordage."
+        ]
+      },
+      {
+        "item_id": "cordage_6",
+        "display_name": "short cordage piece",
+        "description": "A 6-inch (or about 15 cm) long piece of natural cordage.  Useful for some purposes, but not as strong or flexible as proper string.",
+        "weight_g": 6.0,
+        "volume_ml": 10.0,
+        "materials": [
+          "dry_plant"
+        ],
+        "category": "spare_parts",
+        "flags": [
+          "NO_SALVAGE"
+        ],
+        "uses": [
+          "Craft from plant fibre; six-inch segment for lashing tools."
+        ]
+      },
+      {
+        "item_id": "cordage_6_leather",
+        "display_name": "short leather lace",
+        "description": "A 6-inch (or about 15 cm) long piece of leather lace.  Useful for some purposes, but not as flexible as proper string.",
+        "weight_g": 6.0,
+        "volume_ml": 10.0,
+        "materials": [
+          "leather"
+        ],
+        "category": "spare_parts",
+        "flags": [
+          "NO_SALVAGE"
+        ],
+        "uses": [
+          "Use leather straps when plant fibre unavailable."
+        ]
+      },
+      {
+        "item_id": "string_6",
+        "display_name": "short string",
+        "description": "A 6-inch (or about 15 cm) long piece of cotton string.",
+        "weight_g": 6.0,
+        "volume_ml": 10.0,
+        "materials": [
+          "cotton"
+        ],
+        "category": "spare_parts",
+        "flags": [
+          "NO_SALVAGE"
+        ],
+        "uses": [
+          "Cut from longer string; alternative lashing for stone tools."
+        ]
+      },
+      {
+        "item_id": "sinew",
+        "display_name": "sinew",
+        "description": "A tough sinew cut from a corpse, usable as thread.",
+        "weight_g": 1.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "flesh"
+        ],
+        "category": "spare_parts",
+        "flags": [],
+        "uses": [
+          "Harvest from butchered corpses; strong natural cordage."
+        ]
+      },
+      {
+        "item_id": "yarn",
+        "display_name": "yarn",
+        "description": "A length of wool yarn that could be used to knit wool clothing.",
+        "weight_g": 1.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "wool"
+        ],
+        "category": "spare_parts",
+        "flags": [],
+        "uses": [
+          "Unravel sweaters for emergency cordage."
+        ]
+      },
+      {
+        "item_id": "thread",
+        "display_name": "thread",
+        "description": "A small quantity of thread that could be used for sewing.",
+        "weight_g": 1.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "cotton"
+        ],
+        "category": "spare_parts",
+        "flags": [
+          "NO_SALVAGE"
+        ],
+        "uses": [
+          "Harvest from clothing; universal crafting input."
+        ]
+      },
+      {
+        "item_id": "thread_canvas",
+        "display_name": "heavy duty thread",
+        "description": "Some tough canvas-weight thread, sturdier than ordinary thread.  You could meticulously weave this into a sheet of canvas cloth.  It would also be useful for stitching such sheets together, though it's fine to use for normal tailoring projects too.",
+        "weight_g": 1.0,
+        "volume_ml": 200.0,
+        "materials": [
+          "canvas"
+        ],
+        "category": "spare_parts",
+        "flags": [
+          "NO_SALVAGE"
+        ],
+        "uses": [
+          "Salvaged from heavy-duty gear; tougher than cotton thread."
+        ]
+      },
+      {
+        "item_id": "thread_nomex",
+        "display_name": "Nomex thread",
+        "description": "Heat-resistant Nomex thread that would be particularly useful for making heat protection gear, though it's fine to use in place of normal thread too, in most cases.",
+        "weight_g": 1.0,
+        "volume_ml": 200.0,
+        "materials": [
+          "nomex"
+        ],
+        "category": "spare_parts",
+        "flags": [
+          "NO_SALVAGE"
+        ],
+        "uses": [
+          "Fireproof thread recovered from firefighter gear."
+        ]
+      },
+      {
+        "item_id": "thread_kevlar",
+        "display_name": "Kevlar thread",
+        "description": "Very durable Kevlar thread that would be particularly useful for making ballistic armor, though it's fine to use in place of normal thread too, in most cases.  Making armor-grade Kevlar sheets from this would need a particularly tight weave, and so would require some specialized machinery.",
+        "weight_g": 1.0,
+        "volume_ml": 200.0,
+        "materials": [
+          "kevlar"
+        ],
+        "category": "spare_parts",
+        "flags": [
+          "NO_SALVAGE"
+        ],
+        "uses": [
+          "High-tension thread; useful for durable tool lashings."
+        ]
+      },
+      {
+        "item_id": "material_sand",
+        "display_name": "sand",
+        "description": "A handful of New England sand.  If you had a stoked furnace, you could turn it into glass.  Otherwise, it's only good for making cement.",
+        "weight_g": 5.0,
+        "volume_ml": 8.0,
+        "materials": [
+          "sand"
+        ],
+        "category": "spare_parts",
+        "flags": [],
+        "uses": [
+          "Shovel from river banks; used for grinding stone edges."
+        ]
+      },
+      {
+        "item_id": "material_gravel",
+        "display_name": "gravel",
+        "description": "A handful of gravel, smaller than pebbles but larger than sand.",
+        "weight_g": 5.0,
+        "volume_ml": 5.0,
+        "materials": [
+          "stone"
+        ],
+        "category": "spare_parts",
+        "flags": [],
+        "uses": [
+          "Collect from construction sites; abrasive for stone tools."
+        ]
+      },
+      {
+        "item_id": "saline",
+        "display_name": "saline solution",
+        "description": "A solution of sterilized water and salt for intravenous infusion or washing contaminants from one's eyes.",
+        "weight_g": 51.0,
+        "volume_ml": 250.0,
+        "materials": [
+          "salt",
+          "water"
+        ],
+        "category": null,
+        "flags": [
+          "NO_INGEST",
+          "NPC_SAFE"
+        ],
+        "uses": [
+          "Medical supply; used as coolant/grinding medium in recipes.",
+          "Charges per stack: 5"
+        ]
+      },
+      {
+        "item_id": "sheet",
+        "display_name": "sheet",
+        "description": "A 72 by 24 inch two-layer-thick fabric sheet.  It could be used as a curtain or bedsheet, or cut up for a bunch of smaller sheets.",
+        "weight_g": 420.0,
+        "volume_ml": 564.0,
+        "materials": [
+          "cotton"
+        ],
+        "category": null,
+        "flags": [
+          "OVERSIZE",
+          "OUTER",
+          "ALLOWS_NATURAL_ATTACKS"
+        ],
+        "uses": [
+          "Rip from beds; required for makeshift sling crafting."
+        ]
+      },
+      {
+        "item_id": "fire",
+        "display_name": "nearby fire",
+        "description": "seeing this is a bug",
+        "weight_g": null,
+        "volume_ml": 1.0,
+        "materials": [],
+        "category": null,
+        "flags": [
+          "PSEUDO"
+        ],
+        "uses": [
+          "Requires campfire or brazier; treat as ever-present heat source."
+        ]
+      },
+      {
+        "item_id": "filament",
+        "display_name": "sewing filament bundle",
+        "description": "Generic requirement representing 10 inches of thread, sinew, fiber, canvas, or yarn.",
+        "weight_g": null,
+        "volume_ml": null,
+        "materials": [
+          "fiber"
+        ],
+        "category": "material",
+        "flags": [],
+        "uses": [
+          "Satisfies crafting requirements calling for sewing-capable filament."
+        ]
+      }
+    ]
+  }
+}

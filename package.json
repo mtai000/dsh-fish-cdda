@@ -1,0 +1,87 @@
+{
+  "name": "dsh-cdda",
+  "version": "0.4.0",
+  "description": "DSH 插件：让 DSH 自己玩《Cataclysm: Dark Days Ahead》—— 两个 screen 会话，一个游戏、一个实时战报",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "cdda",
+    "cataclysm",
+    "screen",
+    "autoplay",
+    "recording",
+    "video",
+    "srt",
+    "knowledge",
+    "goal",
+    "statistics"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "lib",
+    "prompts",
+    "profile-template",
+    "vendor",
+    "README.md",
+    "AGENTS.md",
+    "NOTICE.md",
+    "LICENSE",
+    "selfcheck.mjs",
+    "scripts",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md"
+  ],
+  "engines": {
+    "dsh": ">=0.2.1-rc.1",
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test",
+    "selfcheck": "node selfcheck.mjs"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-tools": "*",
+    "@deepseek-ai/schemastery": "*"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-tools": {
+      "optional": true
+    },
+    "@deepseek-ai/schemastery": {
+      "optional": true
+    }
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-settings-plugins"
+      ]
+    }
+  },
+  "author": "mtai000",
+  "homepage": "https://github.com/mtai000/dsh_play_cdda",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mtai000/dsh_play_cdda.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mtai000/dsh_play_cdda/issues"
+  }
+}
