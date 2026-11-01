@@ -2,6 +2,13 @@
 
 本项目遵循“一个版本一个小节”的简单记录方式，日期用本地日期。
 
+## 0.6.0 — 2026-11-01
+
+- **包名统一为 `dsh-fish-cdda`**：`package.json`、bundle patch、client module id、
+  安装脚本、profile 依赖/bundle 全部改名；DSH 插件列表显示 `dsh-fish-cdda`。
+- 工具前缀仍是 `mcp__cdda-duty__*`，配置/存档目录仍是 `$DSH_HOME/cdda-duty/`，不受影响。
+- 升级后需要把 profile 里的 `dsh-cdda` 依赖/bundle 换成 `dsh-fish-cdda`，并重启 DSH。
+
 ## 0.5.1 — 2026-11-01
 
 - **身份自动发现**：不用手填 `identityFile`。自动从 `DSH_KIN_FAMILY_ROOT`、

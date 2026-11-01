@@ -9,18 +9,18 @@ PROFILE_DIR="$DSH_HOME/profiles/$PROFILE"
 [ -d "$PROFILE_DIR" ] || { echo "找不到 profile：$PROFILE_DIR（先用 dsh $PROFILE 启动一次）" >&2; exit 1; }
 
 mkdir -p "$PROFILE_DIR/node_modules"
-ln -sfn "$PLUGIN_DIR" "$PROFILE_DIR/node_modules/dsh-cdda"
+ln -sfn "$PLUGIN_DIR" "$PROFILE_DIR/node_modules/dsh-fish-cdda"
 
 node - "$PROFILE_DIR/package.json" "$PLUGIN_DIR" <<'NODE'
 const fs = require('node:fs')
 const [file, pluginDir] = process.argv.slice(2)
 const pkg = JSON.parse(fs.readFileSync(file, 'utf8'))
 pkg.dependencies = pkg.dependencies || {}
-pkg.dependencies['dsh-cdda'] = 'link:' + pluginDir
+pkg.dependencies['dsh-fish-cdda'] = 'link:' + pluginDir
 pkg.dsh = pkg.dsh || {}
 pkg.dsh.profile = pkg.dsh.profile || {}
 const bundles = pkg.dsh.profile.bundles = pkg.dsh.profile.bundles || []
-if (!bundles.includes('dsh-cdda')) bundles.push('dsh-cdda')
+if (!bundles.includes('dsh-fish-cdda')) bundles.push('dsh-fish-cdda')
 fs.writeFileSync(file, JSON.stringify(pkg, null, 2) + '\n')
 NODE
 

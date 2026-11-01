@@ -1,5 +1,5 @@
 /**
- * dsh-cdda —— 浏览器半端：设置页里的一页「CDDA 陪玩」
+ * dsh-fish-cdda —— 浏览器半端：设置页里的一页「CDDA 陪玩」
  * ============================================================================
  * DSH 的 client bundle 不是 ESM，是自注册脚本：
  *   window.__ModuleLoader__.load({ id: '<包名>', factory: (require) => ... })
@@ -8,7 +8,7 @@
  * ============================================================================
  */
 window.__ModuleLoader__.load({
-  id: 'dsh-cdda',
+  id: 'dsh-fish-cdda',
   factory: (require) => {
     const React = require('react')
     const h = React.createElement
@@ -453,10 +453,10 @@ window.__ModuleLoader__.load({
       inject: ['slots'],
       apply(ctx) {
         const style = document.createElement('style')
-        style.setAttribute('data-plugin-css', 'dsh-cdda')
+        style.setAttribute('data-plugin-css', 'dsh-fish-cdda')
         style.textContent = CSS
         document.head.appendChild(style)
-        ctx.effect(() => () => style.remove(), 'dsh-cdda: 设置页样式')
+        ctx.effect(() => () => style.remove(), 'dsh-fish-cdda: 设置页样式')
 
         const slots = (typeof ctx.get === 'function' ? ctx.get('slots') : undefined) || ctx.slots
         if (!slots) return

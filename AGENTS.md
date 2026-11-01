@@ -1,6 +1,6 @@
 # 给 AI 助手看的（本仓库 = 一个 DSH 插件）
 
-`dsh-cdda`：让 DSH 自己玩《Cataclysm: Dark Days Ahead》。插件开两个 screen 会话：
+`dsh-fish-cdda`：让 DSH 自己玩《Cataclysm: Dark Days Ahead》。插件开两个 screen 会话：
 `cdda`（游戏）和 `cdda_log`（战报）。用户可随时 `screen -x` 旁观；DSH 也能开自动玩。
 
 ## 帮用户装时，按这个顺序
@@ -14,13 +14,13 @@
    ```
 2. **装插件**（有 pnpm）：
    ```bash
-   dsh plugin --profile web add link:/path/to/dsh-cdda
+   dsh plugin --profile web add link:/path/to/dsh-fish-cdda
    ```
    **没有 pnpm**（很多机器都没有）：
    ```bash
    mkdir -p ~/.dsh/profiles/web/node_modules
-   ln -sfn /path/to/dsh-cdda ~/.dsh/profiles/web/node_modules/dsh-cdda
-   # 然后手动把 dsh-cdda 加进 profile 的 dependencies 和 dsh.profile.bundles
+   ln -sfn /path/to/dsh-fish-cdda ~/.dsh/profiles/web/node_modules/dsh-fish-cdda
+   # 然后手动把 dsh-fish-cdda 加进 profile 的 dependencies 和 dsh.profile.bundles
    ```
 3. **必须提醒用户重启一次 dsh**（bundle 层要重启才组装）。
 4. 重启后进 **设置 → CDDA 陪玩**：

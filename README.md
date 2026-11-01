@@ -1,6 +1,6 @@
-# dsh-cdda ｜ 让 DSH 自己玩 CDDA
+# dsh-fish-cdda ｜ 让 DSH 自己玩 CDDA
 
-> 当前版本 **0.5.1** · [变更记录](CHANGELOG.md) · [参与开发](CONTRIBUTING.md)
+> 当前版本 **0.6.0** · [变更记录](CHANGELOG.md) · [参与开发](CONTRIBUTING.md)
 
 > **它是什么**：一个 DSH 插件。装上后 DSH 会开两个 `screen` 会话 ——
 > `cdda`（游戏终端）和 `cdda_log`（实时战报）。
@@ -63,23 +63,23 @@ DSH 的插件安装走 pnpm。如果机器上没有 pnpm，可以直接把包 li
 ```bash
 # 1) 建 link
 mkdir -p ~/.dsh/profiles/web/node_modules
-ln -sfn /path/to/dsh-cdda ~/.dsh/profiles/web/node_modules/dsh-cdda
+ln -sfn /path/to/dsh-fish-cdda ~/.dsh/profiles/web/node_modules/dsh-fish-cdda
 
 # 2) 改 profile（或让 DSH 的插件管理器替你写）
 #    ~/.dsh/profiles/web/package.json
-#    "dependencies": { "dsh-cdda": "link:/path/to/dsh-cdda" }
-#    "dsh.profile.bundles": [..., "dsh-cdda"]
+#    "dependencies": { "dsh-fish-cdda": "link:/path/to/dsh-fish-cdda" }
+#    "dsh.profile.bundles": [..., "dsh-fish-cdda"]
 
 # 3) 重启 dsh
 ```
 
 > 有 pnpm 时更简单：
-> `dsh plugin --profile web add link:/path/to/dsh-cdda`，然后重启。
+> `dsh plugin --profile web add link:/path/to/dsh-fish-cdda`，然后重启。
 
 ### 方式 B：发布包
 
 ```bash
-dsh plugin --profile web add dsh-cdda
+dsh plugin --profile web add dsh-fish-cdda
 # 重启 dsh
 ```
 

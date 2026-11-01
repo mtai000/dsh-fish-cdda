@@ -1,6 +1,6 @@
 # NOTICE
 
-`dsh-cdda` 是 MIT 许可的 DSH 插件。它参考/复用了以下项目的思路或少量代码：
+`dsh-fish-cdda` 是 MIT 许可的 DSH 插件。它参考/复用了以下项目的思路或少量代码：
 
 ## dsh-bili-scroll
 

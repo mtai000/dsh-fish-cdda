@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * selfcheck.mjs —— dsh-cdda 的环境自检（不启动游戏、不花 token）
+ * selfcheck.mjs —— dsh-fish-cdda 的环境自检（不启动游戏、不花 token）
  *
  *   node selfcheck.mjs
  *
