@@ -15,7 +15,6 @@ import { DEFAULT_CFG, loadCfgFromDisk, pathsOf } from './lib/state.mjs'
 import { findCdda, screenBin } from './lib/screen.mjs'
 import { findWorlds } from './lib/state-read.mjs'
 import { findFfmpeg, findFont } from './lib/recorder.mjs'
-import { KnowledgeBase, knowledgeDirOf } from './lib/knowledge.mjs'
 import { parseScreen } from './lib/screen-parse.mjs'
 
 const home = process.env.DSH_HOME || join(homedir(), '.dsh')
@@ -46,17 +45,6 @@ add(sv.status === 0, 'GNU screen 可用', (sv.stdout || '').split('\n')[0] || sb
 const cfg = loadCfgFromDisk(stateDir)
 const cdda = findCdda(cfg)
 add(Boolean(cdda), 'CDDA 可执行文件', cdda || '设置里填 cddaPath，或安装 cataclysm-dda-curses')
-
-// knowledge base
-try {
-  const kbDir = knowledgeDirOf(pluginDir, stateDir)
-  const kb = new KnowledgeBase(kbDir)
-  const base = kb.baseline()
-  if (base.length > 500) add(true, 'CDDAi 知识库', `${kb.listTags().length} 个 tag · ${kbDir}`)
-  else warn('CDDAi 知识库（可选）', `未安装：把 CDDAi/data/knowledge_base 复制到 ${join(stateDir, 'knowledge')}`)
-} catch (e) {
-  add(false, 'CDDAi 知识库', String(e?.message ?? e))
-}
 
 // screen parser
 try {

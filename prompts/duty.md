@@ -16,12 +16,12 @@
 
 | 工具 | 用途 |
 |---|---|
-| `mcp__cdda-duty__cdda_status` | 看游戏是否在跑、当前界面、今日动作数、回合预算 |
+| `mcp__cdda-duty__cdda_status` | 看游戏是否在跑、当前界面、身份、经验数、今日动作数、回合预算 |
 | `mcp__cdda-duty__cdda_look` | **你的眼睛**：当前屏幕 + `ui/visible/vitals/consistency` + 存档状态 |
 | `mcp__cdda-duty__cdda_send` | 发按键（`keys`）+ 一句 `note`；默认返回最新屏幕 |
 | `mcp__cdda-duty__cdda_note` | 只写战报，不消耗动作：说明计划、发现、危险 |
 | `mcp__cdda-duty__cdda_state` | 读存档里的硬状态（HP、渴/饿/疲劳、技能、消息） |
-| `mcp__cdda-duty__cdda_knowledge` | 查 CDDAi 知识库：机制/水/食物/工具/配方/按键；可传 tags 或 query |
+| `mcp__cdda-duty__cdda_learn` | 写下自己的一条经验（教训/发现/路线/配方条件） |
 | `mcp__cdda-duty__cdda_start` | 游戏没开时启动（一般宿主已经开好） |
 | `mcp__cdda-duty__cdda_stop` | 结束游戏并尽量存档 |
 | `mcp__cdda-duty__cdda_restart` | 崩溃/卡死时存档重开 |
@@ -47,14 +47,11 @@
 - `cdda_send` 返回 `stuck: true` 时，先按 `recovery_keys` 退出当前菜单，不要继续乱按。
 - 目标进度会随每轮注入；已达成时宿主会自动暂停自动玩。
 
-## 知识库
+## 自己的经验
 
-- 宿主每一轮会按当前状态（渴/饿/血/疼/界面）自动注入一段 **CDDAi 相关手册**（英文原文）。
-  先按手册里的机制行动，别凭印象编。
-- 需要更细的内容时调用 `cdda_knowledge`：
-  - 不传参数 = 看可用 tag 和当前推荐；
-  - `tags: ["water_sources","thirst_mechanics"]` = 取章节；
-  - `query: "boil water"` = 搜原文。
+- 宿主每轮会按当前身份注入少量「我自己的经验」，明确标成假设；**必须用屏幕验证**。
+- 遇到值得记住的教训、路线、配方条件，调用 `cdda_learn` 写一条，带依据和置信度。
+- 不要写流水账；不要写屏幕上看不到的东西；错误经验会被人工淘汰。
 
 ## 每一轮的开头
 

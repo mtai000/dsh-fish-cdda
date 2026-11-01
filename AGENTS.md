@@ -45,15 +45,15 @@
 - `lib/goal.mjs` —— 目标解析（survive/acquire/reach/generic）、起点、进度、完成。
 - `lib/recorder.mjs` —— 录制 mp4 + 同名 `.srt`：screen hardcopy 抓帧、ffmpeg drawtext 实时渲染、
   从 activity 生成字幕、录制索引。
-- `lib/knowledge.mjs` —— CDDAi 知识库：按 state/mode 选 tag（渴/饿/血/疼/菜单/天数）、
-  基础包（基础生存 + 核心按键）、tag 加载、关键词检索、首次铺到 `<家>/knowledge/`。
+- `lib/identity.mjs` —— 读 fish `identity.json` → `memory/<identityId>`。
+- `lib/memory.mjs` —— 经验 JSONL：写入/去重/淘汰/注入。
+- `lib/lessons.mjs` —— 父代经验导出 / 子代继承导入。
 - `lib/mcp-server.mjs` —— headless 回合用的 MCP stdio 服务（newline JSON-RPC）。
 - `prompts/duty.md` —— 自动玩章程（用户可改）。
 - `recordVideo` / `recordFps` / `recordDir` / `recordFont` / `ffmpegPath` / `recordMaxMinutes` —— 录制配置。
-- `knowledge` / `knowledgeMaxChars` —— 知识库注入开关/上限（默认开，12000 字符）。
+- `identityFile` / `memory` / `memoryMaxItems` / `memoryMaxChars` —— 身份与经验注入。
 - `autoUnstick` / `restartOnCrash` / `maxRestartsPerDay` —— 卡菜单兜底、崩溃重开及每日上限。
 - `profile-template/cdda-duty/` —— 最小权限 profile（base + headless，关掉 fs/bash/web/subagent…）。
-- `data/knowledge_base/` —— CDDAi 知识库（MIT，随包分发）；首次复制到 `<家>/knowledge/`。
 - `$DSH_HOME/cdda-duty/starter-world/save/` —— 可选外部开局种子；插件包不带 `.sav`。
 
 ## 调试顺序
@@ -63,7 +63,7 @@
 3. `mcp.log` —— 自动玩的 MCP 握手与调用。
 4. `runs/round-*.log` —— 那一轮模型的推理/工具输出/最终总结。
 5. `status.json` / `activity.jsonl` —— 日志屏/设置页看到的东西。
-   知识注入的 tag/字符数会写进 `cdda.log`（每轮一行「知识注入：…」）。
+   经验注入的身份/条数会写进 `cdda.log`（每轮一行「经验注入：…」）。
    `goal.json` 是目标/进度；`decisions.jsonl` 是结构化动作日志；`rounds.json` 是回合总结。
 6. `recordings/` —— 录制的 mp4 / srt / json；`recording.json` 是当前录制状态。
 7. `node selfcheck.mjs` —— 环境自检（含 ffmpeg/字体）。
@@ -85,8 +85,7 @@
   `reload=1` 根本来不及读新帧。停录要往 ffmpeg stdin 写 `q` 让它写 moov，不能直接 kill。
 - **字幕时间轴以录制开始为 0**：只收 `activity.jsonl` 里 `ts >= startedAt` 的事件；
   同一瞬间的动作+记录会合并成一条 SRT，避免互相盖住。
-- **知识库是中文**：正文已翻译成简体中文；按 tag 注入有 12000 字符上限，
-  超出会截断，别指望一轮塞下 150KB。用户改过的 `<家>/knowledge/` 不会被升级覆盖。
+- **经验是假设**：模型自己写的教训可能错；只注入 10 条/4000 字，错误经验人工淘汰。
 - **`index.js` 里本地 `updateGoal(goal)` 与 `lib/goal.mjs` 的 `updateGoal(stateDir,state)` 重名**：
   导入时必须 alias（目前是 `updateGoalProgress`），否则 `statusPayload` 会把目标写成目录路径。
 - **路由注册不要用 `ctx.get('webServer')`**：apply 时服务可能还没就绪，路由会被静默跳过，

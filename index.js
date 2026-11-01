@@ -482,7 +482,10 @@ export function apply(ctx, config) {
           maxItems: Number(cfg.memoryMaxItems) || 10,
           maxChars: Number(cfg.memoryMaxChars) || 4000,
         })
-        if (mem.text) text += `\n\n${mem.text}`
+        if (mem.text) {
+          log(`经验注入：${id?.identityId || 'shared'} · ${mem.items.length} 条 / ${mem.text.length} 字符`)
+          text += `\n\n${mem.text}`
+        }
       } catch { /* 经验读不到不影响玩 */ }
     }
     return text.slice(0, 36_000)

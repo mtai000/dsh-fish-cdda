@@ -1,6 +1,6 @@
 # dsh-cdda ｜ 让 DSH 自己玩 CDDA
 
-> 当前版本 **0.4.4** · [变更记录](CHANGELOG.md) · [参与开发](CONTRIBUTING.md)
+> 当前版本 **0.5.0** · [变更记录](CHANGELOG.md) · [参与开发](CONTRIBUTING.md)
 
 > **它是什么**：一个 DSH 插件。装上后 DSH 会开两个 `screen` 会话 ——
 > `cdda`（游戏终端）和 `cdda_log`（实时战报）。
@@ -10,11 +10,11 @@
 这个插件把两件事拼在一起：
 
 - **dsh-bili-scroll** 的插件形态：bundle patch、设置页、host 半端工具、headless 回合、最小权限 profile；
-- **CDDAi** 的玩法思路：屏幕感知 + 存档硬状态 + 目标驱动 + 决策日志 + **knowledge_base**。
-  不是把它的 Python 进程塞进来，而是把「看屏幕 / 发按键 / 读状态 / 查手册」做成 DSH 工具，
+- **CDDAi** 的玩法思路：屏幕感知 + 存档硬状态 + 目标驱动 + 决策日志。
+  不是把它的 Python 进程塞进来，而是把「看屏幕 / 发按键 / 读状态」做成 DSH 工具，
   让 DSH 模型自己决策。
-- **CDDAi knowledge_base**：生存指南、饥渴/健康/疲劳/士气/温度、水/食物/工具/材料、
-  早期配方、完整按键表。自动玩每轮按当前状态挑 2-6 章注入，模型也可以按 tag/关键词查。
+- **自主学习**：不内置攻略；AI 用 `cdda_learn` 写下自己的经验，按身份（鱼）隔离，
+  下一轮只注入少量“假设”，必须用屏幕验证才能当事实。
 
 ---
 
@@ -138,7 +138,7 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
 | 区域 | 内容 |
 |---|---|
 | **现在** | 游戏/自动玩状态、今日动作数、回合、最近动作；开始 / 跑一轮 / 停止；自动玩开关 |
-| **目标与节奏** | 目标（内联进提示词 + 日志屏 + 进度）、每轮动作预算、每天最多几轮、两轮间隔、自动开游戏、**可选 CDDAi 知识库**注入及字符上限 |
+| **目标与节奏** | 目标、每轮预算、自动开游戏、**身份文件 / 自己的经验**注入及上限 |
 | **旁观** | `screen -x cdda` / `screen -x cdda_log` 复制按钮、家目录/存档路径 |
 | **角色** | 从存档读出的 HP、饥渴、疲劳、位置、最近消息 |
 | **录制游玩过程** | 开关、当前录制状态、视频/字幕下载、历史录制列表、帧率 |
@@ -162,7 +162,7 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
 | `cdda_status` | 游戏/回合/今日动作/screen 状态 + 旁观命令 |
 | `cdda_stop` | 优先 `S` / `Y` 存档退出，再关 screen |
 | `cdda_restart` | 存档/关掉后用 `--world` 重开（崩溃或卡死时用） |
-| `cdda_knowledge` | 查 CDDAi 知识库：tag / 关键词 / 当前推荐 |
+| `cdda_learn` | 写下一条自己的 CDDA 经验（按 fish 身份隔离） |
 | `cdda_record` | 开始/停止录制视频 + 外挂字幕（仅 host 半端） |
 | `cdda_autoplay` | 开关自动玩（仅 host 半端） |
 
@@ -174,44 +174,25 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
 
 ---
 
-## CDDAi 知识库
+## 自主学习（经验记忆）
 
-CDDAi 的 `data/knowledge_base/` 已放在本仓库的 `data/knowledge_base/`（MIT），
-随包分发；首次运行会复制到：
-
-```text
-~/.dsh/cdda-duty/knowledge/
-```
-
-之后你可以直接改 home 里的副本。知识库内容：
-
-| 类别 | 内容 |
-|---|---|
-| 指南 | 基础生存、早期策略、战斗、菜单/物品栏导航 |
-| 机制 | 饥渴、饥饿、健康、疲劳、士气、温度 |
-| 数据 | 水/食物/工具/材料、早期配方、完整按键表 |
-
-**每轮自动注入**：按当前存档状态选 tag，例如：
-
-- 渴了 → `thirst_mechanics` + `water_sources`
-- 饿了 → `hunger_mechanics` + `food_sources`
-- HP 低/疼痛/出血 → `healing`（必要时 `combat_tactics`）
-- 在菜单里 → `menu_navigation`
-- 第 2 天起 → `crafting`
-- 基础包（基础生存 + 核心按键）始终带
-
-注入上限默认 **12000 字符**（设置页可调），避免把 150KB 全塞进上下文。
-
-**按需查**：`cdda_knowledge` 工具支持：
+插件**不内置任何攻略/知识库**。AI 在游玩中用 `cdda_learn` 写自己的经验：
 
 ```json
-{"tags": ["water_sources", "thirst_mechanics"]}
-{"query": "煮沸水"}
-{}
+{"text":"水必须煮沸","evidence":"喝生水后腹泻","confidence":0.9}
 ```
 
-插件按当前状态挑选章节注入；`<DSH_HOME>/cdda-duty/knowledge/` 里的副本可以随时改。
-如果手动删掉 home 的副本，下次启动会从 `data/knowledge_base/` 重新铺。
+- 有身份文件：写进 `~/.dsh/cdda-duty/memory/<identityId>/memory.jsonl`
+- 没有身份：写进 `~/.dsh/cdda-duty/memory/shared/memory.jsonl`
+- 注入上限：最多 10 条 / 4000 字符，标题明确写「假设，不是攻略；必须用屏幕验证」
+- 完全重复的经验合并 `hits`；最多保留 200 条
+- 身份文件就是 fish-kin 的 `identity.json`；填在设置页「身份文件」里
+
+### 有损传代
+
+父代 CDDA 写 `cdda-lessons.json`；fish-kin 出生时只挑 **3 条 / 300 字**通用技能，
+追加到孩子 seed 的「她玩过的游戏」一节，并写进孩子自己的 `cdda-lessons.json`。
+子代只读这一份，不读父代全量记忆。
 
 ## 结构化屏幕 + 混合状态
 
@@ -306,7 +287,7 @@ CDDAi 的 `data/knowledge_base/` 已放在本仓库的 `data/knowledge_base/`（
     starter-world/   可选外部开局种子（默认没有）
     config/          CDDA 配置
   recordings/        录制的 mp4 / 同名 .srt / .json
-  knowledge/         CDDAi 知识库副本（可改）
+  memory/            经验（按 identityId 分目录；无身份用 shared）
   goal.json          目标与进度
   decisions.jsonl    结构化决策日志
   rounds.json        回合总结索引
@@ -320,7 +301,7 @@ CDDAi 的 `data/knowledge_base/` 已放在本仓库的 `data/knowledge_base/`（
 ## 开发 / 测试
 
 ```bash
-npm test                 # 31 项：按键/解析/存档/知识库/中文格式/屏幕结构化/目标/开局/MCP/screen/录制
+npm test                 # 40 项：按键/解析/存档/身份/记忆/继承/屏幕结构化/目标/开局/MCP/screen/录制
 node selfcheck.mjs       # 环境自检（含 ffmpeg/字体）
 ```
 
@@ -346,12 +327,13 @@ lib/
   game.mjs               开/停游戏、bootstrap
   tools-core.mjs         host 与 MCP 共用的工具实现
   logscreen.mjs          cdda_log 实时面板
-  knowledge.mjs          CDDAi 知识库加载/筛选/检索
+  identity.mjs           读 fish 身份证 → 记忆命名空间
+  memory.mjs             经验 JSONL：写入/去重/淘汰/注入
+  lessons.mjs            经验导出给出生包 / 子代导入
   recorder.mjs           mp4 + 外挂 srt 录制
   mcp-server.mjs         自动玩回合的 MCP stdio 服务
 prompts/duty.md          自动玩值班章程
 profile-template/        最小权限 cdda-duty profile
-data/knowledge_base/      CDDAi 知识库（MIT，随包分发）
 test/                    node:test 测试
 scripts/                 无 pnpm 时的本地安装/卸载
 .github/workflows/ci.yml  GitHub Actions
@@ -375,9 +357,8 @@ scripts/                 无 pnpm 时的本地安装/卸载
 - **录制是文本视频**：没有颜色、没有光标、菜单边框会缺失；2 fps 是为了省 CPU/磁盘。
   中文只出现在外挂字幕里；游戏画面本身是英文 ASCII。
 - **录制目录**：默认 `<DSH_HOME>/cdda-duty/recordings/`；可以改到别的盘。
-- **知识库是中文**：guides/机制/物品/配方已翻译成简体中文；按键只翻了
-  `defaultmode` 核心 68 条，其他上下文保留英文原文。
-  注入有字符上限，超出会截断；需要完整内容用 `cdda_knowledge` 按 tag 查。
+- **经验是假设**：模型自己写的教训可能错；注入上限 10 条 / 4000 字符，
+  错误经验需要人工删 `memory.jsonl`。
 - **屏幕解析是尽力而为**：菜单边框/颜色抓不到，部分数值（0.G 侧栏的饥渴）只显示空值，
   这时会回退存档；没有解析到的字段会明确标 `source: save` 或 `null`。
 - **目标进度依赖游戏内时间**：`survive 3 days` 从第一次看到游戏状态开始算；
@@ -401,8 +382,7 @@ npm test
 ## 依赖与致谢
 
 - **dsh-bili-scroll**（MIT）—— 插件形态、hostdeps、设置页/HTTP/headless 回合的写法参考；
-- **CDDAi**（MIT）—— 屏幕感知 / 存档解析 / 目标驱动玩法；
-  其 `knowledge_base`（生存指南 / 机制 / 物品 / 配方 / 按键）可选使用，不随包分发；
+- **CDDAi**（MIT）—— 屏幕感知 / 存档解析 / 目标驱动玩法的思路参考；
 - **Cataclysm: Dark Days Ahead**（CC-BY-SA 3.0）—— 游戏本体；
 - **@xterm/headless** 没有用到（我们最终用 screen hardcopy + ASCII 清洗，少一个依赖）。
 

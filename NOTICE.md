@@ -17,9 +17,7 @@
 - 许可证：MIT
 - 用途：CDDA 的屏幕感知 / 菜单状态机 / 存档硬状态 / 目标驱动玩法的思路参考。
 - 本项目是独立实现（Node/JS），没有直接把 Python 代码打包进来。
-- 本项目的 `data/knowledge_base/` 来自 CDDAi 的 `data/knowledge_base/`（MIT），
-  包含生存指南、机制说明、物品/配方/按键表；首次运行会复制到
-  `<DSH_HOME>/cdda-duty/knowledge/`。请保留 CDDAi 的 MIT 许可与来源说明。
+- 本项目不再分发 CDDAi 的知识库；只借鉴其屏幕感知/目标驱动的设计思路。
 
 ## Cataclysm: Dark Days Ahead
 

@@ -2,6 +2,17 @@
 
 本项目遵循“一个版本一个小节”的简单记录方式，日期用本地日期。
 
+## 0.5.0 — 2026-11-01
+
+- **移除自带知识库**：删除 `data/knowledge_base`、`lib/knowledge.mjs`、`cdda_knowledge`、
+  `knowledge*` 配置；插件包不再包含攻略/物品/配方数据。
+- **自主学习**：新增 `cdda_learn`，经验写进 `memory/<identityId>/memory.jsonl`；
+  无身份写 `memory/shared`；最多注入 10 条 / 4000 字符，明确标成假设。
+- **鱼的身份证**：读取 fish-kin 的 `identity.json`；不同鱼记忆隔离。
+- **有损传代**：父代导出 `cdda-lessons.json`，fish-kin 出生时只带 3 条/300 字；
+  子代只读自己的继承文件，不读父代全量。
+- 新增身份/记忆/继承测试，总测试 40 项。
+
 ## 0.4.4 — 2026-11-01
 
 - **知识库正文中文化**：guides、机制、物品、配方全部翻译成简体中文；

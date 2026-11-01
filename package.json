@@ -1,6 +1,6 @@
 {
   "name": "dsh-cdda",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "description": "DSH 插件：让 DSH 自己玩《Cataclysm: Dark Days Ahead》—— 两个 screen 会话，一个游戏、一个实时战报",
   "keywords": [
     "dsh",
@@ -13,9 +13,10 @@
     "recording",
     "video",
     "srt",
-    "knowledge",
     "goal",
-    "statistics"
+    "statistics",
+    "memory",
+    "identity"
   ],
   "license": "MIT",
   "type": "module",
@@ -39,8 +40,7 @@
     "selfcheck.mjs",
     "scripts",
     "CHANGELOG.md",
-    "CONTRIBUTING.md",
-    "data"
+    "CONTRIBUTING.md"
   ],
   "engines": {
     "dsh": ">=0.2.1-rc.1",
