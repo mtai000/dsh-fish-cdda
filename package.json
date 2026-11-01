@@ -16,7 +16,8 @@
     "goal",
     "statistics",
     "memory",
-    "identity"
+    "identity",
+    "fish"
   ],
   "license": "MIT",
   "type": "module",
@@ -76,12 +77,12 @@
     }
   },
   "author": "mtai000",
-  "homepage": "https://github.com/mtai000/dsh_play_cdda",
+  "homepage": "https://github.com/mtai000/dsh-fish-cdda",
   "repository": {
     "type": "git",
-    "url": "git@github.com:mtai000/dsh_play_cdda.git"
+    "url": "git@github.com:mtai000/dsh-fish-cdda.git"
   },
   "bugs": {
-    "url": "https://github.com/mtai000/dsh_play_cdda/issues"
+    "url": "https://github.com/mtai000/dsh-fish-cdda/issues"
   }
 }
