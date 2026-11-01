@@ -135,12 +135,6 @@ window.__ModuleLoader__.load({
         h(Switch, { on, onChange, disabled }))
     }
 
-    const fmtTime = (iso) => {
-      try {
-        const d = new Date(iso)
-        return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`
-      } catch { return '--:--' }
-    }
     const copyText = async (t) => {
       try { await navigator.clipboard.writeText(String(t || '')) ; return true } catch { return false }
     }
@@ -173,16 +167,12 @@ window.__ModuleLoader__.load({
       const [st, setSt, err, fails, reload] = useStatus(3000)
       const [busy, setBusy] = React.useState('')
       const [msg, setMsg] = React.useState(null)
-      const [screen, setScreen] = React.useState('')
-      const [showScreen, setShowScreen] = React.useState(false)
       const [draft, setDraft] = React.useState(null)
       const [dirty, setDirty] = React.useState(false)
 
-      const cfg = st?.config || {}
       React.useEffect(() => {
         if (!st?.config || dirty) return
         setDraft({
-          goal: st.config.goal || '',
           actionsPerRound: st.config.actionsPerRound ?? 40,
           maxRoundsPerDay: st.config.maxRoundsPerDay ?? 24,
           roundGapSec: st.config.roundGapSec ?? 20,
@@ -194,6 +184,7 @@ window.__ModuleLoader__.load({
           screenGame: st.config.screenGame || 'cdda',
           screenLog: st.config.screenLog || 'cdda_log',
           dshBin: st.config.dshBin || '',
+          recordVideo: Boolean(st.config.recordVideo),
           recordFps: st.config.recordFps ?? 2,
           recordDir: st.config.recordDir || '',
           recordFont: st.config.recordFont || '',
@@ -222,7 +213,6 @@ window.__ModuleLoader__.load({
 
       const onSave = () => run('save', async () => {
         const patch = {
-          goal: String(draft.goal || '').slice(0, 4000),
           actionsPerRound: Number(draft.actionsPerRound) || 40,
           maxRoundsPerDay: Number(draft.maxRoundsPerDay) || 0,
           roundGapSec: Number(draft.roundGapSec) || 20,
@@ -234,6 +224,7 @@ window.__ModuleLoader__.load({
           screenGame: String(draft.screenGame || 'cdda').trim(),
           screenLog: String(draft.screenLog || 'cdda_log').trim(),
           dshBin: String(draft.dshBin || '').trim(),
+          recordVideo: Boolean(draft.recordVideo),
           recordFps: Number(draft.recordFps) || 2,
           recordDir: String(draft.recordDir || '').trim(),
           recordFont: String(draft.recordFont || '').trim(),
@@ -254,16 +245,6 @@ window.__ModuleLoader__.load({
         say(r.ok ? '已保存（插件 config.json + DSH 设置都写了）' : ('保存到了插件，但 DSH 设置没写进去：' + (r.error || '')), r.ok ? 'good' : 'warn')
       })
 
-      const onStart = () => run('start', async () => {
-        const r = await jpost('/start', { goal: String(draft?.goal || '').trim() })
-        if (r.ok) say(r.already ? '游戏本来就在跑' : '游戏已启动（第一次可能要等十几秒）', 'good')
-        else say(r.error || '启动失败', 'bad')
-      })
-      const onStop = () => run('stop', async () => {
-        if (!confirm('停止游戏？会先尝试 S / Y 存档退出。')) return
-        const r = await jpost('/stop', { save: true })
-        say(r.ok ? '已停止' : (r.error || '停止失败'), r.ok ? 'good' : 'bad')
-      })
       const pickDir = async () => {
         try {
           const picker = globalThis.__DSH_DIRECTORY_PICKER__
@@ -275,39 +256,6 @@ window.__ModuleLoader__.load({
           say('这个界面没有文件夹选择器，手动填路径吧', 'warn')
         } catch (e) { say('打开文件夹选择器失败：' + String(e?.message ?? e), 'bad') }
       }
-      const onRecord = async (on) => {
-        setBusy('record')
-        try {
-          const r = await jpost('/record', { on, fps: Number(draft?.recordFps) || 2 })
-          if (r.ok) say(on ? '录制已开始；视频和同名 .srt 会写进录制目录' : '录制已停止并收尾', 'good')
-          else say(r.error || '录制没起来', 'bad')
-        } catch (e) { say(String(e?.message ?? e), 'bad') }
-        finally { setBusy(''); reload() }
-      }
-      const onRound = () => run('round', async () => {
-        const r = await jpost('/round', {})
-        if (r.started) say('这一轮开跑了，去 screen -x cdda_log 看战报', 'good')
-        else say(r.error || '没跑起来', 'bad')
-      })
-      const onAutoplay = async (on) => {
-        setBusy('autoplay')
-        try {
-          await jpost('/autoplay', { on })
-          say(on ? '自动玩已打开：到点会自己起回合' : '自动玩已暂停', on ? 'good' : '')
-        } catch (e) { say(String(e?.message ?? e), 'bad') }
-        finally { setBusy(''); reload() }
-      }
-      const onScreen = async () => {
-        setShowScreen((v) => !v)
-        if (showScreen) return
-        setBusy('screen')
-        try {
-          const r = await jget('/screen')
-          setScreen(r.ok ? r.text : (r.error || '抓不到屏幕'))
-        } catch (e) { setScreen(String(e?.message ?? e)) }
-        finally { setBusy('') }
-      }
-
       if (!st && !err) {
         return h('div', { 'data-cd-page': '' },
           h('div', { 'data-cd-sec': '' },
@@ -327,12 +275,23 @@ window.__ModuleLoader__.load({
 
       const stt = st?.status || {}
       const dot = stt.mode === 'death' ? 'dead' : (stt.running ? 'on' : '')
-      const round = st?.round
-      const acts = Array.isArray(st?.activity) ? st.activity.slice(-14).reverse() : []
-      const attach = st?.attach || {}
+      const recActive = Boolean(st?.recording?.active)
+      const FieldRow = ({ label, note, children }) => h('div', { 'data-cd-row': '' },
+        h('div', { 'data-cd-grow': '' },
+          h('div', { 'data-cd-label': '' }, label),
+          note ? h('div', { 'data-cd-note': '' }, note) : null),
+        children)
+      const NumInput = ({ k, val, min, max }) => h('input', {
+        'data-cd-input': '', 'data-cd-num': '', type: 'number', min, max,
+        value: draft?.[k] ?? val, onChange: (e) => set(k, e.target.value),
+      })
+      const TxtInput = ({ k, placeholder, type }) => h('input', {
+        'data-cd-input': '', type: type || 'text', style: { flex: '1 1 260px', minWidth: 180 },
+        value: draft?.[k] ?? '', placeholder: placeholder || '', onChange: (e) => set(k, e.target.value),
+      })
 
       return h('div', { 'data-cd-page': '' },
-        // ── 现在 ──
+        // ── 只读状态：不放开始/停止/跑一轮/目标 ──
         h('div', { 'data-cd-sec': '' },
           h('div', { 'data-cd-row': '' },
             h('div', { 'data-cd-grow': '' },
@@ -340,155 +299,67 @@ window.__ModuleLoader__.load({
                 h('span', { 'data-cd-dot': '', 'data-on': dot === 'on' ? '' : undefined, 'data-dead': dot === 'dead' ? '' : undefined }),
                 h('span', { 'data-cd-label': '', style: { fontWeight: 600 } }, stt.running ? `游戏中 · ${stt.modeLabel || ''}` : '未运行'),
                 h('span', { 'data-cd-badge': '' }, 'v' + (st.version || '?')),
-                round?.active ? h('span', { 'data-cd-badge': '' }, `回合 ${round.id || ''}`) : null)),
-            h('button', { 'data-cd-btn': '', disabled: Boolean(busy), onClick: onStart }, '开始游戏'),
-            h('button', { 'data-cd-btn': '', disabled: Boolean(busy) || !stt.running, onClick: onRound }, '跑一轮'),
-            h('button', { 'data-cd-btn': '', 'data-danger': '', disabled: Boolean(busy) || !stt.running, onClick: onStop }, '停止')),
-          h('div', { 'data-cd-row': '' },
-            h('div', { 'data-cd-grow': '' },
-              h('div', { 'data-cd-label': '' }, '自动玩'),
-              h('div', { 'data-cd-note': '' }, '打开后插件会定时起 headless 回合，让 DSH 自己看屏幕、发动作。')),
-            h(Switch, { on: Boolean(cfg.autoplay), disabled: Boolean(busy), onChange: onAutoplay })),
-          h('div', { 'data-cd-note': '' },
-            `今日 ${stt.actionsToday ?? 0} 个动作` +
-            (st?.runtime ? ` · 今日 ${st.runtime.roundsToday ?? 0} 轮` : '') +
-            (round?.active ? ` · 本回合 ${round.actions ?? 0}/${round.actionsLimit ?? 0}` : '') +
-            (st.status?.updatedAt ? ` · 更新 ${fmtTime(st.status.updatedAt)}` : '')),
+                recActive ? h('span', { 'data-cd-badge': '', 'data-bad': '' }, '录制中') : null),
+              h('div', { 'data-cd-note': '' },
+                '开始 / 停止 / 跑一轮 / 目标 / 立刻录制，都在会话里直接对 DSH 说，或让 DSH 自己调 cdda_* 工具。这里只放会重复用到的设置。'))),
           stt.hint ? h('div', { 'data-cd-msg': '' }, stt.hint) : null,
-          stt.goalProgress?.text ? h('div', { 'data-cd-msg': '' }, `目标进度：${stt.goalProgress.text}${stt.goalComplete ? ' · 已达成' : ''}`) : null,
-          h('div', { 'data-cd-note': '' }, `身份：${stt.identityId || '无（共用）'} · 经验 ${stt.memoryCount ?? 0} 条`),
-          st?.lastRound ? h('div', { 'data-cd-note': '' },
-            `上一轮：${st.lastRound.actions ?? 0} 动作 · ${st.lastRound.durationSec ?? 0}s · ${st.lastRound.goalProgress || ''}`) : null,
-          (stt.ui?.state || stt.visible?.threats?.length) ? h('div', { 'data-cd-msg': '' },
-            `${stt.ui?.state ? '界面：' + stt.ui.state : ''}${stt.visible?.threats?.length ? ' · 威胁：' + stt.visible.threats.join('/') : ''}`) : null,
-          (stt.lastNote?.text || stt.lastAction?.note || stt.lastAction?.keys) ? h('div', { 'data-cd-msg': '' },
-            `正在做：${stt.lastNote?.text || stt.lastAction?.note || ''}${stt.lastAction?.keys ? `（${stt.lastAction.keys}）` : ''}`) : null,
           msg ? h('div', { 'data-cd-msg': '', ...(msg.tone === 'good' ? { 'data-good': '' } : msg.tone === 'warn' ? { 'data-warn': '' } : msg.tone === 'bad' ? { 'data-bad': '' } : {}) }, msg.text) : null),
 
-        // ── 录制 ──
-        (() => {
-          const rec = st.recording || {}
-          const list = Array.isArray(st.recordings) ? st.recordings : []
-          const active = Boolean(rec.active)
-          const last = rec.last || null
-          const cur = active ? rec : last
-          return h('div', { 'data-cd-sec': '' },
-            h('div', { 'data-cd-row': '' },
-              h('div', { 'data-cd-grow': '' },
-                h('div', { 'data-cd-label': '', style: { fontWeight: 600 } }, '录制游玩过程'),
-                h('div', { 'data-cd-note': '' }, '录成 mp4，同时生成同名 .srt 外挂字幕；字幕来自 cdda_log 的战报（动作/记录/回合）。')),
-              h(Switch, { on: active || Boolean(cfg.recordVideo), disabled: Boolean(busy), onChange: onRecord })),
-            active
-              ? h('div', { 'data-cd-msg': '', 'data-bad': '' },
-                  h('span', { 'data-cd-rec': '' }), ' 录制中 · ',
-                  String(rec.video || '').split('/').pop(), ` · ${Number(rec.durationSec || 0)}s · ${Number(rec.frames || 0)} 帧 · ${fmtSize(rec.size)}`)
-              : (cur ? h('div', { 'data-cd-msg': '' },
-                  `上一段：${String(cur.video || '').split('/').pop()} · ${Number(cur.durationSec || 0)}s · ${fmtSize(cur.size)}`) : h('div', { 'data-cd-note': '' }, '还没有录制。打开开关后如果游戏没开，会先启动游戏。')),
-            !active && cfg.recordVideo ? h('div', { 'data-cd-msg': '', 'data-warn': '' }, '开关是开的，但当前没在录制：游戏没开、到了单段上限，或 ffmpeg 起不来。') : null,
-            cur ? h('div', { 'data-cd-row': '' },
-              h('a', { 'data-cd-link': '', href: fileUrl(cur.video), target: '_blank', rel: 'noreferrer' }, '看视频'),
-              h('a', { 'data-cd-link': '', href: fileUrl(cur.srt), target: '_blank', rel: 'noreferrer' }, '下字幕 .srt'),
-              h('span', { 'data-cd-note': '' }, active ? `目录：${st.recordDir || ''}` : '')) : null,
-            h('div', { 'data-cd-row': '' },
-              h('div', { 'data-cd-grow': '' },
-                h('div', { 'data-cd-label': '' }, '录制存放目录'),
-                h('div', { 'data-cd-note': '' }, '绝对路径；留空 = 插件家的 recordings。改完保存，下一段生效。')),
-              h('input', { 'data-cd-input': '', style: { flex: '1 1 260px', minWidth: 180 }, value: draft?.recordDir ?? '', placeholder: '/home/你/CDDA录像', onChange: (e) => set('recordDir', e.target.value) }),
-              h('button', { 'data-cd-btn': '', onClick: pickDir }, '选择…')),
-            st.recordDir ? h('div', { 'data-cd-note': '' }, `当前实际目录：${st.recordDir}`) : null,
-            h('div', { 'data-cd-row': '' },
-              h('div', { 'data-cd-grow': '' },
-                h('div', { 'data-cd-label': '' }, '帧率（1-10，默认 2）'),
-                h('div', { 'data-cd-note': '' }, '文本界面不需要高帧率；2 帧/秒足够看清操作。')),
-              h('input', { 'data-cd-input': '', 'data-cd-num': '', type: 'number', min: 1, max: 10, value: draft?.recordFps ?? 2, onChange: (e) => set('recordFps', e.target.value) }),
-              h('button', { 'data-cd-btn': '', disabled: Boolean(busy) || !dirty, onClick: onSave }, '保存录制设置')),
-            st.recorderReady === false ? h('div', { 'data-cd-msg': '', 'data-warn': '' }, '找不到 ffmpeg 或等宽字体：录制会起不来。到「高级」里填 ffmpegPath / recordFont。') : null,
-            list.length ? h('div', { 'data-cd-sec': '' },
-              h('div', { 'data-cd-note': '' }, '历史录制：'),
-              ...list.slice(0, 5).map((r) => h('div', { 'data-cd-row': '', key: r.video || r.id },
-                h('span', { 'data-cd-note': '', 'data-cd-grow': '' },
-                  `${String(r.startedAt || '').replace('T', ' ').slice(0, 16)} · ${Number(r.durationSec || 0)}s · ${fmtSize(r.size)}${r.exists === false ? '（文件没了）' : ''}`),
-                h('a', { 'data-cd-link': '', href: fileUrl(r.video), target: '_blank', rel: 'noreferrer' }, '视频'),
-                h('a', { 'data-cd-link': '', href: fileUrl(r.srt), target: '_blank', rel: 'noreferrer' }, '字幕')))) : null,
-          )
-        })(),
-
-        // ── 目标与节奏 ──
+        // ── 自动玩与节奏（可重复使用） ──
         h('div', { 'data-cd-sec': '' },
-          h('div', { 'data-cd-h': '' }, '目标与节奏'),
-          h('textarea', {
-            'data-cd-input': '', 'data-cd-area': '', value: draft?.goal ?? '',
-            placeholder: '例：尽量活过 3 天；先找水和食物；不要主动打怪。',
-            onChange: (e) => set('goal', e.target.value),
-          }),
-          h('div', { 'data-cd-grid': '' },
-            h('div', null,
-              h('div', { 'data-cd-label': '' }, '每轮动作预算'),
-              h('div', { 'data-cd-note': '' }, '一次按键发送算一个动作；40 大约 10-20 分钟。'),
-              h('input', { 'data-cd-input': '', 'data-cd-num': '', type: 'number', min: 5, max: 500, value: draft?.actionsPerRound ?? 40, onChange: (e) => set('actionsPerRound', e.target.value) })),
-            h('div', null,
-              h('div', { 'data-cd-label': '' }, '每天最多几轮'),
-              h('div', { 'data-cd-note': '' }, '0 = 不限制；默认 24。'),
-              h('input', { 'data-cd-input': '', 'data-cd-num': '', type: 'number', min: 0, max: 200, value: draft?.maxRoundsPerDay ?? 24, onChange: (e) => set('maxRoundsPerDay', e.target.value) })),
-            h('div', null,
-              h('div', { 'data-cd-label': '' }, '两轮间隔（秒）'),
-              h('div', { 'data-cd-note': '' }, '上一轮结束后歇多久。'),
-              h('input', { 'data-cd-input': '', 'data-cd-num': '', type: 'number', min: 5, max: 3600, value: draft?.roundGapSec ?? 20, onChange: (e) => set('roundGapSec', e.target.value) })),
-            h('div', null,
-              h('div', { 'data-cd-label': '' }, '世界名（可选）'),
-              h('div', { 'data-cd-note': '' }, '留空 = 最近的存档。'),
-              h('input', { 'data-cd-input': '', value: draft?.world ?? '', placeholder: 'Pena Pobre', onChange: (e) => set('world', e.target.value) }))),
+          h('div', { 'data-cd-h': '' }, '自动玩与节奏'),
+          h('div', { 'data-cd-note': '' }, '目标是 DSH 当场决定的；这里只定预算、间隔和兜底。'),
+          h(FieldRow, { label: '每轮动作预算', note: '一次按键算一个动作；40 大约 10-20 分钟。', children: h(NumInput, { k: 'actionsPerRound', val: 40, min: 5, max: 500 }) }),
+          h(FieldRow, { label: '每天最多几轮', note: '0 = 不限制；默认 24。', children: h(NumInput, { k: 'maxRoundsPerDay', val: 24, min: 0, max: 200 }) }),
+          h(FieldRow, { label: '两轮间隔（秒）', note: '上一轮结束后歇多久。', children: h(NumInput, { k: 'roundGapSec', val: 20, min: 5, max: 3600 }) }),
+          h(FieldRow, { label: '世界名（可选）', note: '留空 = 最近的存档。通常由 DSH 启动时决定。', children: h(TxtInput, { k: 'world', placeholder: 'Pena Pobre' }) }),
+          h(ToggleRow, { label: '开跑前自动开游戏', note: '游戏没开时先启动，再起回合。', on: Boolean(draft?.autoStartGame), onChange: (v) => set('autoStartGame', v) }),
+          h(ToggleRow, { label: '卡菜单自动兜底', note: '连续 3 次画面没变时先提示恢复键；第 4 次仍卡住就自动发一次 Esc。', on: draft?.autoUnstick !== false, onChange: (v) => set('autoUnstick', v) }),
+          h(ToggleRow, { label: '崩溃/游戏消失时自动重开', note: '只在自动玩开着时生效；死角色不会自动重开。', on: draft?.restartOnCrash !== false, onChange: (v) => set('restartOnCrash', v) }),
+          h(ToggleRow, { label: '角色死亡也自动重开', note: '默认关；打开后死亡也会重开。', on: Boolean(draft?.restartOnDeath), onChange: (v) => set('restartOnDeath', v) }),
+          h(FieldRow, { label: '每天最多自动重开', note: '0 = 不限制；默认 5。', children: h(NumInput, { k: 'maxRestartsPerDay', val: 5, min: 0, max: 50 }) })),
+
+        // ── 录制设置（不在这里手动开关） ──
+        h('div', { 'data-cd-sec': '' },
+          h('div', { 'data-cd-h': '' }, '录制'),
           h(ToggleRow, {
-            label: '开跑前自动开游戏', note: '游戏没开时先启动，再起回合。',
-            on: Boolean(draft?.autoStartGame), onChange: (v) => set('autoStartGame', v),
+            label: '开始游戏后自动录制',
+            note: '下一局/下一轮生效，不会打断当前这段；要立刻开关录制，让 DSH 调 cdda_record。',
+            on: Boolean(draft?.recordVideo), onChange: (v) => set('recordVideo', v),
           }),
-          h(ToggleRow, {
-            label: '卡菜单自动兜底',
-            note: '连续 3 次画面没变时先提示恢复键；第 4 次仍卡住就自动发一次 Esc（不会在正常游戏里乱按）。',
-            on: draft?.autoUnstick !== false, onChange: (v) => set('autoUnstick', v),
-          }),
-          h(ToggleRow, {
-            label: '崩溃/游戏消失时自动重开',
-            note: '只在自动玩开着时生效；死角色不会重开，会暂停等你处理。',
-            on: draft?.restartOnCrash !== false, onChange: (v) => set('restartOnCrash', v),
-          }),
-          h('div', null,
-            h('div', { 'data-cd-label': '' }, '身份文件（可留空自动发现）'),
-            h('div', { 'data-cd-note': '' }, '留空会从 fish-kin 家族目录自动找 identity.json；填了就强制用这个。'),
-            h('input', { 'data-cd-input': '', value: draft?.identityFile ?? '', placeholder: '留空自动发现', onChange: (e) => set('identityFile', e.target.value) })),
-          h(ToggleRow, {
-            label: '自动发现鱼的身份证',
-            note: '从 DSH_KIN_FAMILY_ROOT / ~/.dsh-fish-kin.json / ~/大肥鱼家族 找 fish/identity.json 和 children/*/identity.json；多条鱼时按当前目录判断父代/子代。',
-            on: draft?.identityAuto !== false, onChange: (v) => set('identityAuto', v),
-          }),
-          h(ToggleRow, {
-            label: '注入自己的经验',
-            note: '从当前身份（没有则 shared）挑最多 10 条、4000 字符；明确标成假设，必须用屏幕验证。',
-            on: draft?.memory !== false, onChange: (v) => set('memory', v),
-          }),
-          h('div', { 'data-cd-row': '' },
-            h('div', { 'data-cd-grow': '' },
-              h('div', { 'data-cd-label': '' }, '经验注入条数'),
-              h('div', { 'data-cd-note': '' }, '默认 10 条。')),
-            h('input', { 'data-cd-input': '', 'data-cd-num': '', type: 'number', min: 1, max: 50, value: draft?.memoryMaxItems ?? 10, onChange: (e) => set('memoryMaxItems', e.target.value) })),
-          h('div', { 'data-cd-row': '' },
-            h('div', { 'data-cd-grow': '' },
-              h('div', { 'data-cd-label': '' }, '经验注入字符上限'),
-              h('div', { 'data-cd-note': '' }, '默认 4000。')),
-            h('input', { 'data-cd-input': '', 'data-cd-num': '', type: 'number', min: 200, max: 30000, value: draft?.memoryMaxChars ?? 4000, onChange: (e) => set('memoryMaxChars', e.target.value) })),
-          h(ToggleRow, {
-            label: '使用外部开局种子',
-            note: '默认关；打开后从 <DSH_HOME>/cdda-duty/starter-world/save/ 复制世界到存档目录。插件包本身不带 .sav。',
-            on: Boolean(draft?.starterWorld), onChange: (v) => set('starterWorld', v),
-          }),
-          h('div', { 'data-cd-row': '' },
-            h('div', { 'data-cd-grow': '' },
-              h('div', { 'data-cd-label': '' }, '每天最多自动重开几次'),
-              h('div', { 'data-cd-note': '' }, '0 = 不限制；默认 5。')),
-            h('input', { 'data-cd-input': '', 'data-cd-num': '', type: 'number', min: 0, max: 50, value: draft?.maxRestartsPerDay ?? 5, onChange: (e) => set('maxRestartsPerDay', e.target.value) })),
-          h('div', { 'data-cd-row': '' },
-            h('button', { 'data-cd-btn': '', disabled: Boolean(busy) || !dirty, onClick: onSave }, '保存高级设置')),
+          h(FieldRow, { label: '录制存放目录', note: '绝对路径；留空 = 插件家的 recordings。保存后下一段生效。', children: h('div', { 'data-cd-row': '', style: { flex: '1 1 320px' } },
+            h('input', { 'data-cd-input': '', style: { flex: '1 1 260px', minWidth: 180 }, value: draft?.recordDir ?? '', placeholder: '/home/你/CDDA录像', onChange: (e) => set('recordDir', e.target.value) }),
+            h('button', { 'data-cd-btn': '', onClick: pickDir }, '选择…')) }),
+          st.recordDir ? h('div', { 'data-cd-note': '' }, `当前实际目录：${st.recordDir}`) : null,
+          h(FieldRow, { label: '帧率（1-10，默认 2）', note: '文本界面不需要高帧率。', children: h(NumInput, { k: 'recordFps', val: 2, min: 1, max: 10 }) }),
+          h(FieldRow, { label: '单段最长（分钟）', note: '到点自动收尾；默认 120。', children: h(NumInput, { k: 'recordMaxMinutes', val: 120, min: 1, max: 1440 }) }),
+          h('div', { 'data-cd-note': '' }, '看录像/字幕不在这里：会话顶部「更多会话视图」→「cdda录制」，可直接播放。'),
+          st.recorderReady === false ? h('div', { 'data-cd-msg': '', 'data-warn': '' }, '找不到 ffmpeg 或等宽字体：录制会起不来。到「高级」里填 ffmpegPath / recordFont。') : null),
+
+        // ── 身份与记忆（可重复使用） ──
+        h('div', { 'data-cd-sec': '' },
+          h('div', { 'data-cd-h': '' }, '身份与记忆'),
+          h(FieldRow, { label: '身份文件（可留空）', note: '留空从 fish-kin 家族目录自动找 identity.json。', children: h(TxtInput, { k: 'identityFile', placeholder: '留空自动发现' }) }),
+          h(ToggleRow, { label: '自动发现鱼的身份证', note: '从 DSH_KIN_FAMILY_ROOT / ~/.dsh-fish-kin.json / ~/大肥鱼家族 找。', on: draft?.identityAuto !== false, onChange: (v) => set('identityAuto', v) }),
+          h(ToggleRow, { label: '注入自己的经验', note: '最多 10 条、4000 字符；明确标成假设。', on: draft?.memory !== false, onChange: (v) => set('memory', v) }),
+          h(FieldRow, { label: '经验注入条数', note: '默认 10。', children: h(NumInput, { k: 'memoryMaxItems', val: 10, min: 1, max: 50 }) }),
+          h(FieldRow, { label: '经验注入字符上限', note: '默认 4000。', children: h(NumInput, { k: 'memoryMaxChars', val: 4000, min: 200, max: 30000 }) })),
+
+        // ── 高级路径 ──
+        h('div', { 'data-cd-sec': '' },
+          h('div', { 'data-cd-h': '' }, '高级'),
+          h(FieldRow, { label: 'CDDA 可执行文件', note: '留空 = PATH 里的 cataclysm。', children: h(TxtInput, { k: 'cddaPath', placeholder: '/usr/games/cataclysm' }) }),
+          h(FieldRow, { label: 'CDDA 用户目录', note: '留空 = 默认用户目录。', children: h(TxtInput, { k: 'userDir', placeholder: '~/.cataclysm-dda' }) }),
+          h(FieldRow, { label: '游戏 screen 名', note: '默认 cdda。', children: h(TxtInput, { k: 'screenGame', placeholder: 'cdda' }) }),
+          h(FieldRow, { label: '战报 screen 名', note: '默认 cdda_log。', children: h(TxtInput, { k: 'screenLog', placeholder: 'cdda_log' }) }),
+          h(FieldRow, { label: 'dsh 可执行文件', note: '桌面版找不到 dsh 时填。', children: h(TxtInput, { k: 'dshBin', placeholder: '留空自动找' }) }),
+          h(FieldRow, { label: 'ffmpeg 路径', note: '留空 = PATH 里的 ffmpeg。', children: h(TxtInput, { k: 'ffmpegPath', placeholder: '留空自动找' }) }),
+          h(FieldRow, { label: '录制字体', note: '留空 = 自动找等宽字体。', children: h(TxtInput, { k: 'recordFont', placeholder: '留空自动找' }) }),
+          h(ToggleRow, { label: '使用外部开局种子', note: '默认关；从 <DSH_HOME>/cdda-duty/starter-world/save/ 复制世界。', on: Boolean(draft?.starterWorld), onChange: (v) => set('starterWorld', v) }),
           st.logTail ? h('pre', { 'data-cd-pre': '', style: { maxHeight: 160 } }, st.logTail) : null),
+
+        h('div', { 'data-cd-row': '' },
+          h('button', { 'data-cd-btn': '', 'data-primary': '', disabled: Boolean(busy) || !dirty, onClick: onSave }, '保存设置')),
       )
     }
 

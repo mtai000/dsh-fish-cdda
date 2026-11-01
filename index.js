@@ -1070,14 +1070,8 @@ export function apply(ctx, config) {
               const body = await readBody(req)
               const patch = body.patch && typeof body.patch === 'object' ? body.patch : body
               const host = await persistCfg(patch)
-              if ('recordVideo' in (patch || {})) {
-                if (cfg.recordVideo) {
-                  const g = await inspectGame(cfg, stateDir)
-                  if (g.running && g.mode === 'gameplay') await recorder.start(cfg)
-                } else {
-                  await recorder.stop('switch-off')
-                }
-              }
+              // ⭐ 设置页现在只放「可重复使用」的偏好：recordVideo 是「开局自动录制」，
+              //    不在这里立刻起/停录制。要立刻录制，让 DSH 调 cdda_record 工具。
               return sendJson(res, 200, { ...host, ok: true, config: cfg })
             }
             if (req.method === 'POST' && path === '/api/cdda-duty/start') {
