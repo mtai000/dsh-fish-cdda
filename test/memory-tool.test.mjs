@@ -26,6 +26,9 @@ test('cdda_learn：按身份写入独立目录', async () => {
     assert.equal(rows.length, 1)
     assert.equal(rows[0].text, '晚上不要走街道')
     assert.equal(rows[0].scope, 'skill')
+    const exported = JSON.parse(readFileSync(join(sd, 'cdda-lessons.json'), 'utf8'))
+    assert.equal(exported.lessons.length, 1)
+    assert.equal(exported.lessons[0].text, '晚上不要走街道')
   } finally { rmSync(sd, { recursive: true, force: true }) }
 })
 

@@ -39,9 +39,9 @@ import { modeLabel } from './lib/parse.mjs'
 import { TOOL_SPECS, handleTool } from './lib/tools-core.mjs'
 import { findWorlds } from './lib/state-read.mjs'
 import { Recorder, readRecordings, recordDirOf, findFfmpeg, findFont } from './lib/recorder.mjs'
-import { ensureKnowledge, knowledgeForState } from './lib/knowledge.mjs'
 import { readIdentity, memoryDirOf } from './lib/identity.mjs'
-import { selectMemories, memoryCount } from './lib/memory.mjs'
+import { selectMemories, memoryCount, importInherited } from './lib/memory.mjs'
+import { readInheritedLessons, exportParentLessons } from './lib/lessons.mjs'
 import { ensureGoal, updateGoal as updateGoalProgress, readGoal } from './lib/goal.mjs'
 
 export const name = 'cdda-duty'
@@ -81,8 +81,6 @@ export const Config = !z ? undefined : z.object({
   recordFont: z.string().default('').extra('volatile', true),
   ffmpegPath: z.string().default('').extra('volatile', true),
   recordMaxMinutes: z.natural().default(120).extra('volatile', true),
-  knowledge: z.boolean().default(true).extra('volatile', true),
-  knowledgeMaxChars: z.natural().default(12000).extra('volatile', true),
   identityFile: z.string().default('').extra('volatile', true),
   memory: z.boolean().default(true).extra('volatile', true),
   memoryMaxItems: z.natural().default(10).extra('volatile', true),
@@ -102,7 +100,13 @@ export function apply(ctx, config) {
   const dutyFile = ensureDutyFile(pluginDir, stateDir)
   const log = (m) => { try { logLine(stateDir, String(m)) } catch { /* 忽略 */ } }
   const recorder = new Recorder({ stateDir, pluginDir, log })
-  const knowledgeDir = ensureKnowledge(pluginDir, stateDir, log)
+  try {
+    const bootIdentity = readIdentity(cfg)
+    if (bootIdentity) {
+      const inherited = readInheritedLessons(bootIdentity)
+      if (inherited.length) importInherited(memoryDirOf(stateDir, bootIdentity), inherited)
+    }
+  } catch { /* 继承文件读不到不影响玩 */ }
   let recReadyCache = { at: 0, ok: false }
   const recorderReady = () => {
     if (Date.now() - recReadyCache.at < 60_000) return recReadyCache.ok
@@ -212,7 +216,6 @@ export function apply(ctx, config) {
       else stopRound('autoplay-off')
       return { autoplay: Boolean(on) }
     },
-    knowledgeDir,
     autoUnstick: cfg.autoUnstick !== false,
     ensureRecording: () => recorder.ensure(cfg),
     stopRecording: () => recorder.stop('game-stop'),
@@ -469,7 +472,6 @@ export function apply(ctx, config) {
     } catch { /* 进度失败不影响玩 */ }
     text += `\n\n本轮信息：${repl['<why>']}；动作预算 ${repl['<actions>']} 个。`
       + `\n工具名以 mcp__cdda-duty__ 开头。第一步先调用 mcp__cdda-duty__cdda_status，再看屏幕。`
-      + `\n想看更细的手册可以调用 mcp__cdda-duty__cdda_knowledge。`
       + `\n做完预算就结束这一轮，简短总结你做了什么、下一步打算。`
     if (cfg.memory !== false) {
       try {
@@ -482,20 +484,6 @@ export function apply(ctx, config) {
         })
         if (mem.text) text += `\n\n${mem.text}`
       } catch { /* 经验读不到不影响玩 */ }
-    }
-    if (cfg.knowledge !== false) {
-      try {
-        const k = knowledgeForState(knowledgeDir, game?.save, game?.mode || 'unknown', {
-          maxChars: Number(cfg.knowledgeMaxChars) || 12000,
-          screen: game?.parsed || null,
-        })
-        if (k.text) {
-          log(`知识注入：${k.tags.join(', ')}（${k.text.length} 字符）`)
-          text += `\n\n## 相关手册（CDDAi 知识库，按当前状态挑选）`
-            + `\n标签：${k.tags.join(', ')}`
-            + `\n（英文原文；优先按这些机制行动，别凭印象编）\n\n${k.text}`
-        }
-      } catch (e) { log('注入知识库失败：' + String(e?.message ?? e)) }
     }
     return text.slice(0, 36_000)
   }
@@ -855,7 +843,6 @@ export function apply(ctx, config) {
     saveDir: p.saveDir,
     duty: dutyFile,
     overlay: p.overlayFile,
-    knowledge: p.knowledgeDir,
   })
 
   const statusPayload = async () => {
