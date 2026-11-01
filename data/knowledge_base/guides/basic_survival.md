@@ -1,28 +1,28 @@
-# Basic Survival Guide
+# 基础生存指南
 
-## Core Mechanics At A Glance
+## 核心机制速览
 
-- **Thirst escalates fastest**: plan drink breaks every in-game hour and boil questionable water.
-- **Hunger is manageable**: keep calorie-dense snacks ready but never let morale tank from starvation penalties.
-- **Fatigue sneaks up**: schedule six hours of sleep inside secure shelter before midnight.
-- **Health & morale are linked**: patch bleeding quickly, stay warm and dry to avoid focus crashes.
-- **Temperature swings kill morale**: layer clothing for 35-40 warmth and avoid wet penalties whenever possible.
+- **口渴涨得最快**：每游戏内一小时安排一次饮水，可疑的水一律煮沸。
+- **饥饿尚可管理**：常备高热量零食，但别让饥饿惩罚把士气拖垮。
+- **疲劳悄然而至**：午夜前在安全的避难所里睡满六小时。
+- **健康与士气相互关联**：及时止血，保持温暖干燥，避免专注崩盘。
+- **温差波动最伤士气**：分层穿衣把保暖维持在 35-40，尽量避开潮湿惩罚。
 
-## Day 1 Priorities
+## 第一天优先级
 
-1. **Secure water**: raid kitchens or bathrooms for sealed bottles, set up a pot on any stove or improvise a fire ring near water.
-2. **Claim shelter**: grab a house with intact doors, board windows with `hammer` + `2x4`, and mark exits on your map.
-3. **Assemble basic tools**: craft a `makeshift_crowbar` from pipe, then queue `primitive_knife` and `fire_drill` for butchery and fire starting.
-4. **Stabilize morale**: cook a hot meal, listen to a radio, and dry soaked clothing before nightfall.
-5. **Scout essentials**: map nearby grocery, pharmacy, and public works for future supply runs.
+1. **确保饮水**：搜刮厨房或卫生间的密封瓶装水，把锅架上任意炉灶，或在水源边搭个简易火圈。
+2. **占据避难所**：找一栋门完好的房子，用 `hammer` + `2x4` 封窗，并把出口标在地图上。
+3. **凑齐基础工具**：用管子制作 `makeshift_crowbar`，再安排 `primitive_knife` 和 `fire_drill`，用于屠宰与生火。
+4. **稳住士气**：入夜前做顿热饭、听听收音机，把湿衣服烘干。
+5. **侦察必需点**：把附近的杂货店、药店和公共工程设施标到地图上，为日后补给跑腿做准备。
 
-## Keybinding Quick Reference
+## 常用按键速查
 
-- `e` — Examine nearby tiles (loot containers, interact with furniture)
-- `G` — Pick up items from tile (toggle advanced pickup with `,`)
-- `&` — Open crafting menu (filter recipes with `/` and favorite essentials)
-- `@` — View character sheet (monitor pain, morale, encumbrance)
-- `` ` `` — Toggle safe mode to avoid surprise engagements
-- `Shift+.` — Wait one turn (steady aim or catch your breath)
+- `e` — 查看相邻格子（搜刮容器、与家具互动）
+- `G` — 从格子上拾取物品（用 `,` 切换高级拾取）
+- `&` — 打开制作菜单（用 `/` 筛选配方，收藏常用项）
+- `@` — 查看角色面板（监控疼痛、士气、负重）
+- `` ` `` — 切换安全模式，避免意外接战
+- `Shift+.` — 等待一回合（稳定瞄准或喘口气）
 
-Keep this guide within reach while you bootstrap the knowledge base—mastery of fundamentals buys time for complex plans.
+在搭建知识库的起步阶段，把这份指南放在手边——把基本功练熟，才能为复杂计划争取时间。

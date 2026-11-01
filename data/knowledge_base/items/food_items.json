@@ -5,81 +5,81 @@
     "food",
     "survival"
   ],
-  "summary": "Portable, high-impact foods useful in the first week.",
+  "summary": "第一周里便携、见效快的高热量食物。",
   "details": {
     "generated_on": "2025-10-12",
     "items": [
       {
         "item_id": "meat_cooked",
-        "display_name": "cooked meat",
-        "description": "A chunk of cooked meat.  It's filling and nutritious, but unseasoned and a bit bland.",
+        "display_name": "熟肉",
+        "description": "一块熟肉。管饱又有营养，但没调味，味道有点寡淡。",
         "weight_g": 296.0,
         "volume_ml": 250.0,
         "materials": [
           "flesh"
         ],
         "uses": [
-          "Calories 402"
+          "卡路里 402"
         ],
-        "durability": "Consumable (charges: 1)",
-        "shelf_life": "1 day"
+        "durability": "消耗品（份数：1）",
+        "shelf_life": "1 天"
       },
       {
         "item_id": "meat_smoked",
-        "display_name": "smoked meat",
-        "description": "Tasty meat that has been heavily smoked for preservation.  It could be further smoked to dehydrate it completely.",
+        "display_name": "熏肉",
+        "description": "经过长时间熏制以便保存的香肉。还可以继续熏制，把它彻底脱水。",
         "weight_g": 296.0,
         "volume_ml": 250.0,
         "materials": [
           "flesh"
         ],
         "uses": [
-          "Quench -1",
-          "Calories 402",
-          "Morale +5",
-          "Smoked preservation extends shelf life to 24 days; great for base camps."
+          "解渴 -1",
+          "卡路里 402",
+          "士气 +5",
+          "熏制保存可把保质期延长到 24 天；很适合作为避难所常备食物。"
         ],
-        "durability": "Consumable (charges: 1)",
-        "shelf_life": "24 days"
+        "durability": "消耗品（份数：1）",
+        "shelf_life": "24 天"
       },
       {
         "item_id": "meat_canned",
-        "display_name": "canned meat",
-        "description": "Low-sodium boiled and canned meat.  Contains most of the nutrition, but little of the savor of cooked meat.",
+        "display_name": "罐头肉",
+        "description": "低钠的水煮罐头肉。营养大部分还在，但熟肉那点香味几乎没了。",
         "weight_g": 296.0,
         "volume_ml": 250.0,
         "materials": [
           "flesh"
         ],
         "uses": [
-          "Calories 402",
-          "Morale +2",
-          "High protein ration that never spoils; heavy but shelf-stable."
+          "卡路里 402",
+          "士气 +2",
+          "高蛋白口粮，永不腐坏；偏重，但适合长期存放。"
         ],
-        "durability": "Consumable (charges: 1)",
-        "shelf_life": "1 day 16 hours"
+        "durability": "消耗品（份数：1）",
+        "shelf_life": "1 天 16 小时"
       },
       {
         "item_id": "can_beans",
-        "display_name": "canned beans",
-        "description": "Canned beans.  A staple among canned goods, these are reputedly good for one's coronary health.",
+        "display_name": "罐装豆子",
+        "description": "罐装豆子。罐头食品里的主食，据说对心血管有好处。",
         "weight_g": 256.0,
         "volume_ml": 250.0,
         "materials": [
           "bean"
         ],
         "uses": [
-          "Quench -1",
-          "Calories 203",
-          "Crack open with can opener or knife; pairs with toast for morale."
+          "解渴 -1",
+          "卡路里 203",
+          "用开罐器或刀撬开；配上吐司能提升士气。"
         ],
-        "durability": "Consumable (charges: 1)",
-        "shelf_life": "2 days"
+        "durability": "消耗品（份数：1）",
+        "shelf_life": "2 天"
       },
       {
         "item_id": "jerky",
-        "display_name": "meat jerky",
-        "description": "Salty dried meat that lasts for a long time, but will make you thirsty.",
+        "display_name": "肉干",
+        "description": "咸味的干肉，能放很久，但会让你口渴。",
         "weight_g": 85.0,
         "volume_ml": 250.0,
         "materials": [
@@ -87,18 +87,18 @@
           "flesh"
         ],
         "uses": [
-          "Quench -5",
-          "Calories 348",
-          "Morale +4",
-          "Excellent travel snack: light weight, decent calories, long shelf life."
+          "解渴 -5",
+          "卡路里 348",
+          "士气 +4",
+          "绝佳的旅途零食：轻、热量还不错、保质期长。"
         ],
-        "durability": "Consumable (charges: 1)",
-        "shelf_life": "24 days"
+        "durability": "消耗品（份数：1）",
+        "shelf_life": "24 天"
       },
       {
         "item_id": "pemmican",
-        "display_name": "pemmican",
-        "description": "A concentrated mixture of fat and protein, first said to have been used as a nutritious high-energy food by the Querecho and Teya people of what is Texas today.  Composed of meat, tallow, and edible berries, it provides excellent nutrition in an easy to carry form.",
+        "display_name": "肉糜饼",
+        "description": "脂肪和蛋白质的浓缩混合物。据说最早是今天得克萨斯一带的 Querecho 和 Teya 人当作高能量营养食品使用的。由肉、油脂和可食用浆果制成，营养极佳，又便于携带。",
         "weight_g": 106.0,
         "volume_ml": 120.0,
         "materials": [
@@ -106,18 +106,18 @@
           "fruit"
         ],
         "uses": [
-          "Quench -2",
-          "Calories 440",
-          "Morale +3",
-          "Stacks calories + fat for winter travel; tiny weight footprint."
+          "解渴 -2",
+          "卡路里 440",
+          "士气 +3",
+          "冬季出行时兼顾热量与脂肪；重量极小。"
         ],
-        "durability": "Consumable (charges: 1)",
-        "shelf_life": "360 days"
+        "durability": "消耗品（份数：1）",
+        "shelf_life": "360 天"
       },
       {
         "item_id": "fruit_leather",
-        "display_name": "fruit leather",
-        "description": "Dried strips of sugary fruit paste.",
+        "display_name": "果丹皮",
+        "description": "含糖果酱做成的干条。",
         "weight_g": 34.0,
         "volume_ml": 50.0,
         "materials": [
@@ -125,104 +125,104 @@
           "fruit"
         ],
         "uses": [
-          "Calories 122",
-          "Morale +3",
-          "Sugar rush for quick morale; watch for thirst penalty."
+          "卡路里 122",
+          "士气 +3",
+          "糖分能快速提振士气；注意口渴惩罚。"
         ],
-        "durability": "Consumable (charges: 1)",
-        "shelf_life": "360 days"
+        "durability": "消耗品（份数：1）",
+        "shelf_life": "360 天"
       },
       {
         "item_id": "apple",
-        "display_name": "apple",
-        "description": "An iconic and delicious fruit grown and enjoyed across the world, used for generations in folk medicine as doctor repellant.",
+        "display_name": "苹果",
+        "description": "一种标志性又美味的水果，世界各地都有人种植和享用，几代人都拿它当民间偏方来驱赶医生。",
         "weight_g": 182.0,
         "volume_ml": 232.0,
         "materials": [
           "fruit"
         ],
         "uses": [
-          "Quench +3",
-          "Calories 94",
-          "Morale +3"
+          "解渴 +3",
+          "卡路里 94",
+          "士气 +3"
         ],
-        "durability": "Consumable (charges: 1)",
-        "shelf_life": "6 days 16 hours"
+        "durability": "消耗品（份数：1）",
+        "shelf_life": "6 天 16 小时"
       },
       {
         "item_id": "bread",
-        "display_name": "bread",
-        "description": "A humble piece of bread, one of the single most important staple foods of human civilization since the dawn of agriculture.",
+        "display_name": "面包",
+        "description": "朴素的一块面包，自农业诞生以来，一直是人类文明最重要的主食之一。",
         "weight_g": 58.0,
         "volume_ml": 200.0,
         "materials": [
           "wheat"
         ],
         "uses": [
-          "Calories 77",
-          "Morale +1",
-          "Combine with peanut butter for morale-positive sandwiches."
+          "卡路里 77",
+          "士气 +1",
+          "和花生酱搭配，做成士气为正的三明治。"
         ],
-        "durability": "Consumable (charges: 1)",
-        "shelf_life": "10 days"
+        "durability": "消耗品（份数：1）",
+        "shelf_life": "10 天"
       },
       {
         "item_id": "crackers",
-        "display_name": "cracker",
-        "description": "Dry and salty, these crackers will leave you quite thirsty.",
+        "display_name": "饼干",
+        "description": "又干又咸，吃这些饼干会让你相当口渴。",
         "weight_g": 56.0,
         "volume_ml": 125.0,
         "materials": [
           "wheat"
         ],
         "uses": [
-          "Quench -4",
-          "Calories 280",
-          "Morale +2"
+          "解渴 -4",
+          "卡路里 280",
+          "士气 +2"
         ],
-        "durability": "Consumable (charges: 1)",
-        "shelf_life": "90 days"
+        "durability": "消耗品（份数：1）",
+        "shelf_life": "90 天"
       },
       {
         "item_id": "oatmeal",
-        "display_name": "oatmeal",
-        "description": "Dry flakes of flattened grain.  Tasty and nutritious when cooked, it also doubles as food for horses while dry.",
+        "display_name": "燕麦片",
+        "description": "压扁的干麦片。煮熟后又香又有营养，干燥时也能当马饲料。",
         "weight_g": 35.0,
         "volume_ml": 125.0,
         "materials": [
           "wheat"
         ],
         "uses": [
-          "Quench -15",
-          "Calories 131",
-          "Morale -8",
-          "Cook with clean water to unlock morale bonus and warmth."
+          "解渴 -15",
+          "卡路里 131",
+          "士气 -8",
+          "用干净水煮开后能获得士气加成和暖意。"
         ],
-        "durability": "Consumable (charges: 1)",
-        "shelf_life": "360 days"
+        "durability": "消耗品（份数：1）",
+        "shelf_life": "360 天"
       },
       {
         "item_id": "oatmeal_cooked",
-        "display_name": "cooked oatmeal",
-        "description": "A filling and nutritious New England classic that has sustained pioneers and captains of industry alike.",
+        "display_name": "熟燕麦粥",
+        "description": "管饱又营养的新英格兰经典，养活了拓荒者和工业巨头。",
         "weight_g": 256.0,
         "volume_ml": 250.0,
         "materials": [
           "wheat"
         ],
         "uses": [
-          "Quench +45",
-          "Calories 151",
-          "Morale +2",
-          "Warm breakfast: morale +5, good before long raids."
+          "解渴 +45",
+          "卡路里 151",
+          "士气 +2",
+          "热乎的早餐：士气 +5，适合长途外出前吃。"
         ],
-        "durability": "Consumable (charges: 1)",
-        "shelf_life": "10 days"
+        "durability": "消耗品（份数：1）",
+        "shelf_life": "10 天"
       },
       {
         "item_id": "peanutbutter",
-        "display_name": "peanut butter",
-        "description": "A brown goo that tastes very little like its namesake.  It's not bad, but it'll stick to the roof of your mouth.",
+        "display_name": "花生酱",
+        "description": "一坨棕色的糊状物，尝起来跟名字里说的东西关系不大。不算难吃，但会粘在上颚。",
         "weight_g": 50.0,
         "volume_ml": 250.0,
         "materials": [
@@ -230,14 +230,14 @@
           "nut"
         ],
         "uses": [
-          "Quench -2",
-          "Calories 190",
-          "Morale +2",
-          "8 servings per container",
-          "High calorie spread; combine with crackers or bread for portable meals."
+          "解渴 -2",
+          "卡路里 190",
+          "士气 +2",
+          "每罐 8 份",
+          "高热量抹酱；配饼干或面包就是便携口粮。"
         ],
-        "durability": "Consumable (charges: 8)",
-        "shelf_life": "180 days"
+        "durability": "消耗品（份数：8）",
+        "shelf_life": "180 天"
       }
     ]
   }

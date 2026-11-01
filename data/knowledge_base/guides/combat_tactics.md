@@ -1,26 +1,26 @@
-# Combat Tactics
+# 战斗战术
 
-## Fight Or Flee
+## 战还是退
 
-- **Assess before engaging**: check enemy speed, special attacks, and numbers with `V` (look) before committing.
-- **Leverage stamina**: stay below medium exertion; if winded, retreat immediately to recover.
-- **Know your limits**: avoid shockers, acidic, or hulks until you have ranged weapons or armor support.
-- **Fallback plans**: keep doors, windows, or pits between you and enemies to break line of sight fast.
+- **接战前先评估**：用 `V`（查看）确认敌人的速度、特殊攻击和数量，再决定是否动手。
+- **善用体力**：把体力消耗控制在中等以下；一旦喘不上气，立刻后撤恢复。
+- **清楚自己的上限**：在有远程武器或护甲支持之前，避开电击者、腐蚀者和巨汉僵尸。
+- **退路预案**：让门、窗或坑洞隔在你和敌人之间，以便迅速切断视线。
 
-## Command Fundamentals
+## 指令基础
 
-- `f` — Fire or throw prepared weapon; combine with `.` to steady aim for ranged accuracy.
-- `TAB` — Cycle targets quickly when dealing with multiple foes at close range.
-- `"` — Toggle run/safe pace (default sprint key) to disengage or reposition.
-- `5` — Wait one turn; essential for letting enemies step into advantageous tiles.
-- `X` — Peek diagonal corners without movement, keeping you safe from surprise hits.
+- `f` — 发射或投掷已备好的武器；配合 `.` 稳定瞄准以提高远程命中。
+- `TAB` — 近距离面对多个敌人时快速切换目标。
+- `"` — 切换奔跑/安全步态（默认冲刺键），用于脱离或重新站位。
+- `5` — 等待一回合；让敌人自己走进有利地形时必不可少。
+- `X` — 不移动就能窥视斜角，避免被突袭。
 
-## Terrain & Door Management
+## 地形与门的管理
 
-- **Door funnels**: fight in one-tile chokepoints; close doors behind you to buy rebuild time.
-- **Furniture traps**: drag tables or lockers into corridors to slow zombies before they reach you.
-- **Stairs & ledges**: lure enemies onto staircases where they lose balance; retreat upward if swarmed.
-- **Environmental damage**: kite foes through fires or traps you place with `fire_drill` embers or nailboard traps.
-- **Escape caches**: stash healing, water, and backup weapons near exit points to recover mid-fight.
+- **门口卡位**：在单格隘口作战；随手关上身后的门，为自己争取重整时间。
+- **家具陷阱**：把桌子或储物柜拖进走廊，拖慢僵尸的推进。
+- **楼梯与高处**：把敌人引上楼梯让其失去平衡；被围时向上撤退。
+- **环境伤害**：用 `fire_drill` 的火星或钉板陷阱，牵着敌人穿过你布下的火焰与陷阱。
+- **逃生补给点**：在出口附近存放治疗用品、水和备用武器，方便战斗中途中恢复。
 
-Stick to these principles and even primitive weapons like the `spear_wood` or `cudgel` can keep you alive long enough to upgrade.
+坚持这些原则，即使是 `spear_wood` 或 `cudgel` 这样的简陋武器，也能让你撑到换装升级的那天。

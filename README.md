@@ -1,6 +1,6 @@
 # dsh-cdda ｜ 让 DSH 自己玩 CDDA
 
-> 当前版本 **0.4.2** · [变更记录](CHANGELOG.md) · [参与开发](CONTRIBUTING.md)
+> 当前版本 **0.4.4** · [变更记录](CHANGELOG.md) · [参与开发](CONTRIBUTING.md)
 
 > **它是什么**：一个 DSH 插件。装上后 DSH 会开两个 `screen` 会话 ——
 > `cdda`（游戏终端）和 `cdda_log`（实时战报）。
@@ -206,7 +206,7 @@ CDDAi 的 `data/knowledge_base/` 已放在本仓库的 `data/knowledge_base/`（
 
 ```json
 {"tags": ["water_sources", "thirst_mechanics"]}
-{"query": "boil water"}
+{"query": "煮沸水"}
 {}
 ```
 
@@ -320,7 +320,7 @@ CDDAi 的 `data/knowledge_base/` 已放在本仓库的 `data/knowledge_base/`（
 ## 开发 / 测试
 
 ```bash
-npm test                 # 29 项：按键/解析/存档/知识库/屏幕结构化/目标/开局/MCP/screen/录制
+npm test                 # 31 项：按键/解析/存档/知识库/中文格式/屏幕结构化/目标/开局/MCP/screen/录制
 node selfcheck.mjs       # 环境自检（含 ffmpeg/字体）
 ```
 
@@ -375,7 +375,8 @@ scripts/                 无 pnpm 时的本地安装/卸载
 - **录制是文本视频**：没有颜色、没有光标、菜单边框会缺失；2 fps 是为了省 CPU/磁盘。
   中文只出现在外挂字幕里；游戏画面本身是英文 ASCII。
 - **录制目录**：默认 `<DSH_HOME>/cdda-duty/recordings/`；可以改到别的盘。
-- **知识库是英文原文**：CDDAi 的指南/机制是英文；模型能读，但别期待中文翻译。
+- **知识库是中文**：guides/机制/物品/配方已翻译成简体中文；按键只翻了
+  `defaultmode` 核心 68 条，其他上下文保留英文原文。
   注入有字符上限，超出会截断；需要完整内容用 `cdda_knowledge` 按 tag 查。
 - **屏幕解析是尽力而为**：菜单边框/颜色抓不到，部分数值（0.G 侧栏的饥渴）只显示空值，
   这时会回退存档；没有解析到的字段会明确标 `source: save` 或 `null`。

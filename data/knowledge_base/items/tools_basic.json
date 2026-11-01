@@ -5,14 +5,14 @@
     "tools",
     "survival"
   ],
-  "summary": "Foundational tools and primitive weapons for early survival.",
+  "summary": "早期生存所需的基础工具与原始武器。",
   "details": {
     "generated_on": "2025-10-12",
     "items": [
       {
         "item_id": "pockknife",
-        "display_name": "pocket knife",
-        "description": "A small pocket knife.  It isn't great for combat, but it's better than nothing.  It's sharp enough to butcher with.",
+        "display_name": "口袋刀",
+        "description": "一把小折刀。打起来不算好使，但总比空手强。锋利度足够剥尸。",
         "weight_g": 20.0,
         "volume_ml": 10.0,
         "materials": [
@@ -20,9 +20,9 @@
           "steel"
         ],
         "uses": [
-          "Qualities: CUT 2, CUT_FINE 1, BUTCHER 11"
+          "品质：CUT 2、CUT_FINE 1、BUTCHER 11"
         ],
-        "durability": "Fragile melee tool",
+        "durability": "脆弱的近战工具",
         "flags": [
           "FRAGILE_MELEE",
           "ALLOWS_BODY_BLOCK"
@@ -30,17 +30,17 @@
       },
       {
         "item_id": "makeshift_knife",
-        "display_name": "makeshift knife",
-        "description": "A knife consisting of a long, somewhat sharpened spike and a tightly-wrapped rag as a handle.  Not as good as a real knife, but it'll do in a pinch.",
+        "display_name": "简易刀",
+        "description": "用一根磨尖的长铁钉和紧紧缠上的破布做刀柄制成的刀。不如真刀，但应急够了。",
         "weight_g": 575.0,
         "volume_ml": 260.0,
         "materials": [
           "steel"
         ],
         "uses": [
-          "Qualities: CUT 2, BUTCHER 11"
+          "品质：CUT 2、BUTCHER 11"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "SHEATH_KNIFE",
           "ALLOWS_BODY_BLOCK"
@@ -48,17 +48,17 @@
       },
       {
         "item_id": "knife_steak",
-        "display_name": "steak knife",
-        "description": "A sharp knife designed for cutting meat.  It makes a poor melee weapon, but is decent at butchering corpses.",
+        "display_name": "牛排刀",
+        "description": "一把专为切肉设计的快刀。当近战武器很差，但剥尸还算趁手。",
         "weight_g": 112.0,
         "volume_ml": 100.0,
         "materials": [
           "steel"
         ],
         "uses": [
-          "Qualities: CUT 2, CUT_FINE 1, BUTCHER 15"
+          "品质：CUT 2、CUT_FINE 1、BUTCHER 15"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "SHEATH_KNIFE",
           "ALLOWS_BODY_BLOCK"
@@ -66,17 +66,17 @@
       },
       {
         "item_id": "knife_butcher",
-        "display_name": "butcher knife",
-        "description": "A sharp, heavy knife.  It makes a good melee weapon, and is an ideal item for butchering corpses.",
+        "display_name": "屠刀",
+        "description": "一把锋利厚重的刀。既是不错的近战武器，也是剥尸的理想工具。",
         "weight_g": 380.0,
         "volume_ml": 300.0,
         "materials": [
           "steel"
         ],
         "uses": [
-          "Qualities: CUT 2, BUTCHER 25"
+          "品质：CUT 2、BUTCHER 25"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "SHEATH_KNIFE",
           "ALLOWS_BODY_BLOCK"
@@ -84,19 +84,19 @@
       },
       {
         "item_id": "makeshift_crowbar",
-        "display_name": "makeshift crowbar",
-        "description": "A pipe with both ends bent and hammered flat to resemble a crowbar.  Use it to open locked crates without destroying them, or to lift manhole covers.  It's not strong enough to pry doors or windows, though.  You could also wield it to fight with, in a pinch.",
+        "display_name": "简易撬棍",
+        "description": "一根两头都弯折、锤扁，做成撬棍样子的管子。可以用它撬开上锁的木箱而不弄坏箱子，也能撬开井盖。不过强度不够，撬不开门窗。实在没办法时也能抡起来打。",
         "weight_g": 600.0,
         "volume_ml": 370.0,
         "materials": [
           "steel"
         ],
         "uses": [
-          "Qualities: PRY 1, HAMMER 1",
-          "Use actions: CROWBAR_WEAK",
-          "Prying quality 1: open crates/doors without explosions."
+          "品质：PRY 1、HAMMER 1",
+          "使用动作：CROWBAR_WEAK",
+          "撬棍品质 1：撬开木箱/门且不会引发爆炸。"
         ],
-        "durability": "Fragile melee tool",
+        "durability": "脆弱的近战工具",
         "flags": [
           "BELT_CLIP",
           "FRAGILE_MELEE"
@@ -104,18 +104,18 @@
       },
       {
         "item_id": "crowbar",
-        "display_name": "crowbar",
-        "description": "A hefty prying tool.  Use it to open locked doors without destroying them, or to lift manhole covers.  You could also wield it to bash some heads in.",
+        "display_name": "撬棍",
+        "description": "一把结实的撬具。可以用它打开上锁的门而不弄坏门，也能撬开井盖。还能抡起来砸碎几个脑袋。",
         "weight_g": 1456.0,
         "volume_ml": 520.0,
         "materials": [
           "steel"
         ],
         "uses": [
-          "Qualities: PRY 3, HAMMER 1, PRYING_NAIL 1",
-          "Use actions: CROWBAR"
+          "品质：PRY 3、HAMMER 1、PRYING_NAIL 1",
+          "使用动作：CROWBAR"
         ],
-        "durability": "Durable melee-capable tool",
+        "durability": "耐用的可近战工具",
         "flags": [
           "BELT_CLIP",
           "DURABLE_MELEE"
@@ -123,8 +123,8 @@
       },
       {
         "item_id": "hammer",
-        "display_name": "hammer",
-        "description": "A demagnetized steel claw hammer with a wooden grip.  With a hammer, nails, and planks in your inventory, you could board up adjacent doors and windows.  It has myriad other uses as well.",
+        "display_name": "锤子",
+        "description": "一把木柄的消磁钢羊角锤。背包里有锤子、钉子和木板，就能把相邻的门窗钉死。它还有无数别的用途。",
         "weight_g": 566.0,
         "volume_ml": 320.0,
         "materials": [
@@ -132,10 +132,10 @@
           "wood"
         ],
         "uses": [
-          "Qualities: HAMMER 3, PRY 1, HAMMER_FINE 1, PRYING_NAIL 1",
-          "Use actions: CROWBAR"
+          "品质：HAMMER 3、PRY 1、HAMMER_FINE 1、PRYING_NAIL 1",
+          "使用动作：CROWBAR"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "BELT_CLIP",
           "NONCONDUCTIVE",
@@ -144,8 +144,8 @@
       },
       {
         "item_id": "screwdriver",
-        "display_name": "screwdriver",
-        "description": "A Philips-head screwdriver.  It is important for almost all electronics crafting, most mechanics crafting, and has many more uses.",
+        "display_name": "螺丝刀",
+        "description": "一把十字螺丝刀。几乎所有电子制作、大多数机械制作都离不开它，用途还远不止这些。",
         "weight_g": 170.0,
         "volume_ml": 40.0,
         "materials": [
@@ -153,9 +153,9 @@
           "steel"
         ],
         "uses": [
-          "Qualities: SCREW 1"
+          "品质：SCREW 1"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "SPEAR",
           "BELT_CLIP",
@@ -165,17 +165,17 @@
       },
       {
         "item_id": "matches",
-        "display_name": "matchbook",
-        "description": "A small book of matches with a coarse strike surface on the outside flap for lighting them.  Allows you to use various drugs like cigarettes, light explosives like Molotov cocktails, or light nearby items on fire.  Due to the matches being lightly glued to the matchbook, they can be removed, but not replaced on the book.",
+        "display_name": "火柴盒",
+        "description": "一小本火柴，外侧折页上有粗糙的擦火面。可以点香烟之类的药品、点燃烧瓶之类的爆炸物，或者把身边的东西点着。因为火柴只是轻轻粘在火柴本上，可以取下来，但装不回去。",
         "weight_g": 10.0,
         "volume_ml": 10.0,
         "materials": [
           "cardboard"
         ],
         "uses": [
-          "Use actions: firestarter"
+          "使用动作：firestarter"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "FIRESTARTER",
           "NO_RELOAD",
@@ -184,8 +184,8 @@
       },
       {
         "item_id": "lighter",
-        "display_name": "lighter",
-        "description": "A disposable plastic lighter, capable of creating a small flame with the flick of a finger.  Allows you to use various drugs like cigarettes, light explosives like Molotov cocktails, or light nearby items on fire.",
+        "display_name": "打火机",
+        "description": "一次性塑料打火机，手指一弹就能打出小火苗。可以点香烟之类的药品、点燃烧瓶之类的爆炸物，或者把身边的东西点着。",
         "weight_g": 14.0,
         "volume_ml": 14.0,
         "materials": [
@@ -193,9 +193,9 @@
           "plastic"
         ],
         "uses": [
-          "Use actions: firestarter"
+          "使用动作：firestarter"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "FIRESTARTER",
           "NO_UNLOAD",
@@ -204,19 +204,19 @@
       },
       {
         "item_id": "fire_drill",
-        "display_name": "bow fire drill",
-        "description": "A simple item for starting fires with friction between a notched plank and wooden shaft.  The shaft is spun rapidly with a sawing motion by a bowstring wrapped around it.  Very slow to acquire a usable ember.",
+        "display_name": "弓钻取火器",
+        "description": "用带缺口的木板和木轴摩擦生火的简易工具。把弓弦绕在木轴上，来回拉动让木轴飞快旋转。要弄出能用的火星非常慢。",
         "weight_g": 240.0,
         "volume_ml": 400.0,
         "materials": [
           "wood"
         ],
         "uses": [
-          "Qualities: DRILL_ROCK 1",
-          "Use actions: firestarter",
-          "Infinite firestarter; stamina heavy but no consumables required."
+          "品质：DRILL_ROCK 1",
+          "使用动作：firestarter",
+          "无限次取火；很耗体力，但不需要消耗品。"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "FIRESTARTER",
           "REQUIRES_TINDER"
@@ -224,8 +224,8 @@
       },
       {
         "item_id": "shovel",
-        "display_name": "shovel",
-        "description": "A digging tool.  Use it to dig pits adjacent to your location.",
+        "display_name": "铁锹",
+        "description": "挖土工具。可以在身边挖坑。",
         "weight_g": 2032.0,
         "volume_ml": 3500.0,
         "materials": [
@@ -233,9 +233,9 @@
           "wood"
         ],
         "uses": [
-          "Qualities: DIG 3, COOK 1, BUTCHER -70"
+          "品质：DIG 3、COOK 1、BUTCHER -70"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "NONCONDUCTIVE",
           "NO_SALVAGE"
@@ -243,8 +243,8 @@
       },
       {
         "item_id": "saw",
-        "display_name": "wood saw",
-        "description": "A thin saw, useful for cutting through wood objects.  Activate it to turn pre-cut logs into planks.",
+        "display_name": "木锯",
+        "description": "一把薄锯，适合锯开木制物件。激活后能把预先切好的原木变成木板。",
         "weight_g": 283.0,
         "volume_ml": 1000.0,
         "materials": [
@@ -252,9 +252,9 @@
           "wood"
         ],
         "uses": [
-          "Qualities: AXE 1, SAW_W 2, BUTCHER -90"
+          "品质：AXE 1、SAW_W 2、BUTCHER -90"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "NONCONDUCTIVE",
           "BELT_CLIP"
@@ -262,8 +262,8 @@
       },
       {
         "item_id": "primitive_axe",
-        "display_name": "stone axe",
-        "description": "A stone with a narrow edge affixed to a stick.  It can chop wood, but requires much more effort than a modern axe.",
+        "display_name": "石斧",
+        "description": "把窄刃石头绑在木棍上做成。能砍木头，但比现代斧头费劲得多。",
         "weight_g": 822.0,
         "volume_ml": 1000.0,
         "materials": [
@@ -271,10 +271,10 @@
           "wood"
         ],
         "uses": [
-          "Qualities: CUT 1, AXE 1, BUTCHER -70, HAMMER 1",
-          "Primitive AXE quality for chopping trees when metal axes are scarce."
+          "品质：CUT 1、AXE 1、BUTCHER -70、HAMMER 1",
+          "金属斧头稀缺时，靠原始 AXE 品质砍树。"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "BELT_CLIP",
           "SHEATH_AXE"
@@ -282,8 +282,8 @@
       },
       {
         "item_id": "primitive_knife",
-        "display_name": "stone knife",
-        "description": "A sharpened stone set into a hollowed handle.  Not nearly as usable as a proper knife, but it's better than nothing.",
+        "display_name": "石刀",
+        "description": "把磨尖的石头嵌进掏空的木柄里。远不如正经刀具好用，但总比没有强。",
         "weight_g": 453.0,
         "volume_ml": 250.0,
         "materials": [
@@ -291,10 +291,10 @@
           "wood"
         ],
         "uses": [
-          "Qualities: CUT 2, BUTCHER 11",
-          "Baseline cutting tool; enables butchering and crafting sinew."
+          "品质：CUT 2、BUTCHER 11",
+          "最基础的切割工具；能剥尸，也能制作筋腱。"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "SHEATH_KNIFE",
           "ALLOWS_BODY_BLOCK"
@@ -302,8 +302,8 @@
       },
       {
         "item_id": "primitive_hammer",
-        "display_name": "stone hammer",
-        "description": "A rock affixed to a stick in the crude facsimile of a hammer.  It functions adequately, but really can't compare to a proper hammer, and can't pull out nails either.",
+        "display_name": "石锤",
+        "description": "把石头绑在木棍上，勉强算是锤子。用起来还凑合，但真比不上正经锤子，也拔不出钉子。",
         "weight_g": 1020.0,
         "volume_ml": 400.0,
         "materials": [
@@ -311,44 +311,44 @@
           "wood"
         ],
         "uses": [
-          "Qualities: HAMMER 2",
-          "Provides HAMMER quality for early construction without metal."
+          "品质：HAMMER 2",
+          "没有金属时提供 HAMMER 品质，可用于早期建造。"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "BELT_CLIP"
         ]
       },
       {
         "item_id": "primitive_shovel",
-        "display_name": "wooden shovel",
-        "description": "A crude shovel with a shovelhead made from wood, historically used as an alternative to metal shovels when metal was too expensive.  It works passably well, but really can't compare to a metal shovel.",
+        "display_name": "木铲",
+        "description": "铲头用木头做的粗糙铲子，历史上在金属太贵的年代被当作金属铲的替代品。用起来勉强可以，但真比不上金属铲。",
         "weight_g": 1581.0,
         "volume_ml": 4000.0,
         "materials": [
           "wood"
         ],
         "uses": [
-          "Qualities: DIG 2",
-          "Allows digging pits/trenches before acquiring steel shovels."
+          "品质：DIG 2",
+          "在搞到铁锹之前，可以挖坑、挖壕沟。"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": []
       },
       {
         "item_id": "spear_wood_simple",
-        "display_name": "wooden spear",
-        "description": "A stout wooden pole with a whittled point.",
+        "display_name": "木矛",
+        "description": "一根结实的木杆，前端削尖。",
         "weight_g": 1200.0,
         "volume_ml": 1750.0,
         "materials": [
           "wood"
         ],
         "uses": [
-          "Qualities: COOK 1",
-          "Light reach weapon useful before finding metal polearms."
+          "品质：COOK 1",
+          "在找到金属长柄武器之前，是很好用的轻型长兵器。"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "SPEAR",
           "REACH_ATTACK",
@@ -358,18 +358,18 @@
       },
       {
         "item_id": "spear_wood",
-        "display_name": "fire-hardened wooden spear",
-        "description": "A stout wooden pole with a fire-hardened point.",
+        "display_name": "火烤硬化木矛",
+        "description": "一根结实的木杆，矛尖经过火烤硬化。",
         "weight_g": 1200.0,
         "volume_ml": 1750.0,
         "materials": [
           "wood"
         ],
         "uses": [
-          "Qualities: COOK 1",
-          "Fire-hardened spear with better damage; combine with fire source."
+          "品质：COOK 1",
+          "火烤硬化的矛伤害更高；需要配合火源。"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "SPEAR",
           "REACH_ATTACK",
@@ -379,17 +379,17 @@
       },
       {
         "item_id": "makeshift_sling",
-        "display_name": "makeshift sling",
-        "description": "A large sheet tied into a crude, over-the-shoulder sling.",
+        "display_name": "简易挎带",
+        "description": "把一大块布系成的粗糙单肩挎带。",
         "weight_g": 771.0,
         "volume_ml": 5000.0,
         "materials": [
           "cotton"
         ],
         "uses": [
-          "Crafted storage: quick + volume using spare sheets/blankets."
+          "自制储物：用多余的床单/毯子快速换来容量。"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "OVERSIZE",
           "BELTED",
@@ -398,17 +398,17 @@
       },
       {
         "item_id": "cudgel",
-        "display_name": "cudgel",
-        "description": "A long, slender wooden rod.  While traditionally intended as a training tool, it still makes a good melee weapon in a pinch.",
+        "display_name": "短棍",
+        "description": "一根细长的木棒。虽然本来是练功用的，但应急时也算不错的近战武器。",
         "weight_g": 425.0,
         "volume_ml": 600.0,
         "materials": [
           "wood"
         ],
         "uses": [
-          "Reliable bashing weapon requiring only a 2x4 or pool cue."
+          "可靠的钝击武器，只要一根 2x4 木板或台球杆就能做。"
         ],
-        "durability": "Durable tool",
+        "durability": "耐用的工具",
         "flags": [
           "BELT_CLIP"
         ]

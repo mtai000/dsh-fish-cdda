@@ -1,31 +1,31 @@
 {
   "topic": "health_system",
   "tags": ["mechanics", "survival", "health"],
-  "summary": "Overall health and limb conditions determine combat readiness and healing speed.",
+  "summary": "整体健康与肢体状况决定战斗力与恢复速度。",
   "details": {
     "global_health": {
       "range": [-200, 200],
-      "positive_effects": ["Faster natural healing", "Better disease resistance"],
-      "negative_effects": ["Slower healing", "Higher risk of illness"],
-      "maintenance": ["Eat balanced meals", "Avoid junk food", "Take multivitamins"]
+      "positive_effects": ["自然恢复更快", "抗病能力更强"],
+      "negative_effects": ["恢复变慢", "更容易生病"],
+      "maintenance": ["饮食均衡", "少吃垃圾食品", "服用复合维生素"]
     },
     "limb_status": [
-      {"status": "Healthy", "description": "No damage", "effect": "Full capabilities"},
-      {"status": "Lightly Injured", "description": "<50% limb HP", "effect": "Minor pain; safe to fight"},
-      {"status": "Badly Injured", "description": "<25% limb HP", "effect": "High pain; chance to drop items"},
-      {"status": "Broken", "description": "0 limb HP", "effect": "Limb unusable; movement penalties"}
+      {"status": "健康", "description": "无损伤", "effect": "能力完整"},
+      {"status": "轻伤", "description": "肢体生命值 <50%", "effect": "轻微疼痛，仍可安全作战"},
+      {"status": "重伤", "description": "肢体生命值 <25%", "effect": "剧烈疼痛，可能掉落物品"},
+      {"status": "骨折", "description": "肢体生命值 0", "effect": "肢体无法使用，移动受限"}
     ],
     "injury_types": [
-      {"type": "Bleeding", "symptoms": ["HP loss over time"], "treatments": ["Apply pressure bandage", "Use tourniquet"], "keys": ["a"], "items": ["Bandage", "Hemostatic powder"]},
-      {"type": "Bite", "symptoms": ["Risk of infection"], "treatments": ["Disinfect", "Apply antibiotics"], "keys": ["A"], "items": ["Disinfectant", "Antibiotics"]},
-      {"type": "Infection", "symptoms": ["Fever", "HP drop"], "treatments": ["Antibiotics", "Rest"], "keys": ["@"], "items": ["Antibiotic", "Clean water"]},
-      {"type": "Pain", "symptoms": ["Reduced stats"], "treatments": ["Painkillers", "Sleep"], "keys": ["i"], "items": ["Aspirin", "Codeine"]}
+      {"type": "出血", "symptoms": ["生命值持续流失"], "treatments": ["加压包扎", "使用止血带"], "keys": ["a"], "items": ["绷带", "止血粉"]},
+      {"type": "咬伤", "symptoms": ["有感染风险"], "treatments": ["消毒", "使用抗生素"], "keys": ["A"], "items": ["消毒剂", "抗生素"]},
+      {"type": "感染", "symptoms": ["发烧", "生命值下降"], "treatments": ["抗生素", "休息"], "keys": ["@"], "items": ["抗生素", "净水"]},
+      {"type": "疼痛", "symptoms": ["属性下降"], "treatments": ["止痛药", "睡眠"], "keys": ["i"], "items": ["阿司匹林", "可待因"]}
     ],
     "healing_methods": [
-      {"method": "Bandage", "use": "Stop bleeding, minor healing", "time_minutes": 5},
-      {"method": "Disinfectant", "use": "Kill infection risk on wounds", "time_minutes": 10},
-      {"method": "First Aid", "use": "Heals limb HP", "time_minutes": 12},
-      {"method": "Rest", "use": "Natural recovery of overall health", "time_minutes": 480}
+      {"method": "绷带", "use": "止血、小幅治疗", "time_minutes": 5},
+      {"method": "消毒剂", "use": "消除伤口的感染风险", "time_minutes": 10},
+      {"method": "急救", "use": "恢复肢体生命值", "time_minutes": 12},
+      {"method": "休息", "use": "自然恢复整体健康", "time_minutes": 480}
     ]
   }
 }

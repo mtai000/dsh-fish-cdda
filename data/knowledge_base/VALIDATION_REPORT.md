@@ -1,23 +1,23 @@
-# Knowledge Base Validation Report
+# 知识库验证报告
 
-- **Date**: 2025-10-12
-- **Test Suite**: `pytest tests/validation/test_knowledge_quality.py`
-- **Result**: 10 / 10 questions answered with complete information (all assertions passed)
+- **日期**：2025-10-12
+- **测试套件**：`pytest tests/validation/test_knowledge_quality.py`
+- **结果**：10 / 10 个问题均以完整信息作答（全部断言通过）
 
-## Question Coverage
+## 问题覆盖
 
-1. Stone axe components (recipes/early_game_crafting.json)
-2. Crafting menu keybinding (keybindings/cdda_controls.json)
-3. Bleeding treatment guidance (mechanics/health_system.json)
-4. Day 1 priorities (guides/basic_survival.md)
-5. Clean water sources (items/water_sources.json)
-6. Examine nearby tiles keybinding (keybindings/cdda_controls.json)
-7. Critical thirst symptoms (mechanics/thirst_system.json)
-8. Item pickup keybinding (keybindings/cdda_controls.json)
-9. Wooden spear tool requirements (recipes/early_game_crafting.json)
-10. Starvation signals (mechanics/hunger_system.json)
+1. 石斧的组件（recipes/early_game_crafting.json）
+2. 制作菜单的按键（keybindings/cdda_controls.json）
+3. 出血的处理指引（mechanics/health_system.json）
+4. 第一天优先级（guides/basic_survival.md）
+5. 洁净水源（items/water_sources.json）
+6. 查看相邻格子的按键（keybindings/cdda_controls.json）
+7. 严重口渴的症状（mechanics/thirst_system.json）
+8. 拾取物品的按键（keybindings/cdda_controls.json）
+9. 木矛的工具需求（recipes/early_game_crafting.json）
+10. 饥饿信号（mechanics/hunger_system.json）
 
-## Notes
+## 备注
 
-- Validation suite runs automatically as part of the project-level `pytest` invocation.
-- Update this report whenever knowledge changes alter expected answers or new questions are introduced.
+- 验证套件会随项目级 `pytest` 调用自动运行。
+- 凡知识改动影响到预期答案或新增问题，都要更新本报告。

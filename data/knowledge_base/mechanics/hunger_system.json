@@ -1,27 +1,27 @@
 {
   "topic": "hunger_system",
   "tags": ["mechanics", "survival", "nutrition"],
-  "summary": "Hunger accumulates every 90 minutes; malnutrition reduces stats and healing.",
+  "summary": "饥饿约每 90 分钟累积一次；营养不良会降低属性与恢复速度。",
   "details": {
     "level_progression": [
-      {"level": "Engorged", "calorie_state": ">250%", "effects": ["Slower movement", "Risk of vomiting"], "recommendation": "Stop eating; wait for digestion"},
-      {"level": "Full", "calorie_state": "120-250%", "effects": ["Normal"], "recommendation": "Ideal before long trips"},
-      {"level": "Satisfied", "calorie_state": "80-120%", "effects": ["Normal"], "recommendation": "Maintain with regular meals"},
-      {"level": "Hungry", "calorie_state": "60-80%", "effects": ["Minor focus loss"], "recommendation": "Eat calorie dense food soon"},
-      {"level": "Very Hungry", "calorie_state": "40-60%", "effects": ["-10% strength", "-10% dexterity"], "recommendation": "Cook or eat preserved food"},
-      {"level": "Famished", "calorie_state": "20-40%", "effects": ["-20% strength", "-20% dexterity", "Reduced healing"], "recommendation": "Prioritize cooking or scavenging hearty meals"},
-      {"level": "Starving", "calorie_state": "<20%", "effects": ["Severe stat loss", "Health damage"], "recommendation": "Emergency: consume any safe food"}
+      {"level": "过饱", "calorie_state": ">250%", "effects": ["移动变慢", "有呕吐风险"], "recommendation": "停止进食，等待消化"},
+      {"level": "饱腹", "calorie_state": "120-250%", "effects": ["正常"], "recommendation": "长途行动前的理想状态"},
+      {"level": "满足", "calorie_state": "80-120%", "effects": ["正常"], "recommendation": "按时进餐维持"},
+      {"level": "饥饿", "calorie_state": "60-80%", "effects": ["轻微专注流失"], "recommendation": "尽快吃点高热量食物"},
+      {"level": "非常饥饿", "calorie_state": "40-60%", "effects": ["力量 -10%", "敏捷 -10%"], "recommendation": "烹饪或食用保存食品"},
+      {"level": "极度饥饿", "calorie_state": "20-40%", "effects": ["力量 -20%", "敏捷 -20%", "恢复速度下降"], "recommendation": "优先烹饪或搜刮能吃饱的餐食"},
+      {"level": "濒临饿死", "calorie_state": "<20%", "effects": ["属性大幅下降", "健康受损"], "recommendation": "紧急：吃下任何安全的食物"}
     ],
     "food_categories": [
-      {"category": "Preserved", "examples": ["Canned beans", "Jerky", "MREs"], "use_case": "Long shelf life, emergency reserves"},
-      {"category": "Fresh", "examples": ["Wild vegetables", "Berries", "Meat"], "use_case": "Cook quickly before spoiling"},
-      {"category": "Carbohydrate", "examples": ["Crackers", "Bread", "Pasta"], "use_case": "Quick stamina recovery"},
-      {"category": "Protein", "examples": ["Meat", "Fish", "Peanut butter"], "use_case": "Supports healing and muscle"}
+      {"category": "保存类", "examples": ["罐装豆子", "肉干", "军用口粮"], "use_case": "保质期长，可作应急储备"},
+      {"category": "新鲜类", "examples": ["野菜", "浆果", "肉类"], "use_case": "趁腐败前尽快烹饪"},
+      {"category": "碳水类", "examples": ["饼干", "面包", "意面"], "use_case": "快速恢复体力"},
+      {"category": "蛋白类", "examples": ["肉类", "鱼", "花生酱"], "use_case": "有助恢复与维持肌肉"}
     ],
     "nutrition_tips": [
-      "Cook meat to remove parasites and boost calories.",
-      "Carry multivitamins to avoid vitamin deficiency penalties.",
-      "Rotate food stockpiles to eat items before they rot."
+      "把肉煮熟，既去除寄生虫又能提高热量。",
+      "随身携带复合维生素，避免维生素缺乏惩罚。",
+      "轮换存粮，在腐败前把食物吃掉。"
     ]
   }
 }

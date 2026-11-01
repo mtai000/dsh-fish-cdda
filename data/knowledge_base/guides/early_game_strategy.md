@@ -1,27 +1,27 @@
-# Early Game Strategy
+# 早期游戏策略
 
-## Resource Gathering Tactics
+## 资源搜集战术
 
-- **Sweep every container**: use `e` on fridges, cabinets, and vehicle trunks; toggle advanced pickup (``,` ) for debris piles.
-- **Prioritize multi-use loot**: plastic bottles (water + crafting), pots (cooking + boiling), sheets (bandages + sling).
-- **Harvest nature**: fell bushes for sticks, long sticks, and plant fibre; collect rocks near field edges for knapping.
-- **Track spoilage timers**: cook meat immediately, stash smoked or canned goods in cool basements.
-- **Tag haul zones early**: assign auto-pickup for nails, duct tape, and thread to accelerate crafting sessions.
+- **搜遍每个容器**：对冰箱、橱柜和载具后备箱用 `e`；对成堆的杂物用 `,` 切换高级拾取。
+- **优先多用途物资**：塑料瓶（装水 + 制作）、锅（烹饪 + 煮沸）、床单（绷带 + 投石索）。
+- **采集自然物**：砍倒灌木取树枝、长枝和植物纤维；在田边捡石头用于打制石器。
+- **盯住腐败计时**：肉类立刻下锅，烟熏或罐装食品存进阴凉的地下室。
+- **尽早标记搬运区**：给钉子、胶带和线设定自动拾取，加快制作节奏。
 
-## Threat Avoidance
+## 规避威胁
 
-- **Scout with safe mode toggled**: approach corners slowly; use peek (`x`) to scan without stepping into danger tiles.
-- **Learn zombie behaviors**: shamblers are slow but relentless; avoid brutes, corrosives, and shockers until armed.
-- **Control line of sight**: fight in doorways or windows, closing behind you to limit enemy access.
-- **Leash threats**: throw noise makers or use car alarms to drag hordes away from desired loot routes.
-- **Retreat routes**: keep sprint key (`"` by default) ready and know two exits from every building you enter.
+- **开着安全模式侦察**：慢慢靠近拐角；用窥视（`x`）扫描，而不踏进危险的格子。
+- **摸清僵尸行为**：蹒跚者虽慢但穷追不舍；在武装起来之前避开壮汉、腐蚀者和电击者。
+- **控制视线**：在门口或窗口作战，顺手关上身后的门以限制敌人进入。
+- **牵制威胁**：扔出噪音发生器，或用汽车警报把尸群从目标搜刮路线上引开。
+- **保留退路**：随时准备冲刺键（默认 `"`），每进一栋建筑都先记下两条出路。
 
-## Crafting Progression
+## 制作进阶
 
-1. **Stone tier**: craft `primitive_knife`, `primitive_axe`, and `fire_drill` using sticks, rocks, and cordage.
-2. **Polearms & reach**: carve `spear_wood_simple`, then harden over fire for `spear_wood` to kite early zombies.
-3. **Utility upgrades**: build `makeshift_sling` for storage and `primitive_shovel` to access buried caches.
-4. **Base setup**: assemble `makeshift_crowbar` and `cudgel`, then reinforce shelter with boarded windows.
-5. **Metal transition**: once you loot tools, replace stone gear with steel counterparts while keeping backups.
+1. **石器阶段**：用树枝、石头和绳索制作 `primitive_knife`、`primitive_axe` 和 `fire_drill`。
+2. **长杆与距离**：削出 `spear_wood_simple`，再在火上烤硬成 `spear_wood`，以便和早期僵尸拉开距离周旋。
+3. **实用升级**：制作 `makeshift_sling` 扩容，做 `primitive_shovel` 挖开埋藏的物资。
+4. **基地搭建**：备齐 `makeshift_crowbar` 和 `cudgel`，再用封板的窗户加固避难所。
+5. **金属过渡**：捡到工具后，用钢制对应物替换石器，同时留一套备份。
 
-Executing this loop keeps you supplied, mobile, and ready to answer the validation questions with authority.
+照这个循环走，你就能补给充足、行动灵活，随时有底气应对验证问题。

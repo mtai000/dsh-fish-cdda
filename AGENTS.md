@@ -85,7 +85,7 @@
   `reload=1` 根本来不及读新帧。停录要往 ffmpeg stdin 写 `q` 让它写 moov，不能直接 kill。
 - **字幕时间轴以录制开始为 0**：只收 `activity.jsonl` 里 `ts >= startedAt` 的事件；
   同一瞬间的动作+记录会合并成一条 SRT，避免互相盖住。
-- **知识库是英文**：CDDAi 原文就是英文；按 tag 注入有 12000 字符上限，
+- **知识库是中文**：正文已翻译成简体中文；按 tag 注入有 12000 字符上限，
   超出会截断，别指望一轮塞下 150KB。用户改过的 `<家>/knowledge/` 不会被升级覆盖。
 - **`index.js` 里本地 `updateGoal(goal)` 与 `lib/goal.mjs` 的 `updateGoal(stateDir,state)` 重名**：
   导入时必须 alias（目前是 `updateGoalProgress`），否则 `statusPayload` 会把目标写成目录路径。

@@ -1,7 +1,7 @@
-### Inventory & Pickup Menu Navigation
+### 物品栏与拾取菜单操作
 
-- `g` (pick up) opens an item list with numbered entries (e.g., `1 emergency blanket`). Press the number key to toggle each item you want, then press `Enter` to confirm the pickup.
-- `-` or `=` can select/deselect all items; use them cautiously if weight is a concern.
-- While the “Inventory Organization” screen is open, the game expects a numeric selection, cursor movement, or `Esc` to exit. `e` does nothing in this context.
-- If you only opened the menu to inspect items, press `Esc` to cancel quickly and return to normal movement.
-- Remember that bottles marked `(frozen)` need time or heat before they can be consumed; stash them in inventory for later.
+- `g`（拾取）会打开带编号条目的物品列表（例如 `1 emergency blanket`，即应急毯）。按数字键逐个选中想要的物品，再按 `Enter` 确认拾取。
+- `-` 或 `=` 可以全选/取消全选；如果在意负重，请谨慎使用。
+- “物品整理”界面打开时，游戏只接受数字选择、光标移动或 `Esc` 退出。此时按 `e` 没有任何作用。
+- 如果你只是打开菜单查看物品，按 `Esc` 即可快速取消，回到正常移动。
+- 注意标有 `(frozen)`（冻结）的瓶子需要时间或加热才能饮用；先收进物品栏留着以后用。

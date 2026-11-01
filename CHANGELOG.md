@@ -2,6 +2,17 @@
 
 本项目遵循“一个版本一个小节”的简单记录方式，日期用本地日期。
 
+## 0.4.4 — 2026-11-01
+
+- **知识库正文中文化**：guides、机制、物品、配方全部翻译成简体中文；
+  JSON 键名、tag、item id、配方 id、按键、文件名保持不变。
+- 按键表只翻译 `defaultmode` 的 68 条核心动作/分类；其他上下文保留英文原文，
+  避免把 414 条不同菜单的按键一次性改坏。
+- `compactKeybindings` 的注入标题改为「核心按键（defaultmode）」。
+- 知识库格式器展平 recipe 的嵌套对象（不再出现 `[object Object]`）；
+  旧 home 副本无 `.version` 时先备份再升级到中文版。
+- 总测试 31 项。
+
 ## 0.4.3 — 2026-11-01
 
 - 知识库从 `vendor/knowledge_base/` 移到 `data/knowledge_base/`，随包提交（MIT）；

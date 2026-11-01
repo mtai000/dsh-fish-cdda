@@ -1,32 +1,32 @@
 {
   "topic": "thirst_system",
   "tags": ["mechanics", "survival", "thirst"],
-  "summary": "Thirst rises roughly every 30 in-game minutes; dehydration quickly applies speed and health penalties.",
+  "summary": "口渴约每 30 游戏分钟上升一次；脱水会迅速带来移动速度与健康惩罚。",
   "details": {
     "level_progression": [
-      {"level": "Quenched", "thirst_range": [-100, -1], "effects": ["Bonus to focus recovery"], "recommendation": "No action needed"},
-      {"level": "Slaked", "thirst_range": [0, 39], "effects": ["Baseline"], "recommendation": "Maintain with periodic drinks"},
-      {"level": "Thirsty", "thirst_range": [40, 79], "effects": ["-10% move speed", "Minor focus loss"], "recommendation": "Drink within the hour"},
-      {"level": "Very Thirsty", "thirst_range": [80, 119], "effects": ["-25% move speed", "Minor pain"], "recommendation": "Drink immediately; prepare boiled water"},
-      {"level": "Dehydrated", "thirst_range": [120, 200], "effects": ["-50% move speed", "Health damage", "Risk of death"], "recommendation": "Emergency: drink sterile water now"}
+      {"level": "水分充沛", "thirst_range": [-100, -1], "effects": ["专注恢复加成"], "recommendation": "无需处理"},
+      {"level": "解渴", "thirst_range": [0, 39], "effects": ["基线状态"], "recommendation": "定时饮水维持"},
+      {"level": "口渴", "thirst_range": [40, 79], "effects": ["移动速度 -10%", "轻微专注流失"], "recommendation": "一小时内喝水"},
+      {"level": "非常口渴", "thirst_range": [80, 119], "effects": ["移动速度 -25%", "轻微疼痛"], "recommendation": "立即饮水；备好煮沸过的水"},
+      {"level": "脱水", "thirst_range": [120, 200], "effects": ["移动速度 -50%", "健康受损", "有死亡风险"], "recommendation": "紧急：立刻饮用无菌水"}
     ],
     "water_sources": [
-      {"source": "Clean water", "acquisition": "Boiled water, water purifier, bottled water", "risk": "None"},
-      {"source": "Well water", "acquisition": "Farm pumps, public wells", "risk": "Usually safe"},
-      {"source": "Toilet water", "acquisition": "Household bathrooms", "risk": "Must boil to avoid parasites"},
-      {"source": "Rainwater", "acquisition": "Rain catcher, funnels", "risk": "Boil or use tablets"},
-      {"source": "River/pond", "acquisition": "Natural bodies of water", "risk": "Boil or purify"}
+      {"source": "净水", "acquisition": "煮沸水、净水器、瓶装水", "risk": "无"},
+      {"source": "井水", "acquisition": "农用抽水泵、公共水井", "risk": "通常安全"},
+      {"source": "马桶水", "acquisition": "家用卫生间", "risk": "必须煮沸以避免寄生虫"},
+      {"source": "雨水", "acquisition": "集雨器、漏斗", "risk": "煮沸或使用净水药片"},
+      {"source": "河流/池塘", "acquisition": "天然水体", "risk": "煮沸或净化"}
     ],
     "actions": [
-      {"key": "E", "action": "Drink from adjacent source"},
-      {"key": "a", "action": "Activate water purifier or purification tablets"},
-      {"key": "&", "action": "Craft sealed containers or water purification tools"},
-      {"key": "O", "action": "Open containers to collect rain"}
+      {"key": "E", "action": "从相邻水源饮水"},
+      {"key": "a", "action": "使用净水器或净水药片"},
+      {"key": "&", "action": "制作密封容器或净水工具"},
+      {"key": "O", "action": "打开容器收集雨水"}
     ],
     "tips": [
-      "Always keep at least 2 clean water portions in inventory.",
-      "Craft a makeshift funnel early to harvest rainwater.",
-      "Store boiled water in plastic bottles or canteens to prevent spill."
+      "物品栏里始终保留至少 2 份净水。",
+      "尽早制作一个简易漏斗来收集雨水。",
+      "把煮沸过的水装进塑料瓶或水壶，防止洒漏。"
     ]
   }
 }

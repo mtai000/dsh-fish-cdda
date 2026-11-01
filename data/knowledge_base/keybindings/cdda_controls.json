@@ -5,7 +5,7 @@
     "controls",
     "reference"
   ],
-  "summary": "Default Cataclysm: Dark Days Ahead keyboard commands extracted from packaged keybindings.",
+  "summary": "从游戏内置按键配置中提取的《大灾变：黑暗之日》默认键盘命令，按上下文分组，并标注按键、动作与类别。defaultmode 已中文化；其他上下文保留英文原文。",
   "details": {
     "source_file": "cdda/Cataclysm.app/Contents/Resources/data/raw/keybindings.json",
     "generated_on": "2025-10-12",
@@ -1332,213 +1332,213 @@
       },
       {
         "key": ".",
-        "action": "Pause",
+        "action": "等待一回合",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": ":",
-        "action": "Center view",
+        "action": "视角居中",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "K",
-        "action": "Move view north",
+        "action": "视野北移",
         "context": "defaultmode",
-        "category": "movement"
+        "category": "移动"
       },
       {
         "key": "L",
-        "action": "Move view east",
+        "action": "视野东移",
         "context": "defaultmode",
-        "category": "movement"
+        "category": "移动"
       },
       {
         "key": "J",
-        "action": "Move view south",
+        "action": "视野南移",
         "context": "defaultmode",
-        "category": "movement"
+        "category": "移动"
       },
       {
         "key": "H",
-        "action": "Move view west",
+        "action": "视野西移",
         "context": "defaultmode",
-        "category": "movement"
+        "category": "移动"
       },
       {
         "key": "o",
-        "action": "Open door",
+        "action": "开门",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "c",
-        "action": "Close door",
+        "action": "关门",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "s",
-        "action": "Smash nearby terrain",
+        "action": "砸附近地形",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "e",
-        "action": "Examine nearby terrain or furniture",
+        "action": "查看附近地形或家具",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "/",
-        "action": "Advanced Inventory Manager",
+        "action": "高级物品管理器",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "g",
-        "action": "Pick up items from one nearby tile",
+        "action": "拾取相邻格物品",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "G",
-        "action": "Grab something nearby",
+        "action": "抓取附近物品",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "\\",
-        "action": "Haul items along the ground",
+        "action": "拖拽地面物品",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "O",
-        "action": "Zone activities",
+        "action": "区域活动",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "B",
-        "action": "Butcher",
+        "action": "屠宰",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "C",
-        "action": "Chat with NPC",
+        "action": "与 NPC 交谈",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": ";",
-        "action": "Look around",
+        "action": "环视四周",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "X",
-        "action": "Peek around corners",
+        "action": "探头查看转角",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "V",
-        "action": "List all items around the player",
+        "action": "列出周围全部物品",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "Y",
-        "action": "Zones manager",
+        "action": "区域管理器",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "i",
-        "action": "Open inventory",
+        "action": "打开背包",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "I",
-        "action": "Compare two items",
+        "action": "比较两件物品",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "=",
-        "action": "Swap inventory letters",
+        "action": "交换物品字母",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "a",
-        "action": "Use item",
+        "action": "使用物品",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "A",
-        "action": "Use wielded item",
+        "action": "使用手持物品",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "W",
-        "action": "Wear item",
+        "action": "穿戴物品",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "T",
-        "action": "Take off worn item",
+        "action": "脱下装备",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "E",
-        "action": "Consume item (all items)",
+        "action": "食用/饮用物品（全部）",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "R",
-        "action": "Read",
+        "action": "阅读",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "w",
-        "action": "Wield",
+        "action": "手持",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "_",
-        "action": "Select martial arts style",
+        "action": "选择武术流派",
         "context": "defaultmode",
-        "category": "combat"
+        "category": "战斗"
       },
       {
         "key": "v",
-        "action": "Insert item",
+        "action": "装入物品",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "U",
-        "action": "Unload item",
+        "action": "卸下物品",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "t",
-        "action": "Throw item",
+        "action": "投掷物品",
         "context": "defaultmode",
-        "category": "combat"
+        "category": "战斗"
       },
       {
         "key": "t",
@@ -1548,159 +1548,159 @@
       },
       {
         "key": "f",
-        "action": "Fire wielded item",
+        "action": "发射手持物品",
         "context": "defaultmode",
-        "category": "combat"
+        "category": "战斗"
       },
       {
         "key": "F",
-        "action": "Toggle attack mode of wielded item",
+        "action": "切换手持物品攻击模式",
         "context": "defaultmode",
-        "category": "combat"
+        "category": "战斗"
       },
       {
         "key": "d",
-        "action": "Drop item",
+        "action": "丢弃物品",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "D",
-        "action": "Drop item to adjacent tile",
+        "action": "丢到相邻格",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "p",
-        "action": "View/activate bionics",
+        "action": "查看/激活生化插件",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "[",
-        "action": "View/activate mutations",
+        "action": "查看/激活变异",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "N",
-        "action": "View medical",
+        "action": "查看医疗信息",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "{",
-        "action": "View body status",
+        "action": "查看身体状态",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "+",
-        "action": "Sort armor",
+        "action": "整理护甲",
         "context": "defaultmode",
-        "category": "crafting"
+        "category": "制作"
       },
       {
         "key": "|",
-        "action": "Wait for several minutes",
+        "action": "等待数分钟",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "&",
-        "action": "Craft items",
+        "action": "制作物品",
         "context": "defaultmode",
-        "category": "crafting"
+        "category": "制作"
       },
       {
         "key": "-",
-        "action": "Recraft last recipe",
+        "action": "重复上次配方",
         "context": "defaultmode",
-        "category": "crafting"
+        "category": "制作"
       },
       {
         "key": "*",
-        "action": "Construct terrain",
+        "action": "建造地形",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "(",
-        "action": "Disassemble items",
+        "action": "拆解物品",
         "context": "defaultmode",
-        "category": "crafting"
+        "category": "制作"
       },
       {
         "key": "$",
-        "action": "Sleep",
+        "action": "睡觉",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "^",
-        "action": "Control vehicle",
+        "action": "操控载具",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "!",
-        "action": "Toggle safe mode",
+        "action": "切换安全模式",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "'",
-        "action": "Ignore nearby enemy",
+        "action": "忽略附近敌人",
         "context": "defaultmode",
-        "category": "interaction"
+        "category": "交互"
       },
       {
         "key": "~",
-        "action": "Whitelist enemy",
+        "action": "将敌人加入白名单",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "S",
-        "action": "Save and quit",
+        "action": "存档并退出",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "@",
-        "action": "View player info",
+        "action": "查看幸存者信息",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "m",
-        "action": "View map",
+        "action": "查看地图",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "M",
-        "action": "View missions",
+        "action": "查看任务",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "#",
-        "action": "View factions",
+        "action": "查看派系",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "P",
-        "action": "View message log",
+        "action": "查看消息记录",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "0",
-        "action": "View help",
+        "action": "查看帮助",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "z",
@@ -1734,45 +1734,45 @@
       },
       {
         "key": "r",
-        "action": "Reload item",
+        "action": "装填物品",
         "context": "defaultmode",
-        "category": "combat"
+        "category": "战斗"
       },
       {
         "key": "RETURN",
-        "action": "Action menu",
+        "action": "操作菜单",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "%",
-        "action": "Item action menu",
+        "action": "物品操作菜单",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "Tab",
-        "action": "Autoattack",
+        "action": "自动攻击",
         "context": "defaultmode",
-        "category": "combat"
+        "category": "战斗"
       },
       {
         "key": "Esc",
-        "action": "Main menu",
+        "action": "主菜单",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "\"",
-        "action": "Movement mode menu",
+        "action": "移动模式菜单",
         "context": "defaultmode",
-        "category": "movement"
+        "category": "移动"
       },
       {
         "key": ")",
-        "action": "Open diary / achievements / scores",
+        "action": "打开日记/成就/分数",
         "context": "defaultmode",
-        "category": "menu"
+        "category": "菜单"
       },
       {
         "key": "=",

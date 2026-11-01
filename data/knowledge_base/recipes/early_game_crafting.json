@@ -5,19 +5,19 @@
     "crafting",
     "survival"
   ],
-  "summary": "High-priority primitive tools for surviving the opening days.",
+  "summary": "开局头几天最要紧的原始工具配方。",
   "details": {
     "generated_on": "2025-10-12",
     "recipes": [
       {
         "result": "primitive_axe",
-        "display_name": "stone axe",
+        "display_name": "石斧",
         "skill_used": "survival",
         "skills_required": {
           "fabrication": 1
         },
         "difficulty": 4,
-        "time": "1 h",
+        "time": "1 小时",
         "activity_level": "MODERATE_EXERCISE",
         "tools_required": {
           "qualities": [
@@ -40,29 +40,29 @@
           [
             {
               "item_id": "stick",
-              "display_name": "stick",
+              "display_name": "木棍",
               "count": 1
             },
             {
               "item_id": "2x4",
-              "display_name": "plank",
+              "display_name": "木板",
               "count": 1
             }
           ],
           [
             {
               "item_id": "rock_flaking",
-              "display_name": "flaking rock",
+              "display_name": "燧岩",
               "count": 1
             },
             {
               "item_id": "sharp_rock",
-              "display_name": "sharp rock",
+              "display_name": "坚锐岩块",
               "count": 1
             },
             {
               "item_id": "flint",
-              "display_name": "flint",
+              "display_name": "燧石",
               "count": 1
             }
           ]
@@ -81,11 +81,11 @@
       },
       {
         "result": "spear_wood_simple",
-        "display_name": "wooden spear",
+        "display_name": "木矛",
         "skill_used": "fabrication",
         "skills_required": {},
         "difficulty": 2,
-        "time": "120 m",
+        "time": "120 分钟",
         "activity_level": "MODERATE_EXERCISE",
         "tools_required": {
           "qualities": [
@@ -100,12 +100,12 @@
           [
             {
               "item_id": "stick_long",
-              "display_name": "long stick",
+              "display_name": "长木棍",
               "count": 1
             },
             {
               "item_id": "pointy_stick_long",
-              "display_name": "long pointy stick",
+              "display_name": "尖头长木棍",
               "count": 1
             }
           ]
@@ -122,11 +122,11 @@
       },
       {
         "result": "makeshift_crowbar",
-        "display_name": "makeshift crowbar",
+        "display_name": "简易撬棍",
         "skill_used": "fabrication",
         "skills_required": {},
         "difficulty": 0,
-        "time": "5 m",
+        "time": "5 分钟",
         "activity_level": "MODERATE_EXERCISE",
         "tools_required": {
           "qualities": [
@@ -141,7 +141,7 @@
           [
             {
               "item_id": "pipe",
-              "display_name": "pipe",
+              "display_name": "钢管",
               "count": 1
             }
           ]
@@ -152,13 +152,13 @@
       },
       {
         "result": "primitive_knife",
-        "display_name": "stone knife",
+        "display_name": "简易刀",
         "skill_used": "survival",
         "skills_required": {
           "fabrication": 2
         },
         "difficulty": 5,
-        "time": "1 h",
+        "time": "1 小时",
         "activity_level": "MODERATE_EXERCISE",
         "tools_required": {
           "qualities": [
@@ -185,86 +185,86 @@
           [
             {
               "item_id": "stick",
-              "display_name": "stick",
+              "display_name": "木棍",
               "count": 1
             },
             {
               "item_id": "2x4",
-              "display_name": "plank",
+              "display_name": "木板",
               "count": 1
             }
           ],
           [
             {
               "item_id": "rock_flaking",
-              "display_name": "flaking rock",
+              "display_name": "燧岩",
               "count": 1
             },
             {
               "item_id": "sharp_rock",
-              "display_name": "sharp rock",
+              "display_name": "坚锐岩块",
               "count": 1
             },
             {
               "item_id": "flint",
-              "display_name": "flint",
+              "display_name": "燧石",
               "count": 1
             }
           ],
           [
             {
               "item_id": "string_6",
-              "display_name": "short string",
+              "display_name": "短线",
               "count": 1
             },
             {
               "item_id": "cordage_6",
-              "display_name": "short cordage piece",
+              "display_name": "短纤维线",
               "count": 1
             },
             {
               "item_id": "cordage_6_leather",
-              "display_name": "short leather lace",
+              "display_name": "短皮革条",
               "count": 1
             },
             {
               "item_id": "filament",
-              "display_name": "filament",
+              "display_name": "纤维丝",
               "count": 50
             },
             {
               "item_id": "thread",
-              "display_name": "thread",
+              "display_name": "棉线",
               "count": 50
             },
             {
               "item_id": "sinew",
-              "display_name": "sinew",
+              "display_name": "筋腱",
               "count": 50
             },
             {
               "item_id": "plant_fibre",
-              "display_name": "plant fiber",
+              "display_name": "植物纤维",
               "count": 50
             },
             {
               "item_id": "yarn",
-              "display_name": "yarn",
+              "display_name": "纱线",
               "count": 50
             },
             {
               "item_id": "thread_canvas",
-              "display_name": "heavy duty thread",
+              "display_name": "粗线",
               "count": 50
             },
             {
               "item_id": "thread_nomex",
-              "display_name": "Nomex thread",
+              "display_name": "芳纶纤维",
               "count": 100
             },
             {
               "item_id": "thread_kevlar",
-              "display_name": "Kevlar thread",
+              "display_name": "凯夫拉纤维",
               "count": 100
             }
           ]
@@ -283,13 +283,13 @@
       },
       {
         "result": "primitive_hammer",
-        "display_name": "stone hammer",
+        "display_name": "石锤",
         "skill_used": "survival",
         "skills_required": {
           "fabrication": 3
         },
         "difficulty": 3,
-        "time": "3 h",
+        "time": "3 小时",
         "activity_level": "MODERATE_EXERCISE",
         "tools_required": {
           "qualities": [
@@ -312,115 +312,115 @@
           [
             {
               "item_id": "stick",
-              "display_name": "stick",
+              "display_name": "木棍",
               "count": 1
             },
             {
               "item_id": "2x4",
-              "display_name": "plank",
+              "display_name": "木板",
               "count": 1
             }
           ],
           [
             {
               "item_id": "rock",
-              "display_name": "rock",
+              "display_name": "石块",
               "count": 1
             }
           ],
           [
             {
               "item_id": "water",
-              "display_name": "water",
+              "display_name": "水",
               "count": 1
             },
             {
               "item_id": "water_clean",
-              "display_name": "clean water",
+              "display_name": "净水",
               "count": 1
             },
             {
               "item_id": "water_sewage",
-              "display_name": "sewage water",
+              "display_name": "污水",
               "count": 1
             },
             {
               "item_id": "salt_water",
-              "display_name": "salt water",
+              "display_name": "盐水",
               "count": 1
             },
             {
               "item_id": "saline",
-              "display_name": "saline solution",
+              "display_name": "生理盐水",
               "count": 5
             }
           ],
           [
             {
               "item_id": "material_sand",
-              "display_name": "sand",
+              "display_name": "黄沙",
               "count": 1
             },
             {
               "item_id": "material_gravel",
-              "display_name": "gravel",
+              "display_name": "碎石",
               "count": 1
             }
           ],
           [
             {
               "item_id": "string_6",
-              "display_name": "short string",
+              "display_name": "短线",
               "count": 1
             },
             {
               "item_id": "cordage_6",
-              "display_name": "short cordage piece",
+              "display_name": "短纤维线",
               "count": 1
             },
             {
               "item_id": "cordage_6_leather",
-              "display_name": "short leather lace",
+              "display_name": "短皮革条",
               "count": 1
             },
             {
               "item_id": "filament",
-              "display_name": "filament",
+              "display_name": "纤维丝",
               "count": 50
             },
             {
               "item_id": "thread",
-              "display_name": "thread",
+              "display_name": "棉线",
               "count": 50
             },
             {
               "item_id": "sinew",
-              "display_name": "sinew",
+              "display_name": "筋腱",
               "count": 50
             },
             {
               "item_id": "plant_fibre",
-              "display_name": "plant fiber",
+              "display_name": "植物纤维",
               "count": 50
             },
             {
               "item_id": "yarn",
-              "display_name": "yarn",
+              "display_name": "纱线",
               "count": 50
             },
             {
               "item_id": "thread_canvas",
-              "display_name": "heavy duty thread",
+              "display_name": "粗线",
               "count": 50
             },
             {
               "item_id": "thread_nomex",
-              "display_name": "Nomex thread",
+              "display_name": "芳纶纤维",
               "count": 100
             },
             {
               "item_id": "thread_kevlar",
-              "display_name": "Kevlar thread",
+              "display_name": "凯夫拉纤维",
               "count": 100
             }
           ]
@@ -431,13 +431,13 @@
       },
       {
         "result": "spear_wood",
-        "display_name": "fire-hardened wooden spear",
+        "display_name": "碳化木矛",
         "skill_used": "fabrication",
         "skills_required": {
           "survival": 1
         },
         "difficulty": 2,
-        "time": "45 m",
+        "time": "45 分钟",
         "activity_level": "LIGHT_EXERCISE",
         "tools_required": {
           "qualities": [
@@ -450,7 +450,7 @@
             [
               {
                 "item_id": "fire",
-                "display_name": "nearby fire",
+                "display_name": "附近的火",
                 "charges": -1
               }
             ]
@@ -460,12 +460,12 @@
           [
             {
               "item_id": "stick_long",
-              "display_name": "long stick",
+              "display_name": "长木棍",
               "count": 1
             },
             {
               "item_id": "pointy_stick_long",
-              "display_name": "long pointy stick",
+              "display_name": "尖头长木棍",
               "count": 1
             }
           ]
@@ -482,11 +482,11 @@
       },
       {
         "result": "makeshift_sling",
-        "display_name": "makeshift sling",
+        "display_name": "简易投石索",
         "skill_used": null,
         "skills_required": {},
         "difficulty": 0,
-        "time": "6 s",
+        "time": "6 秒",
         "activity_level": "NO_EXERCISE",
         "tools_required": {
           "qualities": [],
@@ -496,7 +496,7 @@
           [
             {
               "item_id": "sheet",
-              "display_name": "sheet",
+              "display_name": "布料",
               "count": 1
             }
           ]
@@ -507,13 +507,13 @@
       },
       {
         "result": "cudgel",
-        "display_name": "cudgel",
+        "display_name": "长棍",
         "skill_used": "fabrication",
         "skills_required": {
           "melee": 1
         },
         "difficulty": 2,
-        "time": "45 m",
+        "time": "45 分钟",
         "activity_level": "LIGHT_EXERCISE",
         "tools_required": {
           "qualities": [
@@ -528,12 +528,12 @@
           [
             {
               "item_id": "2x4",
-              "display_name": "plank",
+              "display_name": "木板",
               "count": 1
             },
             {
               "item_id": "pool_cue",
-              "display_name": "pool cue",
+              "display_name": "台球杆",
               "count": 1
             }
           ]
@@ -550,11 +550,11 @@
       },
       {
         "result": "fire_drill",
-        "display_name": "bow fire drill",
+        "display_name": "钻火弓",
         "skill_used": "survival",
         "skills_required": {},
         "difficulty": 2,
-        "time": "5 m",
+        "time": "5 分钟",
         "activity_level": "LIGHT_EXERCISE",
         "tools_required": {
           "qualities": [
@@ -569,14 +569,14 @@
           [
             {
               "item_id": "stick",
-              "display_name": "stick",
+              "display_name": "木棍",
               "count": 1
             }
           ],
           [
             {
               "item_id": "splinter",
-              "display_name": "splintered wood",
+              "display_name": "碎木",
               "count": 1
             }
           ]
@@ -588,22 +588,22 @@
           [
             {
               "item_id": "string_6",
-              "display_name": "short string",
+              "display_name": "短线",
               "count": 1
             },
             {
               "item_id": "cordage_6",
-              "display_name": "short cordage piece",
+              "display_name": "短纤维线",
               "count": 1
             },
             {
               "item_id": "cordage_6_leather",
-              "display_name": "short leather lace",
+              "display_name": "短皮革条",
               "count": 1
             },
             {
               "item_id": "filament",
-              "display_name": "filament",
+              "display_name": "纤维丝",
               "count": 50
             }
           ]
@@ -611,11 +611,11 @@
       },
       {
         "result": "primitive_shovel",
-        "display_name": "wooden shovel",
+        "display_name": "木铲",
         "skill_used": "fabrication",
         "skills_required": {},
         "difficulty": 2,
-        "time": "1 h",
+        "time": "1 小时",
         "activity_level": "MODERATE_EXERCISE",
         "tools_required": {
           "qualities": [
@@ -642,86 +642,86 @@
           [
             {
               "item_id": "stick",
-              "display_name": "stick",
+              "display_name": "木棍",
               "count": 1
             },
             {
               "item_id": "2x4",
-              "display_name": "plank",
+              "display_name": "木板",
               "count": 1
             }
           ],
           [
             {
               "item_id": "2x4",
-              "display_name": "plank",
+              "display_name": "木板",
               "count": 1
             }
           ],
           [
             {
               "item_id": "nail",
-              "display_name": "nail",
+              "display_name": "钉子",
               "count": 2
             },
             {
               "item_id": "string_6",
-              "display_name": "short string",
+              "display_name": "短线",
               "count": 2
             },
             {
               "item_id": "cordage_6",
-              "display_name": "short cordage piece",
+              "display_name": "短纤维线",
               "count": 2
             },
             {
               "item_id": "cordage_6_leather",
-              "display_name": "short leather lace",
+              "display_name": "短皮革条",
               "count": 2
             },
             {
               "item_id": "filament",
-              "display_name": "filament",
+              "display_name": "纤维丝",
               "count": 100
             },
             {
               "item_id": "thread",
-              "display_name": "thread",
+              "display_name": "棉线",
               "count": 100
             },
             {
               "item_id": "sinew",
-              "display_name": "sinew",
+              "display_name": "筋腱",
               "count": 100
             },
             {
               "item_id": "plant_fibre",
-              "display_name": "plant fiber",
+              "display_name": "植物纤维",
               "count": 100
             },
             {
               "item_id": "yarn",
-              "display_name": "yarn",
+              "display_name": "纱线",
               "count": 100
             },
             {
               "item_id": "thread_canvas",
-              "display_name": "heavy duty thread",
+              "display_name": "粗线",
               "count": 100
             },
             {
               "item_id": "thread_nomex",
-              "display_name": "Nomex thread",
+              "display_name": "芳纶纤维",
               "count": 200
             },
             {
               "item_id": "thread_kevlar",
-              "display_name": "Kevlar thread",
+              "display_name": "凯夫拉纤维",
               "count": 200
             },
             {
               "item_id": "duct_tape",
-              "display_name": "duct tape",
+              "display_name": "强力胶带",
               "count": 40
             }
           ]
