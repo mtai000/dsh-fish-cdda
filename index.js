@@ -949,6 +949,59 @@ export function apply(ctx, config) {
     }
   }
 
+  const screenName = (which) => String(which === 'log' ? (cfg.screenLog || 'cdda_log') : (cfg.screenGame || 'cdda'))
+  const validScreenName = (name) => /^[A-Za-z0-9_.-]{1,64}$/.test(String(name || ''))
+  const trySpawnTerminal = (cmd, args) => new Promise((resolve) => {
+    let child
+    try {
+      child = spawn(cmd, args, { detached: true, stdio: 'ignore', windowsHide: true })
+    } catch { return resolve(false) }
+    let done = false
+    const finish = (ok) => { if (done) return; done = true; resolve(ok) }
+    child.once('spawn', () => { try { child.unref() } catch { /* 忽略 */ } finish(true) })
+    child.once('error', () => finish(false))
+  })
+  async function openTerminal(which) {
+    const name = screenName(which)
+    if (!validScreenName(name)) return { ok: false, error: 'screen 会话名不合法', command: '' }
+    const command = `screen -x ${name}`
+    const candidates = process.platform === 'darwin'
+      ? [['osascript', ['-e', `tell application "Terminal" to do script "screen -x ${name}"`]]]
+      : process.platform === 'win32'
+        ? [['wt.exe', ['new-tab', 'screen', '-x', name]], ['cmd.exe', ['/c', 'start', '', 'screen', '-x', name]]]
+        : [
+            ['x-terminal-emulator', ['-e', 'screen', '-x', name]],
+            ['gnome-terminal', ['--', 'screen', '-x', name]],
+            ['konsole', ['-e', 'screen', '-x', name]],
+            ['xfce4-terminal', ['-x', 'screen', '-x', name]],
+            ['xterm', ['-e', 'screen', '-x', name]],
+            ['alacritty', ['-e', 'screen', '-x', name]],
+            ['kitty', ['screen', '-x', name]],
+            ['wezterm', ['start', '--', 'screen', '-x', name]],
+          ]
+    for (const [bin, args] of candidates) {
+      if (await trySpawnTerminal(bin, args)) return { ok: true, terminal: bin, command }
+    }
+    return { ok: false, error: '找不到可用的系统终端（可以复制命令手动打开）', command }
+  }
+  async function screensPayload() {
+    const gameName = screenName('game')
+    const logName = screenName('log')
+    const [g, l, gRunning, lRunning] = await Promise.all([
+      capture(cfg, gameName, { stateDir }),
+      capture(cfg, logName, { stateDir }),
+      hasSession(cfg, gameName),
+      hasSession(cfg, logName),
+    ])
+    const one = (name, running, cap) => ({
+      name, running: Boolean(running),
+      text: cap?.ok ? String(cap.text || '') : '',
+      error: cap?.ok ? '' : String(cap?.error || '抓不到屏幕'),
+      command: `screen -x ${name}`,
+    })
+    return { ok: true, game: one(gameName, gRunning, g), log: one(logName, lRunning, l), commands: { game: `screen -x ${gameName}`, log: `screen -x ${logName}` } }
+  }
+
   try {
     // 关键：不能在 apply 里直接 ctx.get('webServer') —— 启动时服务可能还没就绪，
     // 那样路由会被静默跳过，表现就是设置页能开、所有 /api/cdda-duty/* 都 404。
@@ -984,6 +1037,15 @@ export function apply(ctx, config) {
             }
             if (req.method === 'GET' && path === '/api/cdda-duty/rounds') {
               return sendJson(res, 200, { ok: true, rounds: readRounds(stateDir, 20) })
+            }
+            if (req.method === 'GET' && path === '/api/cdda-duty/screens') {
+              return sendJson(res, 200, await screensPayload())
+            }
+            if (req.method === 'POST' && path === '/api/cdda-duty/screens/open') {
+              const body = await readBody(req)
+              const which = body.which === 'log' ? 'log' : 'game'
+              const r = await openTerminal(which)
+              return sendJson(res, 200, { ...r, which, name: screenName(which) })
             }
             if (req.method === 'GET' && path === '/api/cdda-duty/recordings') {
               return sendJson(res, 200, {

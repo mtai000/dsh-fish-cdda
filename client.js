@@ -116,6 +116,19 @@ window.__ModuleLoader__.load({
 [data-cd-recvname]{font-size:12.5px;line-height:1.4;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 [data-cd-recvactions]{display:flex;gap:10px;flex-wrap:wrap;padding-top:2px;}
 @media (max-width:640px){[data-cd-recv]{padding:14px 14px 22px;}[data-cd-recvlist]{grid-template-columns:1fr;}}
+[data-cd-badge][data-good]{color:#22c55e;}
+[data-cd-modal]{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.55);}
+[data-cd-modal-card]{width:min(1050px,96vw);max-height:92vh;display:flex;flex-direction:column;gap:10px;padding:14px;overflow:hidden;
+  border:1px solid var(--dsw-alias-bg-layer-3,rgba(255,255,255,.16));border-radius:14px;background:var(--dsw-alias-bg-layer-1,#1b1b1f);
+  box-shadow:0 20px 60px rgba(0,0,0,.45);color:var(--dsw-alias-label-primary,#e6e6e6);}
+[data-cd-modal-head]{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;}
+[data-cd-screens]{display:flex;flex-direction:column;gap:10px;overflow:auto;min-height:0;}
+[data-cd-screen]{display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--dsw-alias-bg-layer-3,rgba(255,255,255,.14));border-radius:10px;}
+[data-cd-screen-head]{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 9px;background:var(--dsw-alias-bg-layer-4,rgba(128,128,128,.12));}
+[data-cd-screen-head] b{font-size:12px;font-weight:600;}
+[data-cd-screen-pre]{margin:0;padding:9px;min-height:120px;max-height:34vh;overflow:auto;white-space:pre;font-size:11px;line-height:15px;
+  background:#0b0f14;color:#d7dde5;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+@media (max-width:640px){[data-cd-modal]{padding:8px;}[data-cd-modal-card]{max-height:96vh;}[data-cd-screen-pre]{max-height:30vh;}}
 @keyframes cd-pulse{50%{opacity:.35}}
     `
 
@@ -169,6 +182,9 @@ window.__ModuleLoader__.load({
       const [msg, setMsg] = React.useState(null)
       const [draft, setDraft] = React.useState(null)
       const [dirty, setDirty] = React.useState(false)
+      const [screenOpen, setScreenOpen] = React.useState(false)
+      const [screens, setScreens] = React.useState(null)
+      const [screenErr, setScreenErr] = React.useState('')
 
       React.useEffect(() => {
         if (!st?.config || dirty) return
@@ -210,6 +226,45 @@ window.__ModuleLoader__.load({
         try { await fn() } catch (e) { say(String(e?.message ?? e), 'bad') }
         finally { setBusy(''); reload() }
       }
+
+      const loadScreens = async () => {
+        try {
+          const r = await jget('/screens')
+          if (r && r.ok) { setScreens(r); setScreenErr('') }
+          else setScreenErr(r?.error || '抓不到 screen 画面')
+        } catch (e) { setScreenErr(String(e?.message ?? e)) }
+      }
+      const openScreens = () => { setScreenOpen(true); loadScreens() }
+      const openTerminal = async (which) => {
+        setBusy('terminal-' + which)
+        try {
+          const r = await jpost('/screens/open', { which })
+          if (r.ok) say(`已在系统终端打开 ${r.name || which}`, 'good')
+          else {
+            let copied = false
+            if (r.command) copied = await copyText(r.command)
+            say((r.error || '打不开系统终端') + (copied ? `；命令已复制：${r.command}` : (r.command ? `；可手动执行：${r.command}` : '')), 'warn')
+          }
+        } catch (e) { say(String(e?.message ?? e), 'bad') }
+        finally { setBusy('') }
+      }
+      const copyScreenCommand = async (which) => {
+        const cmd = screens?.commands?.[which] || `screen -x ${which === 'log' ? 'cdda_log' : 'cdda'}`
+        await copyText(cmd)
+        say('命令已复制：' + cmd, 'good')
+      }
+      React.useEffect(() => {
+        if (!screenOpen) return
+        let alive = true
+        let timer = null
+        const tick = async () => {
+          if (!alive) return
+          await loadScreens()
+          if (alive) timer = setTimeout(tick, 2000)
+        }
+        tick()
+        return () => { alive = false; if (timer) clearTimeout(timer) }
+      }, [screenOpen])
 
       const onSave = () => run('save', async () => {
         const patch = {
@@ -273,6 +328,18 @@ window.__ModuleLoader__.load({
             h('button', { 'data-cd-btn': '', onClick: reload }, '重试')))
       }
 
+      const ScreenPane = ({ which, title }) => {
+        const d = (screens && screens[which]) || {}
+        return h('div', { 'data-cd-screen': '' },
+          h('div', { 'data-cd-screen-head': '' },
+            h('b', null, title),
+            h('span', { 'data-cd-badge': '', ...(d.running ? { 'data-good': '' } : {}) }, d.running ? '运行中' : '未运行'),
+            h('span', { 'data-cd-note': '' }, d.command || ''),
+            h('button', { 'data-cd-btn': '', disabled: Boolean(busy), onClick: () => openTerminal(which) }, '在系统终端打开'),
+            h('button', { 'data-cd-btn': '', onClick: () => copyScreenCommand(which) }, '复制命令')),
+          h('pre', { 'data-cd-screen-pre': '' }, d.text || d.error || '读取中…'))
+      }
+
       const stt = st?.status || {}
       const dot = stt.mode === 'death' ? 'dead' : (stt.running ? 'on' : '')
       const recActive = Boolean(st?.recording?.active)
@@ -301,7 +368,8 @@ window.__ModuleLoader__.load({
                 h('span', { 'data-cd-badge': '' }, 'v' + (st.version || '?')),
                 recActive ? h('span', { 'data-cd-badge': '', 'data-bad': '' }, '录制中') : null),
               h('div', { 'data-cd-note': '' },
-                '开始 / 停止 / 跑一轮 / 目标 / 立刻录制，都在会话里直接对 DSH 说，或让 DSH 自己调 cdda_* 工具。这里只放会重复用到的设置。'))),
+                '开始 / 停止 / 跑一轮 / 目标 / 立刻录制，都在会话里直接对 DSH 说，或让 DSH 自己调 cdda_* 工具。这里只放会重复用到的设置。')),
+            h('button', { 'data-cd-btn': '', onClick: openScreens }, '调出 screen')),
           stt.hint ? h('div', { 'data-cd-msg': '' }, stt.hint) : null,
           msg ? h('div', { 'data-cd-msg': '', ...(msg.tone === 'good' ? { 'data-good': '' } : msg.tone === 'warn' ? { 'data-warn': '' } : msg.tone === 'bad' ? { 'data-bad': '' } : {}) }, msg.text) : null),
 
@@ -360,6 +428,21 @@ window.__ModuleLoader__.load({
 
         h('div', { 'data-cd-row': '' },
           h('button', { 'data-cd-btn': '', 'data-primary': '', disabled: Boolean(busy) || !dirty, onClick: onSave }, '保存设置')),
+
+        screenOpen ? h('div', {
+          'data-cd-modal': '',
+          onClick: (e) => { if (e.target === e.currentTarget) setScreenOpen(false) },
+        },
+          h('div', { 'data-cd-modal-card': '' },
+            h('div', { 'data-cd-modal-head': '' },
+              h('div', { 'data-cd-grow': '' },
+                h('b', { style: { fontSize: 15 } }, '正在运行的 screen'),
+                h('div', { 'data-cd-note': '' }, '游戏画面 + cdda_log 战报；每 2 秒刷新。也可以直接复制命令到自己的终端。')),
+              h('button', { 'data-cd-btn': '', onClick: () => setScreenOpen(false) }, '关闭')),
+            screenErr ? h('div', { 'data-cd-msg': '', 'data-bad': '' }, screenErr) : null,
+            h('div', { 'data-cd-screens': '' },
+              h(ScreenPane, { which: 'game', title: '游戏画面' }),
+              h(ScreenPane, { which: 'log', title: 'cdda_log 战报' })))) : null,
       )
     }
 
