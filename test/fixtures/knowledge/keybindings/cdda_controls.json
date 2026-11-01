@@ -1,0 +1,10 @@
+{
+  "topic": "KEYBINDINGS",
+  "details": {
+    "keybindings": [
+      {"key": "e", "action": "Examine nearby tile", "context": "defaultmode", "category": "interaction"},
+      {"key": "i", "action": "Open inventory", "context": "defaultmode", "category": "inventory"},
+      {"key": "x", "action": "Look around", "context": "defaultmode", "category": "interaction"}
+    ]
+  }
+}

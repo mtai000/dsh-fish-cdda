@@ -52,7 +52,8 @@ try {
   const kbDir = knowledgeDirOf(pluginDir, stateDir)
   const kb = new KnowledgeBase(kbDir)
   const base = kb.baseline()
-  add(base.length > 500, 'CDDAi 知识库', `${kb.listTags().length} 个 tag · ${kbDir}`)
+  if (base.length > 500) add(true, 'CDDAi 知识库', `${kb.listTags().length} 个 tag · ${kbDir}`)
+  else warn('CDDAi 知识库（可选）', `未安装：把 CDDAi/data/knowledge_base 复制到 ${join(stateDir, 'knowledge')}`)
 } catch (e) {
   add(false, 'CDDAi 知识库', String(e?.message ?? e))
 }

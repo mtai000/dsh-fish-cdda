@@ -138,7 +138,7 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
 | 区域 | 内容 |
 |---|---|
 | **现在** | 游戏/自动玩状态、今日动作数、回合、最近动作；开始 / 跑一轮 / 停止；自动玩开关 |
-| **目标与节奏** | 目标（内联进提示词 + 日志屏 + 进度）、每轮动作预算、每天最多几轮、两轮间隔、自动开游戏、**注入 CDDAi 知识库**及字符上限 |
+| **目标与节奏** | 目标（内联进提示词 + 日志屏 + 进度）、每轮动作预算、每天最多几轮、两轮间隔、自动开游戏、**可选 CDDAi 知识库**注入及字符上限 |
 | **旁观** | `screen -x cdda` / `screen -x cdda_log` 复制按钮、家目录/存档路径 |
 | **角色** | 从存档读出的 HP、饥渴、疲劳、位置、最近消息 |
 | **录制游玩过程** | 开关、当前录制状态、视频/字幕下载、历史录制列表、帧率 |
@@ -174,9 +174,16 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
 
 ---
 
-## CDDAi 知识库
+## CDDAi 知识库（可选）
 
-插件把 CDDAi 的 `data/knowledge_base/` 复制到了 `vendor/knowledge_base/`（MIT）：
+插件**不随包分发** CDDAi 知识库（`vendor/` 已被 `.gitignore` 忽略）。
+需要时，把 CDDAi 的 `data/knowledge_base/` 复制到：
+
+```text
+~/.dsh/cdda-duty/knowledge/
+```
+
+或在本地开发时放到 `vendor/knowledge_base/`（不会进 git）。知识库内容（MIT）：
 
 | 类别 | 内容 |
 |---|---|
@@ -203,8 +210,8 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
 {}
 ```
 
-首次加载会把知识库铺到 `<DSH_HOME>/cdda-duty/knowledge/`，你可以直接改；
-之后升级不会覆盖你改过的版本（插件包里的 vendor 只是首次来源）。
+知识库是可选增强：没有它时插件仍能抓屏、按键、自动玩，只是不注入手册、`cdda_knowledge` 为空。
+有它时，插件按当前状态挑选章节注入；你可以直接改 `<DSH_HOME>/cdda-duty/knowledge/`。
 
 ## 结构化屏幕 + 混合状态
 
@@ -344,7 +351,7 @@ lib/
   mcp-server.mjs         自动玩回合的 MCP stdio 服务
 prompts/duty.md          自动玩值班章程
 profile-template/        最小权限 cdda-duty profile
-vendor/knowledge_base/   CDDAi 知识库（MIT）
+test/fixtures/           测试用最小知识库 fixtures
 test/                    node:test 测试
 scripts/                 无 pnpm 时的本地安装/卸载
 .github/workflows/ci.yml  GitHub Actions
@@ -393,8 +400,8 @@ npm test
 ## 依赖与致谢
 
 - **dsh-bili-scroll**（MIT）—— 插件形态、hostdeps、设置页/HTTP/headless 回合的写法参考；
-- **CDDAi**（MIT）—— 屏幕感知 / 存档解析 / 目标驱动玩法，以及
-  `vendor/knowledge_base/`（生存指南 / 机制 / 物品 / 配方 / 按键）；
+- **CDDAi**（MIT）—— 屏幕感知 / 存档解析 / 目标驱动玩法；
+  其 `knowledge_base`（生存指南 / 机制 / 物品 / 配方 / 按键）可选使用，不随包分发；
 - **Cataclysm: Dark Days Ahead**（CC-BY-SA 3.0）—— 游戏本体；
 - **@xterm/headless** 没有用到（我们最终用 screen hardcopy + ASCII 清洗，少一个依赖）。
 

@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { existsSync, mkdtempSync, rmSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
@@ -10,7 +10,7 @@ import {
 } from '../lib/knowledge.mjs'
 
 const pluginDir = join(fileURLToPath(new URL('.', import.meta.url)), '..')
-const kbDir = join(pluginDir, 'vendor', 'knowledge_base')
+const kbDir = join(pluginDir, 'test', 'fixtures', 'knowledge')
 
 test('知识库：基础包 + tag 加载', () => {
   const kb = new KnowledgeBase(kbDir)
@@ -52,9 +52,13 @@ test('知识库：关键词检索', () => {
 test('知识库：首次铺到家里且可读', () => {
   const home = mkdtempSync(join(tmpdir(), 'dsh-cdda-kb-'))
   try {
-    const dir = ensureKnowledge(pluginDir, home, () => {})
+    // 插件包不再带 vendor；用 fixture 模拟一个带 vendor/knowledge_base 的插件目录
+    const fakePlugin = join(home, 'plugin')
+    mkdirSync(join(fakePlugin, 'vendor'), { recursive: true })
+    cpSync(kbDir, join(fakePlugin, 'vendor', 'knowledge_base'), { recursive: true })
+    const dir = ensureKnowledge(fakePlugin, home, () => {})
     assert.ok(existsSync(join(dir, 'guides', 'basic_survival.md')))
-    assert.equal(knowledgeDirOf(pluginDir, home), dir)
+    assert.equal(knowledgeDirOf(fakePlugin, home), dir)
     const k = knowledgeForState(dir, { ok: true, needs: { thirst: { value: 2 } }, health: { pct: 100 } }, 'gameplay', { maxChars: 8000 })
     assert.ok(k.tags.length > 0)
     assert.ok(k.text.length > 1000)

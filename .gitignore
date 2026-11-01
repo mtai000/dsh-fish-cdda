@@ -21,6 +21,7 @@ headless-overlay.yml
 /goal.json
 /knowledge/
 /starter-world/
+/vendor/
 
 # ── 录制产物 ─────────────────────────────────────────────────────────────
 *.mp4
