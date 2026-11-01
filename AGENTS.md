@@ -45,13 +45,13 @@
 - `lib/goal.mjs` —— 目标解析（survive/acquire/reach/generic）、起点、进度、完成。
 - `lib/recorder.mjs` —— 录制 mp4 + 同名 `.srt`：screen hardcopy 抓帧、ffmpeg drawtext 实时渲染、
   从 activity 生成字幕、录制索引。
-- `lib/identity.mjs` —— 读 fish `identity.json` → `memory/<identityId>`。
+- `lib/identity.mjs` —— 自动发现 fish `identity.json`（family/cwd/父代/唯一）→ `memory/<identityId>`。
 - `lib/memory.mjs` —— 经验 JSONL：写入/去重/淘汰/注入。
 - `lib/lessons.mjs` —— 父代经验导出 / 子代继承导入。
 - `lib/mcp-server.mjs` —— headless 回合用的 MCP stdio 服务（newline JSON-RPC）。
 - `prompts/duty.md` —— 自动玩章程（用户可改）。
 - `recordVideo` / `recordFps` / `recordDir` / `recordFont` / `ffmpegPath` / `recordMaxMinutes` —— 录制配置。
-- `identityFile` / `memory` / `memoryMaxItems` / `memoryMaxChars` —— 身份与经验注入。
+- `identityFile` / `identityAuto` / `memory` / `memoryMaxItems` / `memoryMaxChars` —— 身份自动发现与经验注入。
 - `autoUnstick` / `restartOnCrash` / `maxRestartsPerDay` —— 卡菜单兜底、崩溃重开及每日上限。
 - `profile-template/cdda-duty/` —— 最小权限 profile（base + headless，关掉 fs/bash/web/subagent…）。
 - `$DSH_HOME/cdda-duty/starter-world/save/` —— 可选外部开局种子；插件包不带 `.sav`。

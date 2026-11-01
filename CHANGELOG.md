@@ -2,6 +2,14 @@
 
 本项目遵循“一个版本一个小节”的简单记录方式，日期用本地日期。
 
+## 0.5.1 — 2026-11-01
+
+- **身份自动发现**：不用手填 `identityFile`。自动从 `DSH_KIN_FAMILY_ROOT`、
+  `~/.dsh-fish-kin.json`、`~/大肥鱼家族` 找 `fish/identity.json` 和
+  `children/*/identity.json`；按当前 cwd 判断父代/子代；多条子代无法判断时回退 shared。
+- 设置页新增「自动发现鱼的身份证」开关；手动 `identityFile` 仍可强制覆盖。
+- 测试：42 项。
+
 ## 0.5.0 — 2026-11-01
 
 - **移除自带知识库**：删除 `data/knowledge_base`、`lib/knowledge.mjs`、`cdda_knowledge`、

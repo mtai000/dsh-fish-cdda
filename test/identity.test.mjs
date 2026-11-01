@@ -53,3 +53,46 @@ test('身份：环境变量回退', () => {
     rmSync(dir, { recursive: true, force: true })
   }
 })
+
+test('身份：自动发现 family/fish，cwd 命中 child 时用 child', () => {
+  const old = process.env.DSH_KIN_FAMILY_ROOT
+  const root = mkdtempSync(join(tmpdir(), 'dsh-cdda-family-'))
+  try {
+    const fish = join(root, 'fish')
+    mkdirSync(fish, { recursive: true })
+    writeFileSync(join(fish, 'identity.json'), JSON.stringify({ identityId: ID, lineageId: ID }))
+    const childDir = join(root, 'children', 'kin_01KC0000000000000000000001')
+    mkdirSync(childDir, { recursive: true })
+    const childId = 'fish_01KC0000000000000000000001'
+    writeFileSync(join(childDir, 'identity.json'), JSON.stringify({ identityId: childId, parentId: ID, lineageId: ID }))
+    process.env.DSH_KIN_FAMILY_ROOT = root
+    assert.equal(readIdentity({}).identityId, ID)
+    assert.equal(readIdentity({}, { cwd: childDir }).identityId, childId)
+    assert.equal(readIdentity({}, { cwd: join(root, 'elsewhere') }).identityId, ID)
+  } finally {
+    if (old === undefined) delete process.env.DSH_KIN_FAMILY_ROOT
+    else process.env.DSH_KIN_FAMILY_ROOT = old
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+test('身份：多条 child 且 cwd 不命中时回退 shared', () => {
+  const old = process.env.DSH_KIN_FAMILY_ROOT
+  const root = mkdtempSync(join(tmpdir(), 'dsh-cdda-family2-'))
+  try {
+    const a = 'fish_01KC0000000000000000000002'
+    const b = 'fish_01KC0000000000000000000003'
+    for (const id of [a, b]) {
+      const d = join(root, 'children', id)
+      mkdirSync(d, { recursive: true })
+      writeFileSync(join(d, 'identity.json'), JSON.stringify({ identityId: id }))
+    }
+    process.env.DSH_KIN_FAMILY_ROOT = root
+    assert.equal(readIdentity({}, { cwd: '/tmp' }), null)
+    assert.equal(readIdentity({}, { cwd: join(root, 'children', a) }).identityId, a)
+  } finally {
+    if (old === undefined) delete process.env.DSH_KIN_FAMILY_ROOT
+    else process.env.DSH_KIN_FAMILY_ROOT = old
+    rmSync(root, { recursive: true, force: true })
+  }
+})

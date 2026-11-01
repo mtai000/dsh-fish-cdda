@@ -82,6 +82,7 @@ export const Config = !z ? undefined : z.object({
   ffmpegPath: z.string().default('').extra('volatile', true),
   recordMaxMinutes: z.natural().default(120).extra('volatile', true),
   identityFile: z.string().default('').extra('volatile', true),
+  identityAuto: z.boolean().default(true).extra('volatile', true),
   memory: z.boolean().default(true).extra('volatile', true),
   memoryMaxItems: z.natural().default(10).extra('volatile', true),
   memoryMaxChars: z.natural().default(4000).extra('volatile', true),
@@ -102,6 +103,7 @@ export function apply(ctx, config) {
   const recorder = new Recorder({ stateDir, pluginDir, log })
   try {
     const bootIdentity = readIdentity(cfg)
+    log(bootIdentity ? `身份：${bootIdentity.identityId}（${bootIdentity.source}）` : '身份：无（使用 shared 经验）')
     if (bootIdentity) {
       const inherited = readInheritedLessons(bootIdentity)
       if (inherited.length) importInherited(memoryDirOf(stateDir, bootIdentity), inherited)

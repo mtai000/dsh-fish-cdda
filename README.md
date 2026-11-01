@@ -1,6 +1,6 @@
 # dsh-cdda ｜ 让 DSH 自己玩 CDDA
 
-> 当前版本 **0.5.0** · [变更记录](CHANGELOG.md) · [参与开发](CONTRIBUTING.md)
+> 当前版本 **0.5.1** · [变更记录](CHANGELOG.md) · [参与开发](CONTRIBUTING.md)
 
 > **它是什么**：一个 DSH 插件。装上后 DSH 会开两个 `screen` 会话 ——
 > `cdda`（游戏终端）和 `cdda_log`（实时战报）。
@@ -186,7 +186,10 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
 - 没有身份：写进 `~/.dsh/cdda-duty/memory/shared/memory.jsonl`
 - 注入上限：最多 10 条 / 4000 字符，标题明确写「假设，不是攻略；必须用屏幕验证」
 - 完全重复的经验合并 `hits`；最多保留 200 条
-- 身份文件就是 fish-kin 的 `identity.json`；填在设置页「身份文件」里
+- 身份文件会自动发现：优先 `DSH_KIN_FAMILY_ROOT` / `~/.dsh-fish-kin.json` /
+  `~/大肥鱼家族` 下的 `fish/identity.json` 和 `children/*/identity.json`；
+  多条鱼时按当前目录判断父代/子代；找不到才用 `shared`
+- 设置页「身份文件」留空即可；填了则强制使用该身份
 
 ### 有损传代
 
@@ -301,7 +304,7 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
 ## 开发 / 测试
 
 ```bash
-npm test                 # 40 项：按键/解析/存档/身份/记忆/继承/屏幕结构化/目标/开局/MCP/screen/录制
+npm test                 # 42 项：按键/解析/存档/身份/记忆/继承/屏幕结构化/目标/开局/MCP/screen/录制
 node selfcheck.mjs       # 环境自检（含 ffmpeg/字体）
 ```
 
