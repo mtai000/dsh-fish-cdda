@@ -410,6 +410,7 @@ window.__ModuleLoader__.load({
             h('option', { value: 'text' }, '字符重绘（旧）')) }),
           h(FieldRow, { label: '录制窗口（像素模式）', note: '留空自动找 cdda/cataclysm；找不到就录全屏。也可以填 Konsole 等窗口标题。', children: h(TxtInput, { k: 'recordWindow', placeholder: '留空自动找' }) }),
           h(FieldRow, { label: '画面区域（像素模式）', note: '可选，格式 WxH+X+Y；留空自动窗口/全屏。', children: h(TxtInput, { k: 'recordGeometry', placeholder: '1280x900+0+0' }) }),
+          h('div', { 'data-cd-note': '' }, '实际画面录的是桌面上真实可见的窗口；如果游戏在 detached screen 里、桌面看不到，先点上面的「调出 screen」把终端打开，再填终端窗口标题或直接录全屏。'),
           h(FieldRow, { label: '录制存放目录', note: '绝对路径；留空 = 插件家的 recordings。保存后下一段生效。', children: h('div', { 'data-cd-row': '', style: { flex: '1 1 320px' } },
             h('input', { 'data-cd-input': '', style: { flex: '1 1 260px', minWidth: 180 }, value: draft?.recordDir ?? '', placeholder: '/home/你/CDDA录像', onChange: (e) => set('recordDir', e.target.value) }),
             h('button', { 'data-cd-btn': '', onClick: pickDir }, '选择…')) }),
@@ -504,13 +505,13 @@ window.__ModuleLoader__.load({
 
         active ? h('div', { 'data-cd-msg': '', 'data-bad': '', style: { display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' } },
           h('span', { 'data-cd-rec': '' }),
-          `录制中 · ${String(rec.video || '').split('/').pop()} · ${Number(rec.durationSec || 0)}s · ${Number(rec.frames || 0)} 帧 · ${fmtSize(rec.size)}`,
+          `录制中 · ${String(rec.video || '').split('/').pop()} · ${Number(rec.durationSec || 0)}s · ${Number(rec.frames || 0)} 帧 · ${fmtSize(rec.size)}${rec.source ? ' · ' + rec.source : ''}`,
           rec.video ? h('a', { 'data-cd-link': '', href: fileUrl(rec.video), target: '_blank', rel: 'noreferrer' }, '打开当前文件') : null) : null,
 
         chosenUrl ? h('div', { 'data-cd-recvplayer': '' },
           h('video', { controls: true, preload: 'metadata', src: chosenUrl, key: chosenUrl }),
           h('div', { 'data-cd-recvmeta': '' },
-            h('span', { 'data-cd-grow': '' }, `${chosen.videoName || String(chosen.video || '').split('/').pop()} · ${fmtWhen(chosen.startedAt)} · ${Number(chosen.durationSec || 0)}s · ${fmtSize(chosen.size)}`),
+            h('span', { 'data-cd-grow': '' }, `${chosen.videoName || String(chosen.video || '').split('/').pop()} · ${chosen.mode === 'text' ? '字符重绘' : '实际画面'}${chosen.source ? ' · ' + chosen.source : ''} · ${fmtWhen(chosen.startedAt)} · ${Number(chosen.durationSec || 0)}s · ${fmtSize(chosen.size)}`),
             h('a', { 'data-cd-link': '', href: chosenUrl, target: '_blank', rel: 'noreferrer' }, '新窗口打开'),
             chosen.srt ? h('a', { 'data-cd-link': '', href: fileUrl(chosen.srt), target: '_blank', rel: 'noreferrer' }, '下载字幕') : null)) : null,
 
@@ -524,7 +525,7 @@ window.__ModuleLoader__.load({
                   r.exists === false ? h('span', { 'data-cd-recvmissing': '' }, '文件没了') : null),
                 h('div', { 'data-cd-recvbody': '' },
                   h('div', { 'data-cd-recvname': '' }, r.videoName || String(r.video || '').split('/').pop() || '未命名'),
-                  h('div', { 'data-cd-note': '' }, `${fmtWhen(r.startedAt)} · ${Number(r.durationSec || 0)}s · ${fmtSize(r.size)}`),
+                  h('div', { 'data-cd-note': '' }, `${r.mode === 'text' ? '字符重绘' : '实际画面'}${r.source ? ' · ' + r.source : ''} · ${fmtWhen(r.startedAt)} · ${Number(r.durationSec || 0)}s · ${fmtSize(r.size)}`),
                   h('div', { 'data-cd-recvactions': '' },
                     url ? h('a', { 'data-cd-link': '', href: url, target: '_blank', rel: 'noreferrer' }, '视频') : null,
                     r.srt ? h('a', { 'data-cd-link': '', href: fileUrl(r.srt), target: '_blank', rel: 'noreferrer' }, '字幕') : null)))
