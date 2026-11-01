@@ -2,6 +2,15 @@
 
 本项目遵循“一个版本一个小节”的简单记录方式，日期用本地日期。
 
+## 0.4.1 — 2026-11-01
+
+- **修复 HTTP 404**：不再在 `apply()` 里直接 `ctx.get('webServer')` 注册路由。
+  DSH 启动时 `webServer` 服务可能还没就绪，旧写法会静默跳过注册，导致设置页能打开
+  但所有 `/api/cdda-duty/*` 返回 404。现在改用 `ctx.inject(['webServer'], ...)` 等待服务，
+  并在 `cdda.log` 里记录「webServer 就绪，挂载 /api/cdda-duty」。
+- 新增一条 404 排查文档：`/api/cdda-duty` 本身没有首页，状态接口是
+  `/api/cdda-duty/status`；局域网/反代访问还会被同源检查挡住。
+
 ## 0.4.0 — 2026-10-31
 
 - **结构化屏幕解析**：新增 `lib/screen-parse.mjs`，从 80×24 文本里识别

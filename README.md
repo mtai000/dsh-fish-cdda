@@ -1,6 +1,6 @@
 # dsh-cdda ｜ 让 DSH 自己玩 CDDA
 
-> 当前版本 **0.4.0** · [变更记录](CHANGELOG.md) · [参与开发](CONTRIBUTING.md)
+> 当前版本 **0.4.1** · [变更记录](CHANGELOG.md) · [参与开发](CONTRIBUTING.md)
 
 > **它是什么**：一个 DSH 插件。装上后 DSH 会开两个 `screen` 会话 ——
 > `cdda`（游戏终端）和 `cdda_log`（实时战报）。
@@ -87,6 +87,28 @@ dsh plugin --profile web add dsh-cdda
 > 如果 DSH 支持 HMR，改 `~/.dsh/profiles/web/cordis.patch.yml` 也能触发重载（实测可用）。
 
 ---
+
+## HTTP 404 排查
+
+如果设置页报 `HTTP 404`，先看 `cdda.log` 里有没有：
+
+```
+webServer 就绪，挂载 /api/cdda-duty
+```
+
+没有这句话 = 路由没挂上。0.4.1 已修复启动时 `webServer` 未就绪导致静默跳过注册的问题；
+旧版请升级到 0.4.1 并重启 DSH。
+
+另一个常见原因是路径：`/api/cdda-duty` **本身没有首页**，状态接口是：
+
+```bash
+curl -i http://127.0.0.1:3080/api/cdda-duty/status
+```
+
+- 返回 HTML 404：插件 host 没加载/没重启/装错 profile
+- 返回 JSON `unknown GET /api/cdda-duty`：路径写错
+- 返回 401：DSH 登录态问题
+- 返回 403：用了局域网 IP/反代，插件只接受本机同源；用 SSH 隧道访问
 
 ## 第一次用
 

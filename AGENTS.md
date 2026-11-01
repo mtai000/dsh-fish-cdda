@@ -89,6 +89,9 @@
   超出会截断，别指望一轮塞下 150KB。用户改过的 `<家>/knowledge/` 不会被升级覆盖。
 - **`index.js` 里本地 `updateGoal(goal)` 与 `lib/goal.mjs` 的 `updateGoal(stateDir,state)` 重名**：
   导入时必须 alias（目前是 `updateGoalProgress`），否则 `statusPayload` 会把目标写成目录路径。
+- **路由注册不要用 `ctx.get('webServer')`**：apply 时服务可能还没就绪，路由会被静默跳过，
+  表现是所有 `/api/cdda-duty/*` 404。必须用 `ctx.inject(['webServer'], ...)`，
+  当前代码在 `cdda.log` 里会打「webServer 就绪，挂载 /api/cdda-duty」。
 - **插件改了源码后**：HMR 只认真实配置值变化，**只加注释可能不重载**；
   改一个真实字段（例如 `actionsPerRound: 40` → `41` → `40`）触发整树重载，
   或重启 dsh。client.js 改完刷新浏览器即可。

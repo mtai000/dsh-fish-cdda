@@ -929,9 +929,17 @@ export function apply(ctx, config) {
   }
 
   try {
-    const webServer = ctx.get('webServer')
-    if (webServer?.register) {
-      ctx.effect(() => webServer.register({
+    // 关键：不能在 apply 里直接 ctx.get('webServer') —— 启动时服务可能还没就绪，
+    // 那样路由会被静默跳过，表现就是设置页能开、所有 /api/cdda-duty/* 都 404。
+    // 用 ctx.inject 等 webServer 服务可用后再注册（服务替换时 effect 会重挂）。
+    ctx.inject(['webServer'], (webCtx) => {
+      const webServer = webCtx.webServer || webCtx.get('webServer')
+      if (!webServer?.register) {
+        log('webServer 服务没有 register；HTTP API 不挂载（设置页会报 404）')
+        return
+      }
+      log('webServer 就绪，挂载 /api/cdda-duty')
+      webCtx.effect(() => webServer.register({
         kind: 'prefix',
         path: '/api/cdda-duty',
         handler: async (req, res) => {
@@ -1095,7 +1103,7 @@ export function apply(ctx, config) {
           }
         },
       }), 'cdda-duty: /api/cdda-duty 路由')
-    }
+    })
   } catch (e) {
     log(`HTTP 路由没挂上：${String(e?.message ?? e)}`)
   }
