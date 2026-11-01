@@ -1,0 +1,31 @@
+{
+  "topic": "morale_system",
+  "tags": ["mechanics", "survival", "morale"],
+  "summary": "Morale influences focus gain and crafting success; manage boosts and penalties to stay productive.",
+  "details": {
+    "morale_bands": [
+      {"band": "Elated", "range": [75, 200], "effects": ["+20 focus per tick", "+10% crafting speed"], "sources": ["Fresh meal", "Listening to music"]},
+      {"band": "Positive", "range": [10, 74], "effects": ["+5 focus per tick"], "sources": ["Comfortable temperature", "Reading enjoyable book"]},
+      {"band": "Neutral", "range": [-9, 9], "effects": ["Baseline"], "sources": ["Normal routine"]},
+      {"band": "Negative", "range": [-49, -10], "effects": ["-10 focus per tick", "Crafting slowdown"], "sources": ["Minor pain", "Wet clothing"]},
+      {"band": "Depressed", "range": [-200, -50], "effects": ["Severe focus loss", "Risk of morale spiral"], "sources": ["Severe pain", "Rotten food", "Cold" ]}
+    ],
+    "boosters": [
+      {"name": "Music", "items": ["MP3 player", "Radio"], "duration_minutes": 30, "morale_gain": 15},
+      {"name": "Hot meal", "items": ["Hot stew", "Cooked meat"], "duration_minutes": 60, "morale_gain": 10},
+      {"name": "Reading", "items": ["Entertaining novel"], "duration_minutes": 45, "morale_gain": 8},
+      {"name": "Comfortable environment", "items": ["Warm clothing", "Heated room"], "duration_minutes": 999, "morale_gain": 5}
+    ],
+    "penalties": [
+      {"name": "Pain", "source": "Injuries", "morale_loss": 5, "mitigation": ["Painkillers", "Rest"]},
+      {"name": "Wet", "source": "Rain or swimming", "morale_loss": 10, "mitigation": ["Towel", "Dry clothing"]},
+      {"name": "Rotten food", "source": "Eating spoiled items", "morale_loss": 15, "mitigation": ["Avoid rotten food", "Charcoal tablets"]},
+      {"name": "Filthy gear", "source": "Dirty clothing", "morale_loss": 7, "mitigation": ["Washboard", "Soap"]}
+    ],
+    "management_tips": [
+      "Stack small morale boosts before crafting sessions to maximize focus.",
+      "Keep warm, dry clothing ready to avoid morale dips during storms.",
+      "Treat pain quickly to prevent compounding morale penalties."
+    ]
+  }
+}

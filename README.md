@@ -174,16 +174,16 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
 
 ---
 
-## CDDAi 知识库（可选）
+## CDDAi 知识库
 
-插件**不随包分发** CDDAi 知识库（`vendor/` 已被 `.gitignore` 忽略）。
-需要时，把 CDDAi 的 `data/knowledge_base/` 复制到：
+CDDAi 的 `data/knowledge_base/` 已放在本仓库的 `data/knowledge_base/`（MIT），
+随包分发；首次运行会复制到：
 
 ```text
 ~/.dsh/cdda-duty/knowledge/
 ```
 
-或在本地开发时放到 `vendor/knowledge_base/`（不会进 git）。知识库内容（MIT）：
+之后你可以直接改 home 里的副本。知识库内容：
 
 | 类别 | 内容 |
 |---|---|
@@ -210,8 +210,8 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
 {}
 ```
 
-知识库是可选增强：没有它时插件仍能抓屏、按键、自动玩，只是不注入手册、`cdda_knowledge` 为空。
-有它时，插件按当前状态挑选章节注入；你可以直接改 `<DSH_HOME>/cdda-duty/knowledge/`。
+插件按当前状态挑选章节注入；`<DSH_HOME>/cdda-duty/knowledge/` 里的副本可以随时改。
+如果手动删掉 home 的副本，下次启动会从 `data/knowledge_base/` 重新铺。
 
 ## 结构化屏幕 + 混合状态
 
@@ -351,7 +351,7 @@ lib/
   mcp-server.mjs         自动玩回合的 MCP stdio 服务
 prompts/duty.md          自动玩值班章程
 profile-template/        最小权限 cdda-duty profile
-test/fixtures/           测试用最小知识库 fixtures
+data/knowledge_base/      CDDAi 知识库（MIT，随包分发）
 test/                    node:test 测试
 scripts/                 无 pnpm 时的本地安装/卸载
 .github/workflows/ci.yml  GitHub Actions

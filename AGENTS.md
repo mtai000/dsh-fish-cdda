@@ -53,7 +53,7 @@
 - `knowledge` / `knowledgeMaxChars` —— 知识库注入开关/上限（默认开，12000 字符）。
 - `autoUnstick` / `restartOnCrash` / `maxRestartsPerDay` —— 卡菜单兜底、崩溃重开及每日上限。
 - `profile-template/cdda-duty/` —— 最小权限 profile（base + headless，关掉 fs/bash/web/subagent…）。
-- 知识库不随包分发：可选 `<家>/knowledge/`（或本地忽略的 `vendor/knowledge_base/`）。
+- `data/knowledge_base/` —— CDDAi 知识库（MIT，随包分发）；首次复制到 `<家>/knowledge/`。
 - `$DSH_HOME/cdda-duty/starter-world/save/` —— 可选外部开局种子；插件包不带 `.sav`。
 
 ## 调试顺序

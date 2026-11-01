@@ -1,9 +1,0 @@
-{
-  "topic": "WATER_SOURCES",
-  "summary": "Sealed bottles, wells, rain, and rivers are water sources; boil questionable water.",
-  "details": {
-    "safe": ["sealed water bottle", "clean water"],
-    "unsafe": ["river water", "toilet water"],
-    "method": ["fill container", "boil or purify", "drink"]
-  }
-}

@@ -2,6 +2,13 @@
 
 本项目遵循“一个版本一个小节”的简单记录方式，日期用本地日期。
 
+## 0.4.3 — 2026-11-01
+
+- 知识库从 `vendor/knowledge_base/` 移到 `data/knowledge_base/`，随包提交（MIT）；
+  `vendor/` 继续整体忽略，不提交。
+- 首次运行仍复制到 `<DSH_HOME>/cdda-duty/knowledge/`；`cdda_knowledge` / 自动注入恢复完整。
+- 包文件包含 `data/`，不含 `vendor/`、不含 `.sav`。
+
 ## 0.4.2 — 2026-11-01
 
 - **插件包不再携带存档**：移除 `vendor/starter-world/`（2.1MB 的 0.G 种子），

@@ -10,7 +10,7 @@ import {
 } from '../lib/knowledge.mjs'
 
 const pluginDir = join(fileURLToPath(new URL('.', import.meta.url)), '..')
-const kbDir = join(pluginDir, 'test', 'fixtures', 'knowledge')
+const kbDir = join(pluginDir, 'data', 'knowledge_base')
 
 test('知识库：基础包 + tag 加载', () => {
   const kb = new KnowledgeBase(kbDir)
@@ -52,10 +52,10 @@ test('知识库：关键词检索', () => {
 test('知识库：首次铺到家里且可读', () => {
   const home = mkdtempSync(join(tmpdir(), 'dsh-cdda-kb-'))
   try {
-    // 插件包不再带 vendor；用 fixture 模拟一个带 vendor/knowledge_base 的插件目录
+    // 模拟一个带 data/knowledge_base 的插件目录
     const fakePlugin = join(home, 'plugin')
-    mkdirSync(join(fakePlugin, 'vendor'), { recursive: true })
-    cpSync(kbDir, join(fakePlugin, 'vendor', 'knowledge_base'), { recursive: true })
+    mkdirSync(join(fakePlugin, 'data'), { recursive: true })
+    cpSync(kbDir, join(fakePlugin, 'data', 'knowledge_base'), { recursive: true })
     const dir = ensureKnowledge(fakePlugin, home, () => {})
     assert.ok(existsSync(join(dir, 'guides', 'basic_survival.md')))
     assert.equal(knowledgeDirOf(fakePlugin, home), dir)
