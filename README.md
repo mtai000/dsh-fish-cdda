@@ -247,6 +247,8 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
 
 - **默认「实际画面」**：用 ffmpeg 直接录显示器上的游戏窗口（Linux X11 用 `x11grab`，Windows 用 `gdigrab`，macOS 用 `avfoundation`），
   不经过字符重绘，所以中文按你桌面的字体显示，不会因为插件选的等宽字体缺字而变成方块。
+- **Linux**：X11 下会自动找标题含 `cdda` / `cataclysm` 的窗口，找不到录全屏；Wayland 桌面如果 `x11grab` 抓不到，请先用「调出 screen」并改用字符重绘兜底。
+- **macOS**：录整个屏幕，可用「画面区域」`WxH+X+Y` 裁切；第一次录制要在系统设置 → 隐私与安全性 → 屏幕录制里给终端/DSH 授权。
 - 录制窗口：留空会找标题含 `cdda` / `cataclysm` 的窗口，找不到就录整个屏幕；也可以在设置里填窗口标题（如 `Konsole`）或直接填区域 `WxH+X+Y`。
 - 如果游戏跑在 detached `screen` 里、桌面上没有可见的游戏窗口，先用「调出 screen」把终端打开，或填那个终端窗口的标题，再录。
 - 「字符重绘」是旧方案：每 0.5 秒抓 `cdda` 的 screen，用 `drawtext + textfile(raw)` 渲染；需要等宽字体，中文可能缺字。

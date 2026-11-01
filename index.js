@@ -897,6 +897,7 @@ export function apply(ctx, config) {
     return {
       ok: true,
       version: myVer,
+      platform: process.platform,
       home: stateDir,
       config: cfg,
       round: readRound(stateDir),

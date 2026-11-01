@@ -351,6 +351,7 @@ window.__ModuleLoader__.load({
       const stt = st?.status || {}
       const dot = stt.mode === 'death' ? 'dead' : (stt.running ? 'on' : '')
       const recActive = Boolean(st?.recording?.active)
+      const platform = st?.platform || ''
       const FieldRow = ({ label, note, children }) => h('div', { 'data-cd-row': '' },
         h('div', { 'data-cd-grow': '' },
           h('div', { 'data-cd-label': '' }, label),
@@ -403,12 +404,12 @@ window.__ModuleLoader__.load({
             note: '下一局/下一轮生效，不会打断当前这段；要立刻开关录制，让 DSH 调 cdda_record。',
             on: Boolean(draft?.recordVideo), onChange: (v) => set('recordVideo', v),
           }),
-          h(FieldRow, { label: '录制方式', note: '实际画面直接录屏幕/窗口，中文按你桌面的字体显示；字符重绘是旧方案，需要等宽字体。', children: h('select', {
+          h(FieldRow, { label: '录制方式', note: platform === 'darwin' ? 'macOS 录整个屏幕，可用「画面区域」裁切；中文按桌面字体显示。' : platform === 'win32' ? 'Windows 录整个桌面；可用「画面区域」裁切。' : 'Linux X11 自动找 cdda/cataclysm 窗口，找不到录全屏；中文按桌面字体显示。', children: h('select', {
             'data-cd-input': '', style: { flex: '1 1 220px' }, value: draft?.recordMode || 'pixels', onChange: (e) => set('recordMode', e.target.value),
           },
             h('option', { value: 'pixels' }, '实际画面（推荐）'),
             h('option', { value: 'text' }, '字符重绘（旧）')) }),
-          h(FieldRow, { label: '录制窗口（像素模式）', note: '留空自动找 cdda/cataclysm；找不到就录全屏。也可以填 Konsole 等窗口标题。', children: h(TxtInput, { k: 'recordWindow', placeholder: '留空自动找' }) }),
+          h(FieldRow, { label: '录制窗口（像素模式）', note: platform === 'darwin' ? 'macOS 不按窗口标题裁切；请用下面的「画面区域」。' : '留空自动找 cdda/cataclysm；找不到就录全屏。也可以填 Konsole 等窗口标题。', children: h(TxtInput, { k: 'recordWindow', placeholder: '留空自动找' }) }),
           h(FieldRow, { label: '画面区域（像素模式）', note: '可选，格式 WxH+X+Y；留空自动窗口/全屏。', children: h(TxtInput, { k: 'recordGeometry', placeholder: '1280x900+0+0' }) }),
           h('div', { 'data-cd-note': '' }, '实际画面录的是桌面上真实可见的窗口；如果游戏在 detached screen 里、桌面看不到，先点上面的「调出 screen」把终端打开，再填终端窗口标题或直接录全屏。'),
           h(FieldRow, { label: '录制存放目录', note: '绝对路径；留空 = 插件家的 recordings。保存后下一段生效。', children: h('div', { 'data-cd-row': '', style: { flex: '1 1 320px' } },
