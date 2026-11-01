@@ -38,7 +38,7 @@ import { capture, hasSession } from './lib/screen.mjs'
 import { modeLabel } from './lib/parse.mjs'
 import { TOOL_SPECS, handleTool } from './lib/tools-core.mjs'
 import { findWorlds } from './lib/state-read.mjs'
-import { Recorder, readRecordings, recordDirOf, findFfmpeg, findFont } from './lib/recorder.mjs'
+import { Recorder, readRecordings, recordDirOf, findFfmpeg, findFont, findCaptureTarget } from './lib/recorder.mjs'
 import { readIdentity, memoryDirOf } from './lib/identity.mjs'
 import { selectMemories, memoryCount, importInherited } from './lib/memory.mjs'
 import { readInheritedLessons, exportParentLessons } from './lib/lessons.mjs'
@@ -112,7 +112,7 @@ export function apply(ctx, config) {
   let recReadyCache = { at: 0, ok: false }
   const recorderReady = () => {
     if (Date.now() - recReadyCache.at < 60_000) return recReadyCache.ok
-    const ok = Boolean(findFfmpeg(cfg) && findFont(cfg))
+    const ok = Boolean(findFfmpeg(cfg) && (cfg.recordMode === 'text' ? findFont(cfg) : findCaptureTarget(cfg)))
     recReadyCache = { at: Date.now(), ok }
     return ok
   }
@@ -1134,6 +1134,7 @@ export function apply(ctx, config) {
               const host = await persistCfg(patch)
               // ⭐ 设置页现在只放「可重复使用」的偏好：recordVideo 是「开局自动录制」，
               //    不在这里立刻起/停录制。要立刻录制，让 DSH 调 cdda_record 工具。
+              recReadyCache.at = 0
               return sendJson(res, 200, { ...host, ok: true, config: cfg })
             }
             if (req.method === 'POST' && path === '/api/cdda-duty/start') {

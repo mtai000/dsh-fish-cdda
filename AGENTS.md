@@ -50,7 +50,7 @@
 - `lib/lessons.mjs` —— 父代经验导出 / 子代继承导入。
 - `lib/mcp-server.mjs` —— headless 回合用的 MCP stdio 服务（newline JSON-RPC）。
 - `prompts/duty.md` —— 自动玩章程（用户可改）。
-- `recordVideo` / `recordFps` / `recordDir` / `recordFont` / `ffmpegPath` / `recordMaxMinutes` —— 录制配置（`recordDir` 在设置页可以直接填绝对路径）。
+- `recordVideo` / `recordMode`（pixels/text）/ `recordWindow` / `recordGeometry` / `recordDisplay` / `recordFps` / `recordDir` / `recordFont` / `ffmpegPath` / `recordMaxMinutes` —— 录制配置（像素模式不需要字体）。
 - `client.js` 还注册了 `conversation.view`「cdda录制」：会话顶部「更多会话视图」里直接播放录制。
 - `identityFile` / `identityAuto` / `memory` / `memoryMaxItems` / `memoryMaxChars` —— 身份自动发现与经验注入。
 - `autoUnstick` / `restartOnCrash` / `maxRestartsPerDay` —— 卡菜单兜底、崩溃重开及每日上限。
