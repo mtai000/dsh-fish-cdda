@@ -96,3 +96,20 @@ test('身份：多条 child 且 cwd 不命中时回退 shared', () => {
     rmSync(root, { recursive: true, force: true })
   }
 })
+
+test('身份：新的 ds-fish- + 年月日 + 4 位编码也认（过渡期 330105 也认）', () => {
+  const dir = temp()
+  try {
+    const file = join(dir, 'identity.json')
+    const NEW_ID = 'ds-fish-202611010001'
+    writeFileSync(file, JSON.stringify({ identityId: NEW_ID, childId: null, lineageId: NEW_ID }))
+    const id = readIdentity({ identityFile: file })
+    assert.equal(id.identityId, NEW_ID)
+    assert.equal(memoryDirOf(dir, id), join(dir, 'memory', NEW_ID))
+    assert.equal(id.lineageId, NEW_ID)
+
+    const OLD_ID = '330105202611010001'
+    writeFileSync(file, JSON.stringify({ identityId: OLD_ID, lineageId: OLD_ID }))
+    assert.equal(readIdentity({ identityFile: file }).identityId, OLD_ID)
+  } finally { rmSync(dir, { recursive: true, force: true }) }
+})
