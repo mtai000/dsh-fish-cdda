@@ -40,6 +40,8 @@ import { TOOL_SPECS, handleTool } from './lib/tools-core.mjs'
 import { findWorlds } from './lib/state-read.mjs'
 import { Recorder, readRecordings, recordDirOf, findFfmpeg, findFont } from './lib/recorder.mjs'
 import { ensureKnowledge, knowledgeForState } from './lib/knowledge.mjs'
+import { readIdentity, memoryDirOf } from './lib/identity.mjs'
+import { selectMemories, memoryCount } from './lib/memory.mjs'
 import { ensureGoal, updateGoal as updateGoalProgress, readGoal } from './lib/goal.mjs'
 
 export const name = 'cdda-duty'
@@ -81,6 +83,10 @@ export const Config = !z ? undefined : z.object({
   recordMaxMinutes: z.natural().default(120).extra('volatile', true),
   knowledge: z.boolean().default(true).extra('volatile', true),
   knowledgeMaxChars: z.natural().default(12000).extra('volatile', true),
+  identityFile: z.string().default('').extra('volatile', true),
+  memory: z.boolean().default(true).extra('volatile', true),
+  memoryMaxItems: z.natural().default(10).extra('volatile', true),
+  memoryMaxChars: z.natural().default(4000).extra('volatile', true),
   autoUnstick: z.boolean().default(true).extra('volatile', true),
   restartOnCrash: z.boolean().default(true).extra('volatile', true),
   maxRestartsPerDay: z.natural().default(5).extra('volatile', true),
@@ -465,6 +471,18 @@ export function apply(ctx, config) {
       + `\n工具名以 mcp__cdda-duty__ 开头。第一步先调用 mcp__cdda-duty__cdda_status，再看屏幕。`
       + `\n想看更细的手册可以调用 mcp__cdda-duty__cdda_knowledge。`
       + `\n做完预算就结束这一轮，简短总结你做了什么、下一步打算。`
+    if (cfg.memory !== false) {
+      try {
+        const id = readIdentity(cfg)
+        const mem = selectMemories(memoryDirOf(stateDir, id), {
+          goal: cfg.goal,
+          worldId: game?.save?.world || '',
+          maxItems: Number(cfg.memoryMaxItems) || 10,
+          maxChars: Number(cfg.memoryMaxChars) || 4000,
+        })
+        if (mem.text) text += `\n\n${mem.text}`
+      } catch { /* 经验读不到不影响玩 */ }
+    }
     if (cfg.knowledge !== false) {
       try {
         const k = knowledgeForState(knowledgeDir, game?.save, game?.mode || 'unknown', {
@@ -853,6 +871,9 @@ export function apply(ctx, config) {
     } : null
     ensureGoal(stateDir, cfg.goal, g.save)
     const goalInfo = updateGoalProgress(stateDir, g.save, g.parsed)
+    const identity = readIdentity(cfg)
+    const mDir = memoryDirOf(stateDir, identity)
+    const memInfo = { identityId: identity?.identityId || null, memoryCount: memoryCount(mDir), memoryDir: mDir }
     const recording = recorder.status()
     const recDir = recordDirOf(stateDir, cfg)
     const recordings = readRecordings(stateDir, 12).map((r) => ({
@@ -869,6 +890,9 @@ export function apply(ctx, config) {
         goal: cfg.goal,
         goalProgress: goalInfo?.progress || null,
         goalComplete: Boolean(goalInfo?.complete),
+        identityId: memInfo.identityId,
+        memoryCount: memInfo.memoryCount,
+        memoryDir: memInfo.memoryDir,
         ui: g.view?.ui || g.parsed?.ui || null,
         visible: g.view?.visible || null,
         vitals: g.view ? { health: g.view.health, needs: g.view.needs, location: g.view.location } : null,
@@ -885,6 +909,8 @@ export function apply(ctx, config) {
       config: cfg,
       round: readRound(stateDir),
       goal: goalInfo,
+      identity: identity || null,
+      memoryCount: memInfo.memoryCount,
       goalProgress: goalInfo?.progress || null,
       goalComplete: Boolean(goalInfo?.complete),
       runtime: rt,
@@ -900,6 +926,9 @@ export function apply(ctx, config) {
         updatedAt: st.updatedAt || '',
         goalProgress: goalInfo?.progress || null,
         goalComplete: Boolean(goalInfo?.complete),
+        identityId: memInfo.identityId,
+        memoryCount: memInfo.memoryCount,
+        memoryDir: memInfo.memoryDir,
         ui: g.view?.ui || g.parsed?.ui || null,
         visible: g.view?.visible || null,
         vitals: g.view ? { health: g.view.health, needs: g.view.needs, location: g.view.location } : null,
