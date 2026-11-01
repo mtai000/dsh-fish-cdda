@@ -27,6 +27,14 @@ window.__ModuleLoader__.load({
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(body || {}),
     }))
+    const fileUrl = (name) => API + '/recording/file?name=' + encodeURIComponent(String(name || '').split('/').pop())
+    const fmtSize = (n) => {
+      const v = Number(n) || 0
+      if (v > 1024 * 1024 * 1024) return (v / 1024 / 1024 / 1024).toFixed(2) + ' GB'
+      if (v > 1024 * 1024) return (v / 1024 / 1024).toFixed(1) + ' MB'
+      if (v > 1024) return Math.round(v / 1024) + ' KB'
+      return v + ' B'
+    }
 
     const CSS = `
 [data-cd-page]{display:flex;flex-direction:column;gap:16px;padding:2px 2px 10px;max-width:760px;}
@@ -83,6 +91,31 @@ window.__ModuleLoader__.load({
 [data-cd-link]:hover{text-decoration:underline;}
 [data-cd-rec]{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;
   box-shadow:0 0 0 3px rgba(239,68,68,.16);animation:cd-pulse 1.2s ease-in-out infinite;}
+[data-cd-recv]{display:flex;flex-direction:column;gap:14px;padding:18px 22px 28px;max-width:1100px;width:100%;
+  box-sizing:border-box;margin:0 auto;color:var(--dsw-alias-label-primary,#e6e6e6);}
+[data-cd-recvhead]{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;}
+[data-cd-recvtitle]{font-size:16px;font-weight:600;letter-spacing:.01em;}
+[data-cd-recvsub]{font-size:12px;line-height:17px;color:var(--dsw-alias-label-tertiary,#9aa0a6);word-break:break-all;}
+[data-cd-recvplayer]{border:1px solid var(--dsw-alias-bg-layer-3,rgba(255,255,255,.14));border-radius:14px;overflow:hidden;
+  background:#000;display:flex;flex-direction:column;}
+[data-cd-recvplayer] video{display:block;width:100%;max-height:62vh;background:#000;}
+[data-cd-recvmeta]{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 11px;font-size:11px;
+  color:var(--dsw-alias-label-tertiary,#9aa0a6);background:var(--dsw-alias-bg-layer-4,rgba(0,0,0,.2));}
+[data-cd-recvlist]{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+[data-cd-recvcard]{border:1px solid var(--dsw-alias-bg-layer-3,rgba(255,255,255,.14));border-radius:12px;overflow:hidden;
+  background:var(--dsw-alias-bg-layer-4,rgba(128,128,128,.08));display:flex;flex-direction:column;}
+[data-cd-recvcard][data-sel]{border-color:#3b82f6;box-shadow:0 0 0 2px rgba(59,130,246,.18);}
+[data-cd-recvthumb]{position:relative;display:flex;align-items:center;justify-content:center;width:100%;aspect-ratio:16/9;
+  border:0;padding:0;cursor:pointer;color:#fff;background:linear-gradient(135deg,#1f2937,#0f172a);font-family:inherit;}
+[data-cd-recvthumb]:hover{filter:brightness(1.15);}
+[data-cd-recvplay]{display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);font-size:16px;padding-left:3px;}
+[data-cd-recvmissing]{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.55);font-size:12px;color:#fca5a5;}
+[data-cd-recvbody]{display:flex;flex-direction:column;gap:4px;padding:9px 11px;min-width:0;}
+[data-cd-recvname]{font-size:12.5px;line-height:1.4;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+[data-cd-recvactions]{display:flex;gap:10px;flex-wrap:wrap;padding-top:2px;}
+@media (max-width:640px){[data-cd-recv]{padding:14px 14px 22px;}[data-cd-recvlist]{grid-template-columns:1fr;}}
 @keyframes cd-pulse{50%{opacity:.35}}
     `
 
@@ -231,6 +264,17 @@ window.__ModuleLoader__.load({
         const r = await jpost('/stop', { save: true })
         say(r.ok ? '已停止' : (r.error || '停止失败'), r.ok ? 'good' : 'bad')
       })
+      const pickDir = async () => {
+        try {
+          const picker = globalThis.__DSH_DIRECTORY_PICKER__
+          if (picker && typeof picker.pick === 'function') {
+            const d = await picker.pick()
+            if (d) { set('recordDir', String(d)); say('目录已选，保存后下一段生效', 'good') }
+            return
+          }
+          say('这个界面没有文件夹选择器，手动填路径吧', 'warn')
+        } catch (e) { say('打开文件夹选择器失败：' + String(e?.message ?? e), 'bad') }
+      }
       const onRecord = async (on) => {
         setBusy('record')
         try {
@@ -239,14 +283,6 @@ window.__ModuleLoader__.load({
           else say(r.error || '录制没起来', 'bad')
         } catch (e) { say(String(e?.message ?? e), 'bad') }
         finally { setBusy(''); reload() }
-      }
-      const fileUrl = (name) => API + '/recording/file?name=' + encodeURIComponent(String(name || '').split('/').pop())
-      const fmtSize = (n) => {
-        const v = Number(n) || 0
-        if (v > 1024 * 1024 * 1024) return (v / 1024 / 1024 / 1024).toFixed(2) + ' GB'
-        if (v > 1024 * 1024) return (v / 1024 / 1024).toFixed(1) + ' MB'
-        if (v > 1024) return Math.round(v / 1024) + ' KB'
-        return v + ' B'
       }
       const onRound = () => run('round', async () => {
         const r = await jpost('/round', {})
@@ -355,10 +391,17 @@ window.__ModuleLoader__.load({
               h('span', { 'data-cd-note': '' }, active ? `目录：${st.recordDir || ''}` : '')) : null,
             h('div', { 'data-cd-row': '' },
               h('div', { 'data-cd-grow': '' },
+                h('div', { 'data-cd-label': '' }, '录制存放目录'),
+                h('div', { 'data-cd-note': '' }, '绝对路径；留空 = 插件家的 recordings。改完保存，下一段生效。')),
+              h('input', { 'data-cd-input': '', style: { flex: '1 1 260px', minWidth: 180 }, value: draft?.recordDir ?? '', placeholder: '/home/你/CDDA录像', onChange: (e) => set('recordDir', e.target.value) }),
+              h('button', { 'data-cd-btn': '', onClick: pickDir }, '选择…')),
+            st.recordDir ? h('div', { 'data-cd-note': '' }, `当前实际目录：${st.recordDir}`) : null,
+            h('div', { 'data-cd-row': '' },
+              h('div', { 'data-cd-grow': '' },
                 h('div', { 'data-cd-label': '' }, '帧率（1-10，默认 2）'),
                 h('div', { 'data-cd-note': '' }, '文本界面不需要高帧率；2 帧/秒足够看清操作。')),
               h('input', { 'data-cd-input': '', 'data-cd-num': '', type: 'number', min: 1, max: 10, value: draft?.recordFps ?? 2, onChange: (e) => set('recordFps', e.target.value) }),
-              h('button', { 'data-cd-btn': '', disabled: Boolean(busy) || !dirty, onClick: onSave }, '保存帧率')),
+              h('button', { 'data-cd-btn': '', disabled: Boolean(busy) || !dirty, onClick: onSave }, '保存录制设置')),
             st.recorderReady === false ? h('div', { 'data-cd-msg': '', 'data-warn': '' }, '找不到 ffmpeg 或等宽字体：录制会起不来。到「高级」里填 ffmpegPath / recordFont。') : null,
             list.length ? h('div', { 'data-cd-sec': '' },
               h('div', { 'data-cd-note': '' }, '历史录制：'),
@@ -449,6 +492,78 @@ window.__ModuleLoader__.load({
       )
     }
 
+    function RecordingsView() {
+      const [st, setSt] = React.useState(null)
+      const [err, setErr] = React.useState('')
+      const [sel, setSel] = React.useState('')
+      const load = React.useCallback(async () => {
+        try {
+          const d = await jget('/recordings')
+          if (d && d.ok) { setSt(d); setErr('') }
+          else setErr(d?.error || '读不到录制列表')
+        } catch (e) { setErr(String(e?.message ?? e)) }
+      }, [])
+      React.useEffect(() => {
+        let alive = true
+        const run = () => { if (alive) load() }
+        run()
+        const t = setInterval(run, 5000)
+        return () => { alive = false; clearInterval(t) }
+      }, [load])
+
+      const rec = st?.recording || {}
+      const list = Array.isArray(st?.recordings) ? st.recordings : []
+      const active = Boolean(rec.active)
+      const chosen = list.find((x) => x.video === sel) || list[0] || null
+      const chosenUrl = chosen && chosen.video && chosen.exists !== false ? fileUrl(chosen.video) : ''
+      const fmtWhen = (v) => {
+        try { return new Date(v).toLocaleString('zh-CN', { hour12: false }) } catch { return String(v || '') }
+      }
+
+      return h('div', { 'data-cd-recv': '' },
+        h('div', { 'data-cd-recvhead': '' },
+          h('div', { 'data-cd-grow': '' },
+            h('div', { 'data-cd-recvtitle': '' }, 'CDDA 录制'),
+            h('div', { 'data-cd-recvsub': '' },
+              st ? `${st.recordDir || ''} · ${list.length} 段` : '读取录制列表…',
+              active ? ' · 正在录制' : '')),
+          h('button', { 'data-cd-btn': '', onClick: load }, '刷新'),
+          st?.recordDir ? h('button', { 'data-cd-btn': '', onClick: () => copyText(st.recordDir) }, '复制目录') : null),
+
+        err ? h('div', { 'data-cd-msg': '', 'data-warn': '' }, err) : null,
+
+        active ? h('div', { 'data-cd-msg': '', 'data-bad': '', style: { display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' } },
+          h('span', { 'data-cd-rec': '' }),
+          `录制中 · ${String(rec.video || '').split('/').pop()} · ${Number(rec.durationSec || 0)}s · ${Number(rec.frames || 0)} 帧 · ${fmtSize(rec.size)}`,
+          rec.video ? h('a', { 'data-cd-link': '', href: fileUrl(rec.video), target: '_blank', rel: 'noreferrer' }, '打开当前文件') : null) : null,
+
+        chosenUrl ? h('div', { 'data-cd-recvplayer': '' },
+          h('video', { controls: true, preload: 'metadata', src: chosenUrl, key: chosenUrl }),
+          h('div', { 'data-cd-recvmeta': '' },
+            h('span', { 'data-cd-grow': '' }, `${chosen.videoName || String(chosen.video || '').split('/').pop()} · ${fmtWhen(chosen.startedAt)} · ${Number(chosen.durationSec || 0)}s · ${fmtSize(chosen.size)}`),
+            h('a', { 'data-cd-link': '', href: chosenUrl, target: '_blank', rel: 'noreferrer' }, '新窗口打开'),
+            chosen.srt ? h('a', { 'data-cd-link': '', href: fileUrl(chosen.srt), target: '_blank', rel: 'noreferrer' }, '下载字幕') : null)) : null,
+
+        list.length
+          ? h('div', { 'data-cd-recvlist': '' }, list.map((r) => {
+              const url = r.video ? fileUrl(r.video) : ''
+              const isSel = chosen && r.video === chosen.video
+              return h('div', { key: r.video || r.id, 'data-cd-recvcard': '', 'data-sel': isSel ? '' : undefined },
+                h('button', { 'data-cd-recvthumb': '', onClick: () => setSel(r.video), title: '播放这一段' },
+                  h('span', { 'data-cd-recvplay': '' }, '▶'),
+                  r.exists === false ? h('span', { 'data-cd-recvmissing': '' }, '文件没了') : null),
+                h('div', { 'data-cd-recvbody': '' },
+                  h('div', { 'data-cd-recvname': '' }, r.videoName || String(r.video || '').split('/').pop() || '未命名'),
+                  h('div', { 'data-cd-note': '' }, `${fmtWhen(r.startedAt)} · ${Number(r.durationSec || 0)}s · ${fmtSize(r.size)}`),
+                  h('div', { 'data-cd-recvactions': '' },
+                    url ? h('a', { 'data-cd-link': '', href: url, target: '_blank', rel: 'noreferrer' }, '视频') : null,
+                    r.srt ? h('a', { 'data-cd-link': '', href: fileUrl(r.srt), target: '_blank', rel: 'noreferrer' }, '字幕') : null)))
+            }))
+          : h('div', { 'data-cd-msg': '' },
+              st ? '还没有录制。到设置 → CDDA 陪玩里打开「录制游玩过程」。' : '读取中…'),
+      )
+    }
+
     return {
       inject: ['slots'],
       apply(ctx) {
@@ -463,6 +578,10 @@ window.__ModuleLoader__.load({
         slots.inject('settings.section', () => slots.register(
           { name: 'settings.section', id: 'cdda-duty', order: 31, label: 'CDDA 陪玩' },
           () => h(Panel),
+        ))
+        slots.inject('conversation.view', () => slots.register(
+          { name: 'conversation.view', id: 'cdda-recordings', order: 5, label: () => 'cdda录制' },
+          RecordingsView,
         ))
       },
     }
