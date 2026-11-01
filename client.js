@@ -431,7 +431,7 @@ window.__ModuleLoader__.load({
                     r.srt ? h('a', { 'data-cd-link': '', href: fileUrl(r.srt), target: '_blank', rel: 'noreferrer' }, '字幕') : null)))
             }))
           : h('div', { 'data-cd-msg': '' },
-              st ? '还没有录制。到设置 → CDDA 陪玩里打开「录制游玩过程」。' : '读取中…'),
+              st ? '还没有录制。到设置 → CDDA 陪玩里打开「开始游戏后自动录制」。' : '读取中…'),
       )
     }
 
