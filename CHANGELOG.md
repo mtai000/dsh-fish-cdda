@@ -1,5 +1,32 @@
 # Changelog
 
+## 未发布 · 2026-11-02 凌晨
+
+- **新录制模式 `ansi`（现在是默认）**：录制不再靠 ffmpeg 的 drawtext 重画文字，改抓
+  `tmux capture-pane -p -e` 的带色输出，用 `lib/ansirender.mjs` 自己画成帧，走
+  `image2pipe` 交给 ffmpeg。不占桌面、不用开窗口，游戏在 tmux 里没人 attach 也能录。
+- **字形与宽度**：GNU Unifont（16x16 点阵，`assets/fonts/unifont.hex.gz`）自带，
+  零运行时依赖；宽度按终端规矩算（East Asian Wide/Fullwidth = 2 格，组合记号 = 0 格），
+  不依赖字体自身的宽度，所以换语言不会挤乱排版。英文/中文/日文/韩文/俄文/阿拉伯文/泰文
+  在同一个 tmux 里对过列，行尾标记全落同一列。
+- **`cdda_log` 拼进画面**：`recordLogRows`（默认 4）把战报屏最后几行画在游戏画面下面。
+- 新配置：`recordMode` 默认 `ansi`，`recordScale`（默认 2）、`recordLogRows`。
+- **原始帧日志（`recordKeepRaw`，默认开）**：录制时同时写一份 `xxx.cast.jsonl.gz`
+  （每帧一行 `{t,w,h,d}`，gzip）。改字形/行距/配色以后不用再开一局：
+  `node scripts/render-cast.mjs <cast> <out.mp4> [--scale 2] [--linepad 2]`。
+  实测同素材重画与当场录制逐字节一致。
+- **去掉「cdda画面」页和 ttyd**：实时画面改成用系统终端看——回放页顶部两个按钮
+  「打开游戏终端」「打开日志终端」，直接调 `POST /screens/open`。
+- **回放以原始帧为准**：一次游玩 = 一个目录 `<录制目录>/<id>/`，里面 `cast.jsonl.gz`、
+  `events.srt`、`meta.json`，转过视频就多个 `video.mp4`。列表按目录列，每段一个按钮：
+  没转的显示「生成视频」，转过的显示「播放视频」。删除整目录。
+- 回放页顶部：「打开游戏终端」「打开日志终端」「打开原始帧目录」「刷新」。
+  文件接口 `?name=` 支持 `id/video.mp4` 这种子路径（仍然限制在录制目录内）。
+- 字符/像素两种老模式保留，设置里可以切回去。
+- **回放页可以删录制**：每段右下角一个垃圾桶图标（灰→悬停变红），删 mp4 + srt + 同名 json 并同步索引；
+  正在录的那段会被拒绝（409）。后端 `POST /api/cdda-duty/recording/delete`。
+
+
 ## 0.9.0 — 2026-11-01
 
 - **终端后端抽象：screen / tmux 都支持**。新增 `lib/backend.mjs`，会话的

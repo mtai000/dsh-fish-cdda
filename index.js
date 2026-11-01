@@ -14,6 +14,101 @@
  */
 import { loadHostDeps } from './lib/hostdeps.mjs'
 
+const LIVE_HTML = `<!doctype html><meta charset="utf-8"><title>CDDA 画面</title>
+<style>
+html,body{margin:0;background:#0b0b0f;color:#d6e2f0;font-family:"SFMono-Regular",Menlo,"PingFang SC",monospace}
+#head{padding:6px 10px;font-size:12px;color:#9aa0a6;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;border-bottom:1px solid #1c1e26}
+#plan{color:#e8eef7;font-size:13px}
+#dot{width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block}
+#wrap{display:flex;height:calc(100vh - 58px)}
+#s{flex:1;min-width:0;overflow:auto;margin:0;padding:10px;font-size:13px;line-height:1.2;white-space:pre}
+#logbox{width:320px;flex:none;display:flex;flex-direction:column;border-left:1px solid #23252c;background:#0e0f14}
+#loghead{padding:4px 10px;font-size:11px;color:#9aa0a6;border-bottom:1px solid #23252c}
+#logbox pre{flex:1;overflow:auto;margin:0;padding:8px 10px;font-size:12px;line-height:1.25;color:#c9d4e2;white-space:pre-wrap}
+</style>
+<div id="head"><span id="dot"></span><span id="plan">读取计划…</span><span id="t"></span></div>
+<div id="wrap"><pre id="s"></pre><div id="logbox"><div id="loghead">战报 · 只读</div><pre id="l"></pre></div></div>
+<script>
+const C16=['#000000','#cd3131','#0dbc79','#e5e510','#2472c8','#bc3fbc','#11a8cd','#e5e5e5',
+           '#666666','#f14c4c','#23d18b','#f5f543','#3b8eea','#d670d6','#29b8db','#e5e5e5'];
+function c256(n){
+  if(n<16) return C16[n];
+  if(n<232){ n-=16; const r=Math.floor(n/36),g=Math.floor((n%36)/6),b=n%6;
+    const cv=v=>v===0?0:55+v*40; return 'rgb('+cv(r)+','+cv(g)+','+cv(b)+')'; }
+  const v=8+(n-232)*10; return 'rgb('+v+','+v+','+v+')';
+}
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+function ansiToHtml(text){
+  const out=[];
+  for(const line of text.split('\\n')){
+    let fg='#d6e2f0', bg=null, html='', i=0;
+    const flush=()=>{};
+    while(i<line.length){
+      if(line[i]==='\\x1b' && line[i+1]==='['){
+        const m=/^\\x1b\\[([0-9;]*)m/.exec(line.slice(i));
+        if(m){
+          const codes=m[1].split(';').filter(x=>x!=='').map(Number);
+          if(!codes.length) codes.push(0);
+          for(let k=0;k<codes.length;k++){
+            const c=codes[k];
+            if(c===0){fg='#d6e2f0';bg=null;}
+            else if(c>=30&&c<=37) fg=C16[c-30];
+            else if(c>=90&&c<=97) fg=C16[c-90+8];
+            else if(c===39) fg='#d6e2f0';
+            else if(c===38&&codes[k+1]===5){ fg=c256(codes[k+2]); k+=2; }
+            else if(c===48&&codes[k+1]===5){ bg=c256(codes[k+2]); k+=2; }
+            else if(c>=40&&c<=47) bg=C16[c-40];
+          }
+          if(fg==='#000000') fg='#7b8494';
+          if(bg==='#000000') bg=null;
+          i+=m[0].length; continue;
+        }
+        const m2=/^\\x1b\\[[0-9;]*[A-Za-z]/.exec(line.slice(i));
+        if(m2){ i+=m2[0].length; continue; }
+        i++; continue;
+      }
+      let j=i; let chunk='';
+      while(j<line.length && !(line[j]==='\\x1b' && line[j+1]==='[')){ chunk+=line[j]; j++; }
+      if(chunk){
+        const st='color:'+fg+(bg?';background:'+bg:'');
+        html+='<span style="'+st+'">'+esc(chunk)+'</span>';
+      }
+      i=j;
+    }
+    out.push(html||'&nbsp;');
+  }
+  return out.join('\\n');
+}
+const p=document.getElementById('s'),t=document.getElementById('t'),L=document.getElementById('l'),P=document.getElementById('plan');
+let stick=true;
+document.getElementById('logbox').addEventListener('scroll',e=>{
+  const el=e.currentTarget; stick = el.scrollTop + el.clientHeight >= el.scrollHeight - 8;
+});
+document.getElementById('s').addEventListener('scroll',e=>{
+  const el=e.currentTarget; if(el.scrollTop+el.clientHeight < el.scrollHeight-8) el.dataset.y='1'; else delete el.dataset.y;
+});
+async function tick(){
+  try{
+    const r=await fetch('/api/cdda-duty/screen?ansi=1',{credentials:'same-origin'});
+    const j=await r.json();
+    if(j.ok && j.ansi){ p.innerHTML=ansiToHtml(j.ansi); }
+    else { p.textContent='抓不到画面：'+(j.error||r.status); }
+    t.textContent=new Date().toLocaleTimeString('zh-CN',{hour12:false});
+    const r2=await fetch('/api/cdda-duty/log',{credentials:'same-origin'});
+    const j2=await r2.json();
+    if(j2.ok){ L.textContent=(j2.tail||[]).join('\\n'); if(stick) L.parentElement.scrollTop=L.parentElement.scrollHeight; }
+    const r3=await fetch('/api/cdda-duty/decisions',{credentials:'same-origin'});
+    const j3=await r3.json();
+    const d=(j3.decisions||[]).slice(-1)[0];
+    const age=d&&d.ts?(Date.now()-Date.parse(d.ts)):Infinity;
+    const txt=d?(d.note||d.plan||d.text||d.why||''):'';
+    const hh=d&&d.ts?new Date(d.ts).toLocaleTimeString('zh-CN',{hour12:false,hour:'2-digit',minute:'2-digit'}):'';
+    P.textContent=(txt&&age<1800000)?('接下来：'+hh+' '+txt.slice(0,150)):'实时画面 · 只读 · 空闲中';
+  }catch(e){ p.textContent='连接断了：'+e }
+}
+tick(); setInterval(tick,800);
+</script>`
+
 const hostDeps = await loadHostDeps()
 const z = hostDeps.z
 const defineTool = hostDeps.defineTool
@@ -28,7 +123,7 @@ import { basename, dirname, extname, join, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import {
-  DEFAULT_CFG, clampCfg, ensureDirs, ensureDutyFile,
+  DEFAULT_CFG, clampCfg, ensureDirs, ensureDutyFile, appendActivity,
   logLine, pathsOf, readActivity, readDecisions, readJson, readRound, readRounds, readRuntime, readSavedCfg,
   readStatus, recordEvent, recordNote, saveCfgToDisk, stateDirOf, tailFile,
   writeJson, writeRound, writeStatus, bumpRuntime,
@@ -38,7 +133,7 @@ import { attachArgv, attachCommand, capture, hasSession, listCommand, shellQuote
 import { modeLabel } from './lib/parse.mjs'
 import { TOOL_SPECS, handleTool } from './lib/tools-core.mjs'
 import { findWorlds } from './lib/state-read.mjs'
-import { Recorder, readRecordings, recordDirOf, findFfmpeg, findFont, findCaptureTarget } from './lib/recorder.mjs'
+import { Recorder, readRecordings, recordDirOf, findFfmpeg, findFont, findCaptureTarget, deleteRecording, listCasts, renderCast } from './lib/recorder.mjs'
 import { readIdentity, memoryDirOf } from './lib/identity.mjs'
 import { selectMemories, memoryCount, importInherited } from './lib/memory.mjs'
 import { readInheritedLessons, exportParentLessons } from './lib/lessons.mjs'
@@ -112,7 +207,11 @@ export function apply(ctx, config) {
   let recReadyCache = { at: 0, ok: false }
   const recorderReady = () => {
     if (Date.now() - recReadyCache.at < 60_000) return recReadyCache.ok
-    const ok = Boolean(findFfmpeg(cfg) && (cfg.recordMode === 'text' ? findFont(cfg) : findCaptureTarget(cfg)))
+    const mode = String(cfg.recordMode || 'ansi')
+    const ok = Boolean(findFfmpeg(cfg) && (
+      mode === 'text' ? findFont(cfg)
+        : mode === 'pixels' ? findCaptureTarget(cfg)
+          : true))
     recReadyCache = { at: Date.now(), ok }
     return ok
   }
@@ -868,12 +967,7 @@ export function apply(ctx, config) {
     const memInfo = { identityId: identity?.identityId || null, memoryCount: memoryCount(mDir), memoryDir: mDir }
     const recording = recorder.status()
     const recDir = recordDirOf(stateDir, cfg)
-    const recordings = readRecordings(stateDir, 12).map((r) => ({
-      ...r,
-      videoName: basename(String(r.video || '')),
-      srtName: basename(String(r.srt || '')),
-      exists: Boolean(r.video && existsSync(r.video)),
-    }))
+    const recordings = listCasts(stateDir, cfg).slice(0, 12)
     // 让 cdda_log（只读 status.json）也跟着设置页轮询刷新，不必等下一次动作。
     try {
       writeStatus(stateDir, {
@@ -1038,6 +1132,19 @@ export function apply(ctx, config) {
               return sendJson(res, 200, await statusPayload())
             }
             if (req.method === 'GET' && path === '/api/cdda-duty/screen') {
+              // 本地改造：带 ansi=1 时把 tmux 的原始颜色码一起吐出来（前端自己上色）
+              if (url.searchParams.get('ansi') === '1' && cfg.backend !== 'screen') {
+                try {
+                  const { execFile } = await import('node:child_process')
+                  const name = String(cfg.screenGame || 'cdda')
+                  const raw = await new Promise((res2, rej) => {
+                    execFile('tmux', ['capture-pane', '-p', '-e', '-t', name], { timeout: 8000 }, (e, out) => e ? rej(e) : res2(out))
+                  })
+                  return sendJson(res, 200, { ok: true, ansi: raw, at: new Date().toISOString() })
+                } catch (e) {
+                  return sendJson(res, 200, { ok: false, error: String(e?.message ?? e).slice(0, 160) })
+                }
+              }
               const cap = await capture(cfg, String(cfg.screenGame || 'cdda'), { stateDir })
               return sendJson(res, 200, cap.ok ? { ok: true, ...cap } : { ok: false, error: cap.error })
             }
@@ -1063,21 +1170,55 @@ export function apply(ctx, config) {
               return sendJson(res, 200, {
                 ok: true,
                 recording: recorder.status(),
-                recordings: readRecordings(stateDir, 50).map((r) => ({
-                  ...r,
-                  videoName: basename(String(r.video || '')),
-                  srtName: basename(String(r.srt || '')),
-                  exists: Boolean(r.video && existsSync(r.video)),
-                })),
+                recordings: listCasts(stateDir, cfg),
                 recordDir: recordDirOf(stateDir, cfg),
+              })
+            }
+            if (req.method === 'POST' && path === '/api/cdda-duty/recording/render') {
+              const body = await readBody(req)
+              const r = await renderCast(stateDir, cfg, String(body.id || body.name || ''))
+              if (r.ok) appendActivity(stateDir, { kind: 'record_render', text: `转成视频 ${r.videoName}` })
+              return sendJson(res, r.ok ? 200 : 400, r)
+            }
+            if (req.method === 'GET' && path === '/api/cdda-duty/live.html') {
+              res.setHeader('content-type', 'text/html; charset=utf-8')
+              res.setHeader('cache-control', 'no-store')
+              res.end(LIVE_HTML)
+              return
+            }
+            if (req.method === 'POST' && path === '/api/cdda-duty/open-dir') {
+              // 本地改造：录制页的「打开目录」——直接让 Finder 打开录制目录
+              const dir = resolve(recordDirOf(stateDir, cfg))
+              try {
+                const { spawn } = await import('node:child_process')
+                spawn('open', [dir], { detached: true, stdio: 'ignore' }).unref()
+                return sendJson(res, 200, { ok: true, dir })
+              } catch (e) {
+                return sendJson(res, 500, { ok: false, error: String(e?.message ?? e) })
+              }
+            }
+            if (req.method === 'POST' && path === '/api/cdda-duty/recording/delete') {
+              const body = await readBody(req)
+              const target = String(body.name || body.id || '')
+              const st = recorder.status()
+              if (st && st.active && target && (target.endsWith('.mp4') ? st.video.endsWith(target) : st.id === target)) {
+                return sendJson(res, 409, { ok: false, error: '这段还在录，先停下再删' })
+              }
+              const r = deleteRecording(stateDir, target, cfg)
+              if (r.ok) appendActivity(stateDir, { kind: 'record_delete', text: `删除录制 ${target}` })
+              return sendJson(res, r.ok ? 200 : 400, {
+                ...r,
+                recordings: listCasts(stateDir, cfg),
               })
             }
             if (req.method === 'GET' && path === '/api/cdda-duty/recording/file') {
               const name = String(url.searchParams.get('name') || '')
               const ext = extname(name).toLowerCase()
               const dir = resolve(recordDirOf(stateDir, cfg))
+              const segs = name.split('/').filter(Boolean)
+              const okSegs = segs.length >= 1 && segs.length <= 2 && segs.every((x) => x && x !== '.' && x !== '..' && !x.includes('\\'))
               const full = resolve(dir, name)
-              if (!name || basename(name) !== name || !['.mp4', '.srt'].includes(ext) || !full.startsWith(dir + sep)) {
+              if (!name || !okSegs || !['.mp4', '.srt'].includes(ext) || !full.startsWith(dir + sep)) {
                 return sendJson(res, 400, { ok: false, error: '文件名不合法' })
               }
               let st
@@ -1136,7 +1277,7 @@ export function apply(ctx, config) {
                 ok: Boolean(r.ok),
                 error: r.error,
                 recording: recorder.status(),
-                recordings: readRecordings(stateDir, 50).map((x) => ({ ...x, videoName: basename(String(x.video || '')), srtName: basename(String(x.srt || '')) })),
+                recordings: listCasts(stateDir, cfg),
                 recordDir: recordDirOf(stateDir, cfg),
               })
             }

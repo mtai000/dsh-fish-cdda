@@ -37,6 +37,15 @@ window.__ModuleLoader__.load({
     }
 
     const CSS = `
+[data-cd-live]{display:flex;flex-direction:column;gap:8px;height:100%;min-height:0;}
+[data-cd-livehead]{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--dsw-alias-label-tertiary,#9aa0a6);}
+[data-cd-livescreen]{flex:1;min-height:0;overflow:auto;background:#0b0b0f;border:1px solid rgba(255,255,255,.12);
+  border-radius:10px;padding:10px;}
+[data-cd-livescreen] pre{margin:0;font-family:"SFMono-Regular",Menlo,"PingFang SC",monospace;font-size:12px;
+  line-height:1.18;color:#d6e2f0;white-space:pre;letter-spacing:0;}
+[data-cd-liveplan]{font-size:12px;color:#e8eef7;max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+[data-cd-livedot]{width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block;}
+
 [data-cd-page]{display:flex;flex-direction:column;gap:16px;padding:2px 2px 10px;max-width:760px;}
 [data-cd-sec]{display:flex;flex-direction:column;gap:9px;}
 [data-cd-h]{font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--dsw-alias-label-tertiary,#9aa0a6);}
@@ -114,7 +123,12 @@ window.__ModuleLoader__.load({
   background:rgba(0,0,0,.55);font-size:12px;color:#fca5a5;}
 [data-cd-recvbody]{display:flex;flex-direction:column;gap:4px;padding:9px 11px;min-width:0;}
 [data-cd-recvname]{font-size:12.5px;line-height:1.4;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-[data-cd-recvactions]{display:flex;gap:10px;flex-wrap:wrap;padding-top:2px;}
+[data-cd-recvactions]{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding-top:2px;}
+[data-cd-liveterm]{flex:1 1 auto;min-height:0;border:0;border-radius:10px;background:#000;width:100%;height:100%;}
+[data-cd-iconbtn]{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;margin-left:auto;
+  border:0;border-radius:7px;background:transparent;color:var(--dsw-alias-text-tertiary,#7c8598);cursor:pointer;opacity:.75;}
+[data-cd-iconbtn]:hover{opacity:1;background:rgba(239,68,68,.14);color:#ef4444;}
+[data-cd-iconbtn]:focus-visible{outline:2px solid rgba(239,68,68,.5);outline-offset:1px;}
 @media (max-width:640px){[data-cd-recv]{padding:14px 14px 22px;}[data-cd-recvlist]{grid-template-columns:1fr;}}
 [data-cd-badge][data-good]{color:#22c55e;}
 [data-cd-modal]{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.55);}
@@ -476,72 +490,117 @@ window.__ModuleLoader__.load({
     function RecordingsView() {
       const [st, setSt] = React.useState(null)
       const [err, setErr] = React.useState('')
-      const [sel, setSel] = React.useState('')
+      const [busy, setBusy] = React.useState('')
+      const [playing, setPlaying] = React.useState('')
       const load = React.useCallback(async () => {
         try {
           const d = await jget('/recordings')
           if (d && d.ok) { setSt(d); setErr('') }
-          else setErr(d?.error || '读不到录制列表')
-        } catch (e) { setErr(String(e?.message ?? e)) }
+          else setErr((d && d.error) || '读不到录制列表')
+        } catch (e) { setErr(String((e && e.message) || e)) }
       }, [])
       React.useEffect(() => {
         let alive = true
         const run = () => { if (alive) load() }
         run()
-        const t = setInterval(run, 5000)
+        const t = setInterval(run, 8000)
         return () => { alive = false; clearInterval(t) }
       }, [load])
-
-      const rec = st?.recording || {}
-      const list = Array.isArray(st?.recordings) ? st.recordings : []
-      const active = Boolean(rec.active)
-      const chosen = list.find((x) => x.video === sel) || list[0] || null
-      const chosenUrl = chosen && chosen.video && chosen.exists !== false ? fileUrl(chosen.video) : ''
-      const fmtWhen = (v) => {
-        try { return new Date(v).toLocaleString('zh-CN', { hour12: false }) } catch { return String(v || '') }
+      const openTerm = async (which) => {
+        setBusy('term-' + which)
+        try {
+          const r = await jpost('/screens/open', { which })
+          if (!r || r.ok === false) throw new Error((r && r.error) || '打不开系统终端')
+          setErr('')
+        } catch (e) { setErr(String((e && e.message) || e)) }
+        finally { setBusy('') }
       }
-
+      const makeVideo = async (id) => {
+        setBusy('render-' + id)
+        try {
+          const r = await jpost('/recording/render', { id })
+          if (!r || r.ok === false) throw new Error((r && r.error) || '转换失败')
+          await load()
+        } catch (e) { setErr(String((e && e.message) || e)) }
+        finally { setBusy('') }
+      }
+      const removeOne = async (id) => {
+        if (!window.confirm(`删掉 ${id}？原始帧和转好的视频都会没。`)) return
+        setBusy('del-' + id)
+        try {
+          const r = await jpost('/recording/delete', { id })
+          if (!r || r.ok === false) throw new Error((r && r.error) || '删除失败')
+          await load()
+        } catch (e) { setErr(String((e && e.message) || e)) }
+        finally { setBusy('') }
+      }
+      const fmtSize = (n) => {
+        const v = Number(n) || 0
+        if (v > 1024 * 1024 * 1024) return (v / 1024 / 1024 / 1024).toFixed(2) + ' GB'
+        if (v > 1024 * 1024) return (v / 1024 / 1024).toFixed(1) + ' MB'
+        if (v > 1024) return Math.round(v / 1024) + ' KB'
+        return v + ' B'
+      }
+      const fileUrl = (name) => API + '/recording/file?name=' + encodeURIComponent(String(name || ''))
+      const list = (Array.isArray(st?.recordings) ? st.recordings : [])
+      const fmtWhen = (v) => {
+        try { return v ? new Date(v).toLocaleString('zh-CN', { hour12: false }) : '' } catch { return String(v || '') }
+      }
       return h('div', { 'data-cd-recv': '' },
         h('div', { 'data-cd-recvhead': '' },
           h('div', { 'data-cd-grow': '' },
-            h('div', { 'data-cd-recvtitle': '' }, 'CDDA 录制'),
-            h('div', { 'data-cd-recvsub': '' },
-              st ? `${st.recordDir || ''} · ${list.length} 段` : '读取录制列表…',
-              active ? ' · 正在录制' : '')),
-          h('button', { 'data-cd-btn': '', onClick: load }, '刷新'),
-          st?.recordDir ? h('button', { 'data-cd-btn': '', onClick: () => copyText(st.recordDir) }, '复制目录') : null),
+            h('div', { 'data-cd-recvtitle': '' }, 'CDDA 回放'),
+            h('div', { 'data-cd-recvsub': '' }, st ? `${st.recordDir || ''} · ${list.length} 段` : '读取录制列表…')),
+          h('button', { 'data-cd-btn': '', disabled: Boolean(busy), onClick: () => openTerm('game') }, '打开游戏终端'),
+          h('button', { 'data-cd-btn': '', disabled: Boolean(busy), onClick: () => openTerm('log') }, '打开日志终端'),
+          h('button', { 'data-cd-btn': '', onClick: async () => {
+            try {
+              const r = await jpost('/open-dir', {})
+              if (!r || r.ok === false) throw new Error((r && r.error) || '打不开目录')
+            } catch (e) { setErr(String((e && e.message) || e)) }
+          } }, '打开原始帧目录'),
+          h('button', { 'data-cd-btn': '', onClick: load }, '刷新')),
 
         err ? h('div', { 'data-cd-msg': '', 'data-warn': '' }, err) : null,
 
-        active ? h('div', { 'data-cd-msg': '', 'data-bad': '', style: { display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' } },
-          h('span', { 'data-cd-rec': '' }),
-          `录制中 · ${String(rec.video || '').split('/').pop()} · ${Number(rec.durationSec || 0)}s · ${Number(rec.frames || 0)} 帧 · ${fmtSize(rec.size)}${rec.source ? ' · ' + rec.source : ''}`,
-          rec.video ? h('a', { 'data-cd-link': '', href: fileUrl(rec.video), target: '_blank', rel: 'noreferrer' }, '打开当前文件') : null) : null,
-
-        chosenUrl ? h('div', { 'data-cd-recvplayer': '' },
-          h('video', { controls: true, preload: 'metadata', src: chosenUrl, key: chosenUrl }),
-          h('div', { 'data-cd-recvmeta': '' },
-            h('span', { 'data-cd-grow': '' }, `${chosen.videoName || String(chosen.video || '').split('/').pop()} · ${chosen.mode === 'text' ? '字符重绘' : '实际画面'}${chosen.source ? ' · ' + chosen.source : ''} · ${fmtWhen(chosen.startedAt)} · ${Number(chosen.durationSec || 0)}s · ${fmtSize(chosen.size)}`),
-            h('a', { 'data-cd-link': '', href: chosenUrl, target: '_blank', rel: 'noreferrer' }, '新窗口打开'),
-            chosen.srt ? h('a', { 'data-cd-link': '', href: fileUrl(chosen.srt), target: '_blank', rel: 'noreferrer' }, '下载字幕') : null)) : null,
+        playing
+          ? h('div', { 'data-cd-recvplayer': '' },
+              h('video', { controls: true, autoPlay: true, preload: 'metadata', src: playing, key: playing }),
+              h('div', { 'data-cd-msg': '', style: { padding: '6px 10px' } },
+                h('a', { 'data-cd-link': '', href: playing, target: '_blank', rel: 'noreferrer' }, '在新页面打开')))
+          : null,
 
         list.length
-          ? h('div', { 'data-cd-recvlist': '' }, list.map((r) => {
-              const url = r.video ? fileUrl(r.video) : ''
-              const isSel = chosen && r.video === chosen.video
-              return h('div', { key: r.video || r.id, 'data-cd-recvcard': '', 'data-sel': isSel ? '' : undefined },
-                h('button', { 'data-cd-recvthumb': '', onClick: () => setSel(r.video), title: '播放这一段' },
-                  h('span', { 'data-cd-recvplay': '' }, '▶'),
-                  r.exists === false ? h('span', { 'data-cd-recvmissing': '' }, '文件没了') : null),
-                h('div', { 'data-cd-recvbody': '' },
-                  h('div', { 'data-cd-recvname': '' }, r.videoName || String(r.video || '').split('/').pop() || '未命名'),
-                  h('div', { 'data-cd-note': '' }, `${r.mode === 'text' ? '字符重绘' : '实际画面'}${r.source ? ' · ' + r.source : ''} · ${fmtWhen(r.startedAt)} · ${Number(r.durationSec || 0)}s · ${fmtSize(r.size)}`),
-                  h('div', { 'data-cd-recvactions': '' },
-                    url ? h('a', { 'data-cd-link': '', href: url, target: '_blank', rel: 'noreferrer' }, '视频') : null,
-                    r.srt ? h('a', { 'data-cd-link': '', href: fileUrl(r.srt), target: '_blank', rel: 'noreferrer' }, '字幕') : null)))
-            }))
+          ? h('div', { 'data-cd-recvlist': '' }, list.map((r) => h('div', { key: r.id, 'data-cd-recvcard': '' },
+              h('div', { 'data-cd-recvbody': '' },
+                h('div', { 'data-cd-recvname': '' }, r.id),
+                h('div', { 'data-cd-note': '' },
+                  `原始帧 ${fmtSize(r.size)}${r.frames ? ` · ${r.frames} 帧` : ''}` +
+                  (r.videoName ? ` · 视频 ${fmtSize(r.videoSize)}` : ' · 还没转视频') +
+                  (r.startedAt ? ` · ${fmtWhen(r.startedAt)}` : '')),
+                h('div', { 'data-cd-recvactions': '' },
+                  r.videoName
+                    ? h('button', { 'data-cd-btn': '', onClick: () => setPlaying(playing === fileUrl(r.videoName) ? '' : fileUrl(r.videoName)) },
+                        playing === fileUrl(r.videoName) ? '收起' : '播放视频')
+                    : null,
+                  h('button', { 'data-cd-btn': '', disabled: Boolean(busy), onClick: () => makeVideo(r.id) },
+                    busy === 'render-' + r.id ? '转换中…' : (r.videoName ? '重新生成' : '生成视频')),
+                  h('button', {
+                    'data-cd-iconbtn': '',
+                    'aria-label': '删除这一段',
+                    title: '删掉原始帧和视频',
+                    onClick: () => removeOne(r.id),
+                  }, h('svg', {
+                    width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none',
+                    stroke: 'currentColor', strokeWidth: 1.9, strokeLinecap: 'round', strokeLinejoin: 'round',
+                    'aria-hidden': 'true',
+                  },
+                    h('path', { d: 'M3 6h18' }),
+                    h('path', { d: 'M8 6V4.5A1.5 1.5 0 0 1 9.5 3h5A1.5 1.5 0 0 1 16 4.5V6' }),
+                    h('path', { d: 'M18.5 6l-.8 13.2A2 2 0 0 1 15.7 21H8.3a2 2 0 0 1-2-1.8L5.5 6' }),
+                    h('path', { d: 'M10 10.5v6M14 10.5v6' }))))))))
           : h('div', { 'data-cd-msg': '' },
-              st ? '还没有录制。到设置 → CDDA 陪玩里打开「开始游戏后自动录制」。' : '读取中…'),
+              st ? '还没有录制。开一局，录制会只存原始帧；要看的时候点「转成视频」。' : '读取中…'),
       )
     }
 
@@ -561,7 +620,7 @@ window.__ModuleLoader__.load({
           () => h(Panel),
         ))
         slots.inject('conversation.view', () => slots.register(
-          { name: 'conversation.view', id: 'cdda-recordings', order: 5, label: () => 'cdda录制' },
+          { name: 'conversation.view', id: 'cdda-recordings', order: 5, label: () => 'cdda回放' },
           RecordingsView,
         ))
       },

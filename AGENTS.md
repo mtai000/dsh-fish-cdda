@@ -103,3 +103,23 @@
 - 配置/存档/日志都在 `$DSH_HOME/cdda-duty/`，不写进插件包目录；
 - 自动玩回合没有文件系统/命令/联网；只给 CDDA MCP；
 - 战报是给人看的：不写内部术语，不编屏幕上看不到的东西。
+
+## 录制（recordMode）
+- 默认 `ansi`：抓 `tmux capture-pane -p -e` 的带色输出，用 `lib/ansirender.mjs` 自己画帧
+  （`assets/fonts/unifont.hex.gz`，GNU Unifont，零运行时依赖），`image2pipe` 喂给 ffmpeg。
+- 宽度按终端规矩算：`charCells()`（East Asian Wide/Fullwidth=2、组合记号=0、其余=1）。
+  不要用字体自带宽度推进——换语言会错行。
+- `recordScale` 放大倍数，`recordLogRows` 把 cdda_log 最后几行拼在画面下面。
+- `pixels`（录桌面）/`text`（纯文字重绘）保留，作为回退。
+
+## 看实时画面 / 回放
+- 没有「cdda画面」页了，也不再有 ttyd。要看实时画面用系统终端：
+  回放页顶部「打开游戏终端 / 打开日志终端」→ `POST /api/cdda-duty/screens/open`。
+- 回放列表 = 录制目录下每个 `<id>/`（`listCasts`，兼容老的扁平 `*.cast.jsonl.gz`）。
+  一次游玩一个目录：`cast.jsonl.gz` / `events.srt` / `meta.json` / 可选 `video.mp4`。
+  转视频走 `POST /recording/render` → `scripts/render-cast.mjs`；删除整目录。
+
+## 原始帧日志（改渲染不要重开游戏）
+- 录制默认同时写 `xxx.cast.jsonl.gz`（`lib/cast.mjs`）：每帧 `{t,w,h,d}`，gzip JSONL。
+- 重画：`node scripts/render-cast.mjs <cast> <out.mp4> [--scale 2] [--linepad 2] [--cols 80]`。
+- 测试渲染优先用这个，不要为了看一帧效果再开游戏。

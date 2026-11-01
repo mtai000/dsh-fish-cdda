@@ -56,3 +56,6 @@ Thumbs.db
 .env.*
 !.env.example
 .npm-cache/
+
+# 本地备份
+*.bak-*
