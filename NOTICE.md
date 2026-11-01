@@ -25,8 +25,8 @@
 
 - 仓库：https://github.com/CleverRaven/Cataclysm-DDA
 - 许可证：CC-BY-SA 3.0
-- 用途：游戏本体；`vendor/starter-world/` 里是 CDDA 0.G 生成的一个小世界存档，
-  仅用于让插件第一次运行就能开箱即玩。存档内容属于 CDDA 的衍生数据；
+- 用途：游戏本体；插件不随包分发任何存档。运行时存档由用户本地 CDDA 生成，
+  只写到 `<DSH_HOME>/cdda-duty/game/save/`。
   如果分发本项目，请保留本说明与 CDDA 的许可信息。
 
 ## @deepseek-ai/*

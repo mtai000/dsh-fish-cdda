@@ -1,6 +1,6 @@
 # dsh-cdda ｜ 让 DSH 自己玩 CDDA
 
-> 当前版本 **0.4.1** · [变更记录](CHANGELOG.md) · [参与开发](CONTRIBUTING.md)
+> 当前版本 **0.4.2** · [变更记录](CHANGELOG.md) · [参与开发](CONTRIBUTING.md)
 
 > **它是什么**：一个 DSH 插件。装上后 DSH 会开两个 `screen` 会话 ——
 > `cdda`（游戏终端）和 `cdda_log`（实时战报）。
@@ -115,9 +115,10 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
 进 **设置 → CDDA 陪玩**：
 
 1. 点 **开始游戏**。
-   - 第一次没有存档时，插件会把内置的 0.G 开局存档铺到
-     `<DSH_HOME>/cdda-duty/game/save/`，然后用 `--world "Pena Pobre"` 启动；
-   - 如果语言/数据校验挡在前面，插件会自动按键走完（约 30 秒）。
+   - 第一次没有存档时，插件会启动 CDDA 并自动走建世界/建角色流程（约 30 秒）；
+   - 存档只会写到 `<DSH_HOME>/cdda-duty/game/save/`，**插件目录里不会生成 `.sav`**；
+   - 想用现成开局，可把世界放到 `<DSH_HOME>/cdda-duty/starter-world/save/`，
+     再在设置里打开 `starterWorld`（默认关）。
 2. 在终端里看：
    ```bash
    screen -x cdda        # 看游戏
@@ -125,9 +126,10 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
    ```
 3. 想让它自己玩：打开 **自动玩**，或者直接对 DSH 说「开始自动玩，目标活过 3 天」。
 
-> **内置开局**是 CDDA 0.G 生成的一个小世界（加油站，角色 Jody Anaya，第 61 天）。
-> 它只是让你开箱即玩；想玩自己的世界，在设置里填 **CDDA userdir / 世界名**，
-> 或清掉 `<DSH_HOME>/cdda-duty/game/save/` 后自己建一个角色。
+> 插件包不带存档。默认第一次启动走 CDDA 自己的建角色流程；
+> 想用现成开局，把世界放到 `<DSH_HOME>/cdda-duty/starter-world/save/` 并打开 `starterWorld`。
+> 想玩自己的世界，在设置里填 **CDDA userdir / 世界名**，或清掉
+> `<DSH_HOME>/cdda-duty/game/save/` 后自己建一个角色。
 
 ---
 
@@ -293,7 +295,8 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
   round.json         当前/上一轮
   play-session.json  自动玩续用的会话 id
   game/
-    save/            CDDA 存档（内置开局也铺在这里）
+    save/            CDDA 存档（只写这里，不写插件目录）
+    starter-world/   可选外部开局种子（默认没有）
     config/          CDDA 配置
   recordings/        录制的 mp4 / 同名 .srt / .json
   knowledge/         CDDAi 知识库副本（可改）
@@ -310,7 +313,7 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
 ## 开发 / 测试
 
 ```bash
-npm test                 # 26 项：按键/解析/存档/知识库/屏幕结构化/目标/MCP/screen/录制
+npm test                 # 29 项：按键/解析/存档/知识库/屏幕结构化/目标/开局/MCP/screen/录制
 node selfcheck.mjs       # 环境自检（含 ffmpeg/字体）
 ```
 
@@ -342,7 +345,6 @@ lib/
 prompts/duty.md          自动玩值班章程
 profile-template/        最小权限 cdda-duty profile
 vendor/knowledge_base/   CDDAi 知识库（MIT）
-vendor/starter-world/    内置 0.G 开局存档
 test/                    node:test 测试
 scripts/                 无 pnpm 时的本地安装/卸载
 .github/workflows/ci.yml  GitHub Actions
@@ -358,7 +360,7 @@ scripts/                 无 pnpm 时的本地安装/卸载
 - **菜单边框会变成空白**：CDDA 菜单用 CP437/ACS 线框，`screen hardcopy` 拿不到；
   地图、侧栏、消息都是 ASCII，AI 玩没问题，但菜单里的选中高亮只能靠描述文字推断。
 - **第一次开局慢**：语言/数据校验 + 建局约 30 秒；有存档后约 8 秒。
-- **CDDA 版本**：内置开局是 0.G 存档；其它版本可能拒绝或迁移。用自己的存档请填 userdir / 世界名。
+- **CDDA 版本**：插件按 0.G 的 `--savedir/--configdir` 启动；其它版本可能不兼容。用自己的存档请填 userdir / 世界名。
 - **中文**：游戏本身用英文（`LANG=C.UTF-8`），战报是中文；`screen hardcopy` 抓不了 CJK，
   但 `cdda_log` 是直接给终端看的，中文正常。
 - **死亡**：不会自动重开；自动玩暂停。
@@ -383,7 +385,7 @@ node selfcheck.mjs
 npm test
 ```
 
-自检会检查：node、screen、CDDA 可执行文件、内置开局、目录权限、当前 screen 会话，
+自检会检查：node、screen、CDDA 可执行文件、目录权限、当前 screen 会话，
 以及录制需要的 ffmpeg / 等宽字体（缺失只影响录制）。
 
 ---
@@ -393,7 +395,7 @@ npm test
 - **dsh-bili-scroll**（MIT）—— 插件形态、hostdeps、设置页/HTTP/headless 回合的写法参考；
 - **CDDAi**（MIT）—— 屏幕感知 / 存档解析 / 目标驱动玩法，以及
   `vendor/knowledge_base/`（生存指南 / 机制 / 物品 / 配方 / 按键）；
-- **Cataclysm: Dark Days Ahead**（CC-BY-SA 3.0）—— 游戏本体与内置开局存档；
+- **Cataclysm: Dark Days Ahead**（CC-BY-SA 3.0）—— 游戏本体；
 - **@xterm/headless** 没有用到（我们最终用 screen hardcopy + ASCII 清洗，少一个依赖）。
 
 详见 [NOTICE.md](NOTICE.md)。本项目 MIT。

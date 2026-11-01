@@ -1,6 +1,6 @@
 {
   "name": "dsh-cdda",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "DSH 插件：让 DSH 自己玩《Cataclysm: Dark Days Ahead》—— 两个 screen 会话，一个游戏、一个实时战报",
   "keywords": [
     "dsh",

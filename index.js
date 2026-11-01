@@ -70,7 +70,7 @@ export const Config = !z ? undefined : z.object({
   screenDir: z.string().default('').extra('volatile', true),
   dshBin: z.string().default('').extra('volatile', true),
   dutyProfile: z.string().default('cdda-duty').extra('volatile', true),
-  starterWorld: z.boolean().default(true).extra('volatile', true),
+  starterWorld: z.boolean().default(false).extra('volatile', true),
   modelProvider: z.string().default('').extra('volatile', true),
   model: z.string().default('').extra('volatile', true),
   recordVideo: z.boolean().default(false).extra('volatile', true),

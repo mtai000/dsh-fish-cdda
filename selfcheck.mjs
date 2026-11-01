@@ -4,8 +4,8 @@
  *
  *   node selfcheck.mjs
  *
- * 检查：Node、GNU screen、CDDA 可执行文件、内置开局存档、插件家目录、
- *      两个 screen 会话、配置解析。
+ * 检查：Node、GNU screen、CDDA 可执行文件、插件家目录、两个 screen 会话、配置解析。
+ *      插件包不再自带 .sav；可选外部 starter 放到 <家>/starter-world/save。
  */
 import { existsSync, accessSync, constants, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
@@ -46,20 +46,6 @@ add(sv.status === 0, 'GNU screen 可用', (sv.stdout || '').split('\n')[0] || sb
 const cfg = loadCfgFromDisk(stateDir)
 const cdda = findCdda(cfg)
 add(Boolean(cdda), 'CDDA 可执行文件', cdda || '设置里填 cddaPath，或安装 cataclysm-dda-curses')
-
-// starter world
-const starter = join(pluginDir, 'vendor', 'starter-world', 'save')
-let starterOk = false
-let starterDetail = ''
-try {
-  const worlds = readdirSync(starter, { withFileTypes: true }).filter((d) => d.isDirectory())
-  for (const w of worlds) {
-    const dir = join(starter, w.name)
-    const saves = readdirSync(dir).filter((f) => f.endsWith('.sav'))
-    if (saves.length) { starterOk = true; starterDetail = `${w.name}（${saves.length} 个 .sav）`; break }
-  }
-} catch { /* 忽略 */ }
-add(starterOk, '内置开局存档', starterDetail || starter)
 
 // knowledge base
 try {

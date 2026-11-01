@@ -170,6 +170,7 @@ window.__ModuleLoader__.load({
           knowledgeMaxChars: st.config.knowledgeMaxChars ?? 12000,
           autoUnstick: st.config.autoUnstick !== false,
           restartOnCrash: st.config.restartOnCrash !== false,
+          starterWorld: Boolean(st.config.starterWorld),
           maxRestartsPerDay: st.config.maxRestartsPerDay ?? 5,
         })
       }, [st?.config, dirty])
@@ -206,6 +207,7 @@ window.__ModuleLoader__.load({
           knowledgeMaxChars: Number(draft.knowledgeMaxChars) || 12000,
           autoUnstick: Boolean(draft.autoUnstick),
           restartOnCrash: Boolean(draft.restartOnCrash),
+          starterWorld: Boolean(draft.starterWorld),
           maxRestartsPerDay: Number(draft.maxRestartsPerDay) || 5,
         }
         const r = await jpost('/config', { patch })
@@ -490,6 +492,11 @@ window.__ModuleLoader__.load({
             label: '崩溃/游戏消失时自动重开',
             note: '只在自动玩开着时生效；死角色不会重开，会暂停等你处理。',
             on: draft?.restartOnCrash !== false, onChange: (v) => set('restartOnCrash', v),
+          }),
+          h(ToggleRow, {
+            label: '使用外部开局种子',
+            note: '默认关；打开后从 <DSH_HOME>/cdda-duty/starter-world/save/ 复制世界到存档目录。插件包本身不带 .sav。',
+            on: Boolean(draft?.starterWorld), onChange: (v) => set('starterWorld', v),
           }),
           h('div', { 'data-cd-row': '' },
             h('div', { 'data-cd-grow': '' },
