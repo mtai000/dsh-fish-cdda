@@ -1,7 +1,8 @@
 # 给 AI 助手看的（本仓库 = 一个 DSH 插件）
 
 `dsh-fish-cdda`：让 DSH 自己玩《Cataclysm: Dark Days Ahead》。插件开两个 screen 会话：
-`cdda`（游戏）和 `cdda_log`（战报）。用户可随时 `screen -x` 旁观；DSH 也能开自动玩。
+`cdda`（游戏）和 `cdda_log`（战报）。用户可随时 attach 旁观（screen: `screen -x`；tmux: `tmux attach -t`）；DSH 也能开自动玩。
+终端后端由 `cfg.terminal`（auto/tmux/screen）选择，会话操作统一走 `lib/backend.mjs`。
 
 ## 帮用户装时，按这个顺序
 
@@ -25,7 +26,7 @@
 3. **必须提醒用户重启一次 dsh**（bundle 层要重启才组装）。
 4. 重启后进 **设置 → CDDA 陪玩**：
    - 点「开始游戏」；第一次约 30 秒（语言/校验/建局）；
-   - 终端里 `screen -x cdda` 和 `screen -x cdda_log` 旁观；
+   - 终端里 attach 旁观：`tmux attach -t cddagame`（或 `screen -x cddagame`），战报同理；
    - 想自动玩就打开「自动玩」。
 5. **不要**替用户把 `autoplay` 长期打开 —— 那会持续花 token。让用户自己决定。
 
@@ -36,7 +37,8 @@
 - `client.js` —— 浏览器半端：设置页「CDDA 陪玩」（`settings.section`）。
 - `lib/tools-core.mjs` —— 工具的真正实现；host 和 MCP 共用。
 - `lib/game.mjs` —— 开/停游戏、bootstrap 状态机、screen 唤醒。
-- `lib/screen.mjs` —— screen 会话、hardcopy 抓屏、按键、世界选择。
+- `lib/backend.mjs` —— 会话后端（screen/tmux）：建/送/抓/查/杀 + attach 命令。
+- `lib/screen.mjs` —— CDDA 启动脚本、世界选择、战报屏（会话原语从 backend 再导出）。
 - `lib/state-read.mjs` —— 解析 `.sav`（第一行 `# version N` + JSON）。
 - `lib/parse.mjs` —— 屏幕清洗 + 界面识别。
 - `lib/logscreen.mjs` —— `cdda_log` 的实时面板（读 status/activity，不碰游戏）。
@@ -59,7 +61,7 @@
 
 ## 调试顺序
 
-1. `screen -ls` —— `cdda`/`cdda_log` 在不在。
+1. `tmux ls`（或 `screen -ls`）—— `cddagame`/`cdda_log` 在不在；`node selfcheck.mjs` 会直接报当前后端。
 2. `cdda.log` —— 开游戏、界面识别、回合起停。
 3. `mcp.log` —— 自动玩的 MCP 握手与调用。
 4. `runs/round-*.log` —— 那一轮模型的推理/工具输出/最终总结。

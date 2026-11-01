@@ -12,7 +12,8 @@ import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { spawnSync } from 'node:child_process'
 import { DEFAULT_CFG, loadCfgFromDisk, pathsOf } from './lib/state.mjs'
-import { findCdda, screenBin } from './lib/screen.mjs'
+import { findCdda, hasSession, screenBin, tmuxBin } from './lib/screen.mjs'
+import { backendName } from './lib/backend.mjs'
 import { findWorlds } from './lib/state-read.mjs'
 import { findFfmpeg, findFont } from './lib/recorder.mjs'
 import { parseScreen } from './lib/screen-parse.mjs'
@@ -36,13 +37,19 @@ const warn = (name, detail = '') => {
 const major = Number(process.versions.node.split('.')[0])
 add(major >= 22, 'Node.js >= 22', process.version)
 
-// screen
-const sb = screenBin({})
-const sv = spawnSync(sb, ['--version'], { encoding: 'utf8' })
-add(sv.status === 0, 'GNU screen 可用', (sv.stdout || '').split('\n')[0] || sb)
-
-// CDDA
+// CDDA（先读配置，后面要按 terminal 决定查哪个复用器）
 const cfg = loadCfgFromDisk(stateDir)
+
+// 终端复用器：按 terminal 配置选，auto 时看装了谁
+const backend = backendName(cfg)
+const tbin = tmuxBin(cfg)
+const sb = screenBin({})
+const tv = tbin ? spawnSync(tbin, ['-V'], { encoding: 'utf8' }) : { status: -1, stdout: '' }
+const sv = spawnSync(sb, ['--version'], { encoding: 'utf8' })
+if (backend === 'tmux') add(tv.status === 0, 'tmux 可用', (tv.stdout || '').trim() || tbin || '没装 tmux；设置里 terminal=screen 可回退')
+else add(sv.status === 0, 'GNU screen 可用', (sv.stdout || '').split('\n')[0] || sb)
+add(true, '终端后端', `${backend}（terminal=${cfg.terminal || 'auto'}；tmux ${tv.status === 0 ? '有' : '无'} / screen ${(sv.status === 0 || /Screen version/i.test(sv.stdout || '')) ? '有' : '无'}）`)
+
 const cdda = findCdda(cfg)
 add(Boolean(cdda), 'CDDA 可执行文件', cdda || '设置里填 cddaPath，或安装 cataclysm-dda-curses')
 
@@ -73,14 +80,13 @@ try {
 const worlds = findWorlds(p.saveDir)
 add(worlds.length > 0, '当前 CDDA 存档', worlds.length ? worlds.map((w) => w.name).join(' / ') : '还没开过游戏（第一次点「开始游戏」会自动铺内置存档）')
 
-// screen sessions
-const ls = spawnSync(sb, ['-ls'], { encoding: 'utf8' })
-const listText = `${ls.stdout || ''}${ls.stderr || ''}`
-const has = (n) => new RegExp(`\\b\\d+\\.${n}\\b`).test(listText)
-if (has(cfg.screenGame)) add(true, `screen 会话 ${cfg.screenGame}`, '游戏在跑')
-else warn(`screen 会话 ${cfg.screenGame}`, '还没开（正常；点「开始游戏」）')
-if (has(cfg.screenLog)) add(true, `screen 会话 ${cfg.screenLog}`, '战报在跑')
-else warn(`screen 会话 ${cfg.screenLog}`, '还没开（正常；宿主加载后会自动开）')
+// 会话（按当前后端查）
+const gameSession = String(cfg.screenGame || 'cdda')
+const logSession = String(cfg.screenLog || 'cdda_log')
+if (await hasSession(cfg, gameSession)) add(true, `会话 ${gameSession}`, `游戏在跑（${backend}）`)
+else warn(`会话 ${gameSession}`, `还没开（正常；点「开始游戏」）`)
+if (await hasSession(cfg, logSession)) add(true, `会话 ${logSession}`, '战报在跑')
+else warn(`会话 ${logSession}`, '还没开（正常；宿主加载后会自动开）')
 
 // config
 try {

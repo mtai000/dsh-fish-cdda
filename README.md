@@ -4,7 +4,7 @@
 
 > **它是什么**：一个 DSH 插件。装上后 DSH 会开两个 `screen` 会话 ——
 > `cdda`（游戏终端）和 `cdda_log`（实时战报）。
-> 你可以随时 `screen -x cdda` / `screen -x cdda_log` 旁观；
+> 你可以随时 attach 旁观：screen 用 `screen -x cddagame`，tmux 用 `tmux attach -t cddagame`（战报会话同理）；
 > DSH 自己也可以开「自动玩」，定时起 headless 回合接着玩。
 
 这个插件把两件事拼在一起：
@@ -48,7 +48,8 @@
 - `cdda`：真正的 CDDA 终端。插件用 `screen -X hardcopy` 读它，用 `screen -X stuff` 按键。
 - `cdda_log`：一个 Node 渲染的实时面板，读插件家里的 `status.json` / `activity.jsonl`，
   显示目标、角色状态、最近动作、DSH 正在做什么。
-- 两个会话都是 detached 的，可以多端同时 `screen -x` 看，不抢控制权。
+- 两个会话都是 detached 的，可以多端同时 attach 看，不抢控制权。
+- 终端后端可切：设置里「终端后端」= `auto` / `tmux` / `screen`（auto 会先看同名会话在哪个后端活着）。
 - ⭐ **录制开关**：打开后把 `cdda` 画面录成 **mp4**，同时把 `cdda_log` 同一时段的战报写成
   **同名 `.srt` 外挂字幕** —— 用播放器打开视频会自动挂上字幕。
 
@@ -121,8 +122,8 @@ curl -i http://127.0.0.1:3080/api/cdda-duty/status
      再在设置里打开 `starterWorld`（默认关）。
 2. 在终端里看：
    ```bash
-   screen -x cdda        # 看游戏
-   screen -x cdda_log    # 看 DSH 在做什么
+   tmux attach -t cddagame   # 看游戏（screen 后端则 screen -x cddagame）
+   tmux attach -t cdda_log   # 看 DSH 在做什么
    ```
 3. 想让它自己玩：直接对 DSH 说「开始自动玩，目标活过 3 天」；DSH 会调 `cdda_autoplay`。
 
@@ -409,4 +410,4 @@ npm test
 ## 交流
 
 遇到问题先看 `cdda.log` / `mcp.log` / `runs/round-*.log` 的最后几十行。
-真正像 bug 的，带上 DSH 版本、插件版本、`screen -ls`、日志原文。
+真正像 bug 的，带上 DSH 版本、插件版本、`tmux ls`（或 `screen -ls`）、日志原文。

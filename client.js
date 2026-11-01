@@ -197,6 +197,7 @@ window.__ModuleLoader__.load({
           world: st.config.world || '',
           cddaPath: st.config.cddaPath || '',
           userDir: st.config.userDir || '',
+          terminal: st.config.terminal || 'auto',
           screenGame: st.config.screenGame || 'cdda',
           screenLog: st.config.screenLog || 'cdda_log',
           dshBin: st.config.dshBin || '',
@@ -235,7 +236,7 @@ window.__ModuleLoader__.load({
         try {
           const r = await jget('/screens')
           if (r && r.ok) { setScreens(r); setScreenErr('') }
-          else setScreenErr(r?.error || '抓不到 screen 画面')
+          else setScreenErr(r?.error || '抓不到终端画面')
         } catch (e) { setScreenErr(String(e?.message ?? e)) }
       }
       const openScreens = () => { setScreenOpen(true); loadScreens() }
@@ -253,7 +254,8 @@ window.__ModuleLoader__.load({
         finally { setBusy('') }
       }
       const copyScreenCommand = async (which) => {
-        const cmd = screens?.commands?.[which] || `screen -x ${which === 'log' ? 'cdda_log' : 'cdda'}`
+        const cmd = screens?.commands?.[which] || ''
+        if (!cmd) { say('还没有会话命令：先「开始游戏」或刷新状态', 'warn'); return }
         await copyText(cmd)
         say('命令已复制：' + cmd, 'good')
       }
@@ -280,6 +282,7 @@ window.__ModuleLoader__.load({
           world: String(draft.world || '').trim(),
           cddaPath: String(draft.cddaPath || '').trim(),
           userDir: String(draft.userDir || '').trim(),
+          terminal: ['auto', 'tmux', 'screen'].includes(String(draft.terminal)) ? String(draft.terminal) : 'auto',
           screenGame: String(draft.screenGame || 'cdda').trim(),
           screenLog: String(draft.screenLog || 'cdda_log').trim(),
           dshBin: String(draft.dshBin || '').trim(),
@@ -378,7 +381,7 @@ window.__ModuleLoader__.load({
                 recActive ? h('span', { 'data-cd-badge': '', 'data-bad': '' }, '录制中') : null),
               h('div', { 'data-cd-note': '' },
                 '开始 / 停止 / 跑一轮 / 目标 / 立刻录制，都在会话里直接对 DSH 说，或让 DSH 自己调 cdda_* 工具。这里只放会重复用到的设置。')),
-            h('button', { 'data-cd-btn': '', onClick: openScreens }, '调出 screen')),
+            h('button', { 'data-cd-btn': '', onClick: openScreens }, '调出终端')),
           stt.hint ? h('div', { 'data-cd-msg': '' }, stt.hint) : null,
           msg ? h('div', { 'data-cd-msg': '', ...(msg.tone === 'good' ? { 'data-good': '' } : msg.tone === 'warn' ? { 'data-warn': '' } : msg.tone === 'bad' ? { 'data-bad': '' } : {}) }, msg.text) : null),
 
@@ -411,7 +414,7 @@ window.__ModuleLoader__.load({
             h('option', { value: 'text' }, '字符重绘（旧）')) }),
           h(FieldRow, { label: '录制窗口（像素模式）', note: platform === 'darwin' ? 'macOS 不按窗口标题裁切；请用下面的「画面区域」。' : '留空自动找 cdda/cataclysm；找不到就录全屏。也可以填 Konsole 等窗口标题。', children: h(TxtInput, { k: 'recordWindow', placeholder: '留空自动找' }) }),
           h(FieldRow, { label: '画面区域（像素模式）', note: '可选，格式 WxH+X+Y；留空自动窗口/全屏。', children: h(TxtInput, { k: 'recordGeometry', placeholder: '1280x900+0+0' }) }),
-          h('div', { 'data-cd-note': '' }, '实际画面录的是桌面上真实可见的窗口；如果游戏在 detached screen 里、桌面看不到，先点上面的「调出 screen」把终端打开，再填终端窗口标题或直接录全屏。'),
+          h('div', { 'data-cd-note': '' }, '实际画面录的是桌面上真实可见的窗口；如果游戏在 detached 会话里、桌面看不到，先点上面的「调出终端」把终端打开，再填终端窗口标题或直接录全屏。'),
           h(FieldRow, { label: '录制存放目录', note: '绝对路径；留空 = 插件家的 recordings。保存后下一段生效。', children: h('div', { 'data-cd-row': '', style: { flex: '1 1 320px' } },
             h('input', { 'data-cd-input': '', style: { flex: '1 1 260px', minWidth: 180 }, value: draft?.recordDir ?? '', placeholder: '/home/你/CDDA录像', onChange: (e) => set('recordDir', e.target.value) }),
             h('button', { 'data-cd-btn': '', onClick: pickDir }, '选择…')) }),
@@ -435,7 +438,13 @@ window.__ModuleLoader__.load({
           h('div', { 'data-cd-h': '' }, '高级'),
           h(FieldRow, { label: 'CDDA 可执行文件', note: '留空 = PATH 里的 cataclysm。', children: h(TxtInput, { k: 'cddaPath', placeholder: '/usr/games/cataclysm' }) }),
           h(FieldRow, { label: 'CDDA 用户目录', note: '留空 = 默认用户目录。', children: h(TxtInput, { k: 'userDir', placeholder: '~/.cataclysm-dda' }) }),
-          h(FieldRow, { label: '游戏 screen 名', note: '默认 cdda。', children: h(TxtInput, { k: 'screenGame', placeholder: 'cdda' }) }),
+          h(FieldRow, { label: '终端后端', note: 'auto = 同名会话在哪个后端活着就用哪个，都没有则优先 tmux。切换后重启游戏会话生效。', children: h('select', {
+            'data-cd-input': '', style: { flex: '1 1 200px' }, value: draft?.terminal || 'auto', onChange: (e) => set('terminal', e.target.value),
+          },
+            h('option', { value: 'auto' }, '自动（推荐）'),
+            h('option', { value: 'tmux' }, 'tmux'),
+            h('option', { value: 'screen' }, 'GNU screen')) }),
+          h(FieldRow, { label: '游戏会话名', note: '默认 cddagame（老配置是 cdda）。', children: h(TxtInput, { k: 'screenGame', placeholder: 'cddagame' }) }),
           h(FieldRow, { label: '战报 screen 名', note: '默认 cdda_log。', children: h(TxtInput, { k: 'screenLog', placeholder: 'cdda_log' }) }),
           h(FieldRow, { label: 'dsh 可执行文件', note: '桌面版找不到 dsh 时填。', children: h(TxtInput, { k: 'dshBin', placeholder: '留空自动找' }) }),
           h(FieldRow, { label: 'ffmpeg 路径', note: '留空 = PATH 里的 ffmpeg。', children: h(TxtInput, { k: 'ffmpegPath', placeholder: '留空自动找' }) }),

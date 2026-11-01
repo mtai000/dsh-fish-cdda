@@ -2,7 +2,7 @@
  * dsh-cdda —— host 半端
  * ============================================================================
  * 它是什么：让 DSH 自己玩 CDDA 的插件版。
- *   1. 在 screen 里开两个会话：`cdda`（游戏终端，用户可 `screen -x cdda` 旁观）
+ *   1. 在终端复用器里开两个会话：`cdda`（游戏终端，用户可 attach 旁观；screen/tmux 都可以）
  *      和 `cdda_log`（实时战报，显示 DSH 正在做什么）。
  *   2. 把“看屏幕 / 发按键 / 读写状态”注册成 DSH 工具，聊天里就能玩。
  *   3. 自动玩：定时起一个 headless 回合，通过插件生成的 overlay 挂上
@@ -34,7 +34,7 @@ import {
   writeJson, writeRound, writeStatus, bumpRuntime,
 } from './lib/state.mjs'
 import { ensureLog, inspectGame, startGame, stopGame } from './lib/game.mjs'
-import { capture, hasSession } from './lib/screen.mjs'
+import { attachArgv, attachCommand, capture, hasSession, listCommand, shellQuote } from './lib/screen.mjs'
 import { modeLabel } from './lib/parse.mjs'
 import { TOOL_SPECS, handleTool } from './lib/tools-core.mjs'
 import { findWorlds } from './lib/state-read.mjs'
@@ -934,9 +934,9 @@ export function apply(ctx, config) {
         log: { name: g.logScreen, running: logRunning },
       },
       attach: {
-        game: `screen -x ${g.screen}`,
-        log: `screen -x ${g.logScreen}`,
-        list: 'screen -ls',
+        game: attachCommand(cfg, g.screen),
+        log: attachCommand(cfg, g.logScreen),
+        list: listCommand(cfg),
       },
       activity: readActivity(stateDir, 20),
       lastRound: readRounds(stateDir, 1)[0] || null,
@@ -964,21 +964,26 @@ export function apply(ctx, config) {
   })
   async function openTerminal(which) {
     const name = screenName(which)
-    if (!validScreenName(name)) return { ok: false, error: 'screen 会话名不合法', command: '' }
-    const command = `screen -x ${name}`
+    if (!validScreenName(name)) return { ok: false, error: '会话名不合法', command: '' }
+    const command = attachCommand(cfg, name)
+    // attachArgv 已经带可执行文件：[tmux, attach, -t, NAME] / [screen, -x, NAME]
+    const argv = attachArgv(cfg, name)
+    const line = argv.map((a) => (/^[A-Za-z0-9_./:=@+-]+$/.test(a) ? a : shellQuote(a))).join(' ')
+    // AppleScript 的字符串用双引号包，反斜杠和双引号要转义
+    const asLine = line.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
     const candidates = process.platform === 'darwin'
-      ? [['osascript', ['-e', `tell application "Terminal" to do script "screen -x ${name}"`]]]
+      ? [['osascript', ['-e', `tell application "Terminal" to do script "${asLine}"`]]]
       : process.platform === 'win32'
-        ? [['wt.exe', ['new-tab', 'screen', '-x', name]], ['cmd.exe', ['/c', 'start', '', 'screen', '-x', name]]]
+        ? [['wt.exe', ['new-tab', ...argv]], ['cmd.exe', ['/c', 'start', '', ...argv]]]
         : [
-            ['x-terminal-emulator', ['-e', 'screen', '-x', name]],
-            ['gnome-terminal', ['--', 'screen', '-x', name]],
-            ['konsole', ['-e', 'screen', '-x', name]],
-            ['xfce4-terminal', ['-x', 'screen', '-x', name]],
-            ['xterm', ['-e', 'screen', '-x', name]],
-            ['alacritty', ['-e', 'screen', '-x', name]],
-            ['kitty', ['screen', '-x', name]],
-            ['wezterm', ['start', '--', 'screen', '-x', name]],
+            ['x-terminal-emulator', ['-e', ...argv]],
+            ['gnome-terminal', ['--', ...argv]],
+            ['konsole', ['-e', ...argv]],
+            ['xfce4-terminal', ['-x', ...argv]],
+            ['xterm', ['-e', ...argv]],
+            ['alacritty', ['-e', ...argv]],
+            ['kitty', argv],
+            ['wezterm', ['start', '--', ...argv]],
           ]
     for (const [bin, args] of candidates) {
       if (await trySpawnTerminal(bin, args)) return { ok: true, terminal: bin, command }
@@ -998,9 +1003,15 @@ export function apply(ctx, config) {
       name, running: Boolean(running),
       text: cap?.ok ? String(cap.text || '') : '',
       error: cap?.ok ? '' : String(cap?.error || '抓不到屏幕'),
-      command: `screen -x ${name}`,
+      backend: cap?.backend || '',
+      command: attachCommand(cfg, name),
     })
-    return { ok: true, game: one(gameName, gRunning, g), log: one(logName, lRunning, l), commands: { game: `screen -x ${gameName}`, log: `screen -x ${logName}` } }
+    return {
+      ok: true,
+      game: one(gameName, gRunning, g),
+      log: one(logName, lRunning, l),
+      commands: { game: attachCommand(cfg, gameName), log: attachCommand(cfg, logName), list: listCommand(cfg) },
+    }
   }
 
   try {

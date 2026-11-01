@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.9.0 — 2026-11-01
+
+- **终端后端抽象：screen / tmux 都支持**。新增 `lib/backend.mjs`，会话的
+  创建/送键/抓屏/存在性/结束全部走这一层；`cfg.terminal` = `auto` | `tmux` | `screen`，
+  auto 会先看同名会话在哪个后端活着，都没有则优先 tmux。
+- **抓屏改用后端能力**：tmux 走 `capture-pane -p -J`（回滚加 `-S -n`），不再需要
+  hardcopy 落盘 + 反色洗屏；screen 仍用 `-X hardcopy`。
+- **所有对用户展示的命令都从 `attachCommand()` 取**：设置页「调出终端」、工具返回的
+  `attach`、战报屏底栏、开局失败提示、`/screens` 接口，一共 25 处硬编码的
+  `screen -x` / `screen -ls` 全部收敛，换后端不会再漏改。
+- 设置页新增「终端后端」下拉；`selfcheck.mjs` 会报当前后端以及 tmux/screen 是否可用。
+- 送键用 `send-keys -l --`（字面量），并在 tmux 面板目标上加冒号——`-t =name`
+  在 3.7c 上会报 `can't find pane`，必须是 `-t =name:`。
+- 屏幕二进制探测顺序修正：macOS 自带的 screen 4.00.03 排在 homebrew 5.x 之后
+  （且它的 `--version` 返回 1，容易被误判成“没装”）。
+- 测试：新增 tmux 后端的创建/抓屏/送键/关闭用例；`screen` 用例固定 `terminal: 'screen'`
+  以覆盖老路径。
+
 本项目遵循“一个版本一个小节”的简单记录方式，日期用本地日期。
 
 ## 0.6.0 — 2026-11-01
